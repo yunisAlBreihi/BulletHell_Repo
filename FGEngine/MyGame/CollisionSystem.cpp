@@ -3,6 +3,8 @@
 #include <xmmintrin.h>
 #include <smmintrin.h>
 
+uint32_t CollisionMasker::counter = 0;
+
 #pragma region IMPL
 class CollisionSystemImpl
 {
@@ -12,11 +14,13 @@ class CollisionSystemImpl
 		bool dynamic;
 		float x, y, w, h;
 		FG::Entity* entity;
+		uint64_t mask;
+		uint64_t collidesWith;
 	};
 
 	__m128 c;
 	__m128 w;
-	std::vector<std::vector<SpatialObject>> buckets;
+std::vector<std::vector<SpatialObject>> buckets;
 
 public:
 	CollisionSystemImpl() : c(_mm_set_ps(0, 0, 0, 0)), w(_mm_set_ps(0, 0, 0, 0))
@@ -53,7 +57,7 @@ public:
 		_mm_store_ps(indices, res);
 	}
 
-	void RegisterCollider(const FG::Vector2D& pos, const FG::Vector2D& size, FG::Entity* entity, bool dynamic)
+	void RegisterCollider(const FG::Vector2D& pos, const FG::Vector2D& size, FG::Entity* entity, bool dynamic, uint64_t mask, uint64_t collidesWith)
 	{
 		SpatialObject object;
 		object.x = pos.x;
@@ -62,6 +66,8 @@ public:
 		object.h = size.y;
 		object.entity = entity;
 		object.dynamic = dynamic;
+		object.mask = mask;
+		object.collidesWith = collidesWith;
 
 		const static int indexCount = 4;
 		const float px[4] = { pos.x, pos.x + size.x, pos.x, pos.x + size.x };
@@ -112,7 +118,10 @@ public:
 				for (int j = i + 1; j < objectsToTest.size(); j++)
 				{
 					SpatialObject b = objectsToTest[j];
-					if (a.entity == b.entity)
+
+					bool aCollidesWithB = (a.collidesWith >> b.mask) & 1U;
+					bool bCollidesWithA = (b.collidesWith >> a.mask) & 1U;
+					if (!aCollidesWithB && !bCollidesWithA)
 					{
 						continue;
 					}
@@ -120,8 +129,14 @@ public:
 					{
 						if (isColliding(a, b))
 						{
-							a.entity->OnCollision(b.entity);
-							b.entity->OnCollision(a.entity);
+							if (aCollidesWithB)
+							{
+								a.entity->OnCollision(b.entity);
+							}
+							if (bCollidesWithA)
+							{
+								b.entity->OnCollision(a.entity);
+							}
 						}
 					}
 				}
@@ -146,9 +161,9 @@ void CollisionSystem::Setup(const int worldX, const int worldY, const float buck
 	impl->Setup(worldX, worldY, bucketSize);
 }
 
-void CollisionSystem::RegisterCollider(const FG::Vector2D& pos, const FG::Vector2D& size, FG::Entity* entity, bool dynamic)
+void CollisionSystem::RegisterCollider(const FG::Vector2D& pos, const FG::Vector2D& size, FG::Entity* entity, bool dynamic, uint64_t mask, uint64_t collidesWith)
 {
-	impl->RegisterCollider(pos, size, entity, dynamic);
+	impl->RegisterCollider(pos, size, entity, dynamic, mask, collidesWith);
 }
 
 void CollisionSystem::TestCollisions()

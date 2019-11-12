@@ -15,7 +15,7 @@ class Player : public FG::Entity
 {
 public:
 	BulletManager bm;
-	float speed = 100.0f;
+	float speed = 5.0f;
 	FG::Sprite sprite;
 
 	Player(FG::InputManager* inputManager, FG::Sprite sprite);

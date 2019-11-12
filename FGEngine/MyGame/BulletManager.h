@@ -9,21 +9,25 @@ namespace FG
 	class Window;
 	class InputManager;
 }
+
+class BulletManager;
+
+class _Bullet : public FG::Entity
+{
+public:
+	bool active = false;
+	FG::Vector2D position;
+	FG::Vector2D dir;
+	FG::Sprite sprite;
+	BulletManager* bulletManager;
+	int index;
+
+	virtual void OnCollision(Entity* other) override;
+};
+
+
 class BulletManager : public FG::Entity
 {
-	class _Bullet : public FG::Entity
-	{
-	public:
-		bool active = false;
-		FG::Vector2D position;
-		FG::Vector2D dir;
-		FG::Sprite sprite;
-		BulletManager* bulletManager;
-		int index;
-
-		virtual void OnCollision(Entity* other) override;
-	};
-
 public:
 	BulletManager(size_t count, FG::Sprite sprite);
 

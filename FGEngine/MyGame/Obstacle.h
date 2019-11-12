@@ -13,9 +13,9 @@ class Obstacle : public FG::Entity
 {
 public:
 	FG::Vector2D position;
-	FG::Sprite* sprite = nullptr;
+	FG::Sprite sprite;
 
-	Obstacle()  {}
+	Obstacle(FG::Vector2D position, FG::Sprite sprite) :position(position), sprite(sprite) { this->sprite.size = { 0.5f, 0.5f }; }
 	void Render(Renderer* const camera) override;
 
 	void Update(float deltaTime);

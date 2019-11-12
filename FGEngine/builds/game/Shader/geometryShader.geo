@@ -39,18 +39,18 @@ void main()
     float xIndex = index % nWidth;
 
     gl_Position = vp *(gl_in[0].gl_Position + (vec4(-spriteWidth, -spriteHeight, 0, 0)) * rotation);
-    TexCoord = vec3((xIndex+1) * tileMapData.x, tileMapData.y * (yIndex+1), textureIndex);
+        TexCoord = vec3(xIndex * tileMapData.x, tileMapData.y * yIndex, textureIndex);
     EmitVertex();
 
-    gl_Position =  vp *(gl_in[0].gl_Position + (vec4(spriteWidth, -spriteHeight, 0, 0)) * rotation); 
-    TexCoord = vec3(xIndex * tileMapData.x, tileMapData.y * (yIndex+1), textureIndex);
-    EmitVertex();
-
-    gl_Position = vp *(gl_in[0].gl_Position + (vec4(-spriteWidth, spriteHeight, 0, 0))* rotation);
+    gl_Position =  vp *(gl_in[0].gl_Position + (vec4(spriteWidth, -spriteHeight, 0, 0)) * rotation);
     TexCoord = vec3((xIndex+1) * tileMapData.x, tileMapData.y * yIndex, textureIndex);
     EmitVertex();
 
+    gl_Position = vp *(gl_in[0].gl_Position + (vec4(-spriteWidth, spriteHeight, 0, 0))* rotation);
+    TexCoord = vec3(xIndex * tileMapData.x, tileMapData.y * (yIndex+1), textureIndex);
+    EmitVertex();
+
     gl_Position = vp *(gl_in[0].gl_Position +  (vec4(spriteWidth, spriteHeight, 0, 0))* rotation);
-    TexCoord = vec3(xIndex * tileMapData.x, tileMapData.y * yIndex, textureIndex);
+    TexCoord = vec3((xIndex+1) * tileMapData.x, tileMapData.y * (yIndex+1), textureIndex);
     EmitVertex();
 }
