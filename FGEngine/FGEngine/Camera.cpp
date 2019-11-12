@@ -65,7 +65,7 @@ const float movementSpeed = 3.0f;
 
 Camera::Camera(float3 position, float fov, float near, float far)
 {
-	this->zoom = 1.0f;
+	this->zoom = 10.0f;
 	this->near = near;
 	this->fov = fov;
 	this->far = far;
@@ -82,7 +82,7 @@ void Camera::Update(float dt, FG::Vector2D look)
 	position = float3(look.x / zoom, -look.y / (zoom), 0) + float3(0.0f, 0, 0);
 	lookAt = position;
 	mat4Util::lookAt(view, lookAt, lookAt + float3(0, 0, 1), float3(0, 1, 0));
-	projection = mat4Util::ortho(-zoom, zoom, -zoom, zoom, near, far);
+	projection = mat4Util::ortho(zoom, -zoom, zoom, -zoom, near, far);
 
 	//projection = glm::ortho(-zoom, zoom, zoom * aspectRat, -zoom * aspectRat, near, far);
 

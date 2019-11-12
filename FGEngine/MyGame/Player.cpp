@@ -2,23 +2,27 @@
 
 #include <InputManager.h>
 #include <Camera.h>
-#include <Sprite.h>
+
 #include <SDL_render.h>
 #include "CollisionSystem.h"
-Player::Player(FG::InputManager* inputManager ) :
-	inputManager(inputManager)
-{}
+Player::Player(FG::InputManager* inputManager, FG::Sprite sprite ) :
+	inputManager(inputManager), bm(BulletManager(5, sprite)), sprite(sprite)
+{
+}
 
 void Player::Update(float deltaTime)
 {
 	MovePlayer(deltaTime);
 	MoveCamera(deltaTime);
+	Shoot(deltaTime);
 	auto it = CollisionSystem::GetInstance();
-	it->RegisterCollider(position, sprite->size, this, true);
+	it->RegisterCollider(position, sprite.size, this, true);
 }
 
 void Player::Render(Renderer* const camera)
 {
+	sprite.size = { 0.5f, 0.5f };
+	camera->Render(position, sprite);
 	//SDL_Color oldDrawColor;
 	//SDL_GetRenderDrawColor(camera->GetInternalRenderer(),
 	//	&oldDrawColor.r, &oldDrawColor.g, &oldDrawColor.b, &oldDrawColor.a);
@@ -29,6 +33,16 @@ void Player::Render(Renderer* const camera)
 
 	//SDL_SetRenderDrawColor(camera->GetInternalRenderer(),
 	//	oldDrawColor.r, oldDrawColor.g, oldDrawColor.b, oldDrawColor.a);
+}
+
+void Player::Shoot(float deltaTime)
+{
+
+	if (inputManager->IsKeyDown(SDL_SCANCODE_SPACE))
+		if (inputManager->IsKeyDown(SDL_SCANCODE_F))
+		{
+			bm.Shoot((position + FG::Vector2D(200, 0)), { 1,0 });
+		}
 }
 
 SDL_Rect Player::GetColliderRectangle()

@@ -3,11 +3,11 @@
 #include "Vector2D.h"
 #include "Entity.h"
 #include "Intevals.h"
+#include "Sprite.h"
 namespace FG
 {
 	class Window;
 	class InputManager;
-	class Sprite;
 }
 class BulletManager : public FG::Entity
 {

@@ -41,12 +41,19 @@ bool GameApplication::Initialize()
 	FG::SpriteFactory factory;	
 	FG::Sprite sprite = factory.LoadSprite("..//assets//images//test.png",  {0.125f , 0.125f , 8.f, 8.f});
 	entityManager = new FG::EntityManager();
-	Enemy* enemy = new Enemy({0.0f,0}, sprite, sprite);
+	Enemy* enemy = new Enemy({5.0f,0}, sprite, sprite);
 	entityManager->AddEntity(enemy);
 
+	enemy = new Enemy({ 1.0f,0 }, sprite, sprite);
+	entityManager->AddEntity(enemy);
+	enemy = new Enemy({ 2.0f,0 }, sprite, sprite);
+	entityManager->AddEntity(enemy);
 
+	enemy = new Enemy({ 3.0f,0 }, sprite, sprite);
+	entityManager->AddEntity(enemy);
 
-
+	Player* player = new Player(inputManager, sprite);
+	entityManager->AddEntity(player);
 //
 //#undef LoadImage
 //	resourceManager = new FG::ResourceManager();

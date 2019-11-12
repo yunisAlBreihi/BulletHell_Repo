@@ -7,6 +7,7 @@ namespace FG
 	class Sprite 
 	{
 	public:
+		Sprite() {}
 		Vector2D size;
 		uint16_t spriteIndex;
 		uint16_t textureIndex;
