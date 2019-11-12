@@ -1,24 +1,18 @@
 #pragma once
 #include "Vector2D.h"
 #include "Entity.h"
-#include <vector>
-#include <xmmintrin.h>
-#include <smmintrin.h>
+#include <memory>
+class CollisionSystemImpl;
 
 class CollisionSystem
 {
+	std::unique_ptr<CollisionSystemImpl> impl;
 	CollisionSystem();
 
-	class SpatialObject
-	{
-	public:
-		bool dynamic;
-		float x, y, w, h;
-		FG::Entity* entity;
-	};
-	bool isColliding(const SpatialObject& a, const SpatialObject& b) const;
 	static CollisionSystem* system;
 public:
+	~CollisionSystem() = default;
+
 	static CollisionSystem* GetInstance()
 	{
 		if (system == nullptr)
@@ -33,8 +27,5 @@ public:
 	void TestCollisions();
 	void Clear();
 
-	__m128 c;
-	__m128 w;
-	std::vector<std::vector<SpatialObject>> buckets;
 };
 
