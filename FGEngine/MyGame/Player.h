@@ -22,7 +22,7 @@ public:
 	void Update(float deltaTime) override;
 	void Render(FG::Camera* const camera) override;
 
-	SDL_Rect GetColliderRectangle() override;
+	SDL_Rect GetColliderRectangle();
 	void OnCollision(FG::Entity* other) override;
 
 private:

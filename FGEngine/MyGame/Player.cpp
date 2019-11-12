@@ -4,7 +4,7 @@
 #include <Camera.h>
 #include <Sprite.h>
 #include <SDL_render.h>
-
+#include "CollisionSystem.h"
 Player::Player(FG::InputManager* inputManager, FG::Camera* camera) :
 	inputManager(inputManager), camera(camera)
 {}
@@ -13,6 +13,8 @@ void Player::Update(float deltaTime)
 {
 	MovePlayer(deltaTime);
 	MoveCamera(deltaTime);
+	auto it = CollisionSystem::GetInstance();
+	it->RegisterCollider(position, sprite->size, this, true);
 }
 
 void Player::Render(FG::Camera* const camera)

@@ -11,6 +11,8 @@
 
 #include "Player.h"
 #include "Obstacle.h"
+#include "Enemy.h"
+#include "CollisionSystem.h"
 
 bool GameApplication::Initialize()
 {
@@ -54,6 +56,15 @@ bool GameApplication::Initialize()
 	obstacle->position.x = 500.0f;
 	obstacle->position.y = 500.0f;
 	entityManager->AddEntity(obstacle);
+	sprite = new FG::Sprite();
+	sprite->LoadImage(camera->GetInternalRenderer(), "rocks.png");
+
+	auto tempSprite = new FG::Sprite();
+	tempSprite->LoadImage(camera->GetInternalRenderer(), "rocks.png");
+	entityManager->AddEntity(new Enemy(FG::Vector2D(300, 300), sprite, tempSprite, camera));
+
+	auto instance = CollisionSystem::GetInstance();
+	instance->Setup(50000, 50000, 500);
 
 	return true;
 }
@@ -66,7 +77,10 @@ void GameApplication::Run()
 		time.StartFrame();
 		inputManager->Update(quit);
 		entityManager->Update(time.DeltaTime());
-		entityManager->DoCollisions();
+
+		auto instance = CollisionSystem::GetInstance();
+		instance->TestCollisions();
+
 		camera->StartRenderFrame();
 		entityManager->Render(camera);
 		camera->EndRenderFrame();
