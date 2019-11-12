@@ -1,0 +1,16 @@
+﻿  Camera.cpp
+  Collision.cpp
+  EntityManager.cpp
+  InputManager.cpp
+  Logger.cpp
+  main.cpp
+  Renderer.cpp
+  ResourceManager.cpp
+  Sprite.cpp
+C:\Users\yunis.al.breihi\Documents\BulletHell_Repo\FGEngine\thirdParty\stb\SDL_stbimage.h(346,57): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  Time.cpp
+  Vector2D.cpp
+  Window.cpp
+  Generating Code...
+C:\Users\yunis.al.breihi\Documents\BulletHell_Repo\FGEngine\thirdParty\stb\SDL_stbimage.h(526,36): warning C4244: 'argument': conversion from 'Sint64' to 'int', possible loss of data
+  FGEngine.vcxproj -> C:\Users\yunis.al.breihi\Documents\BulletHell_Repo\FGEngine\builds\engine\Debug\FGEngine_d.lib

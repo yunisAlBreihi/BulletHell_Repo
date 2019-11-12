@@ -1,0 +1,23 @@
+﻿  CollisionSystem.cpp
+cl : command line warning D9025: overriding '/Qpar-' with '/Qpar'
+C:\Users\yunis.al.breihi\Documents\BulletHell_Repo\FGEngine\MyGame\CollisionSystem.cpp(40,32): warning C4244: 'argument': conversion from 'double' to 'const unsigned __int64', possible loss of data
+  Enemy.cpp
+  BulletManager.cpp
+C:\Users\yunis.al.breihi\Documents\BulletHell_Repo\FGEngine\MyGame\CollisionSystem.cpp(90,22): warning C4244: 'argument': conversion from 'float' to 'const unsigned __int64', possible loss of data
+  GameApplication.cpp
+C:\Users\yunis.al.breihi\Documents\BulletHell_Repo\FGEngine\MyGame\BulletManager.cpp(8,37): warning C4267: 'argument': conversion from 'size_t' to 'uint32_t', possible loss of data
+C:\Users\yunis.al.breihi\Documents\BulletHell_Repo\FGEngine\MyGame\Projectile.h(22,11): error C3668: 'Projectile::GetColliderRectangle': method with override specifier 'override' did not override any base class methods
+C:\Users\yunis.al.breihi\Documents\BulletHell_Repo\FGEngine\MyGame\GameApplication.cpp(42,133): error C2660: 'FG::Sprite::LoadImage': function does not take 4 arguments
+C:\Users\yunis.al.breihi\Documents\BulletHell_Repo\FGEngine\FGEngine\Sprite.h(21,8): message : see declaration of 'FG::Sprite::LoadImage'
+C:\Users\yunis.al.breihi\Documents\BulletHell_Repo\FGEngine\MyGame\GameApplication.cpp(47,137): error C2660: 'FG::Sprite::LoadImage': function does not take 4 arguments
+C:\Users\yunis.al.breihi\Documents\BulletHell_Repo\FGEngine\FGEngine\Sprite.h(21,8): message : see declaration of 'FG::Sprite::LoadImage'
+C:\Users\yunis.al.breihi\Documents\BulletHell_Repo\FGEngine\MyGame\GameApplication.cpp(55,139): error C2660: 'FG::Sprite::LoadImage': function does not take 4 arguments
+C:\Users\yunis.al.breihi\Documents\BulletHell_Repo\FGEngine\FGEngine\Sprite.h(21,8): message : see declaration of 'FG::Sprite::LoadImage'
+C:\Users\yunis.al.breihi\Documents\BulletHell_Repo\FGEngine\MyGame\GameApplication.cpp(82,30): error C2039: 'DoCollisions': is not a member of 'FG::EntityManager'
+  Obstacle.cpp
+  Player.cpp
+C:\Users\yunis.al.breihi\Documents\BulletHell_Repo\FGEngine\FGEngine\EntityManager.h(9): message : see declaration of 'FG::EntityManager'
+C:\Users\yunis.al.breihi\Documents\BulletHell_Repo\FGEngine\MyGame\Projectile.h(22,11): error C3668: 'Projectile::GetColliderRectangle': method with override specifier 'override' did not override any base class methods
+C:\Users\yunis.al.breihi\Documents\BulletHell_Repo\FGEngine\MyGame\Player.cpp(32,38): error C2660: 'FG::Sprite::Render': function does not take 3 arguments
+  Generating Code...
+C:\Users\yunis.al.breihi\Documents\BulletHell_Repo\FGEngine\FGEngine\Sprite.h(22,8): message : see declaration of 'FG::Sprite::Render'

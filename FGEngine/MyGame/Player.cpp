@@ -95,8 +95,7 @@ void Player::Shoot(float deltaTime)
 	if (inputManager->IsKeyDown(SDL_SCANCODE_SPACE))
 	{
 		projectile->SetPosition(position);
-		FG::Vector2D vec= projectile->GetPosition();
-		std::cout << vec.x;
+		
 	}
 }
 
