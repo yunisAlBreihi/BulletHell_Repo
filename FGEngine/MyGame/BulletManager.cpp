@@ -3,7 +3,7 @@
 #include "Camera.h"
 #include <iostream>
 #include "CollisionSystem.h"
-BulletManager::BulletManager(size_t count, FG::Sprite* sprite)
+BulletManager::BulletManager(size_t count, FG::Sprite sprite)
 {
 	freeIndices = IntervalSet(0, count);
 	bullets.resize(count);
@@ -27,7 +27,7 @@ void BulletManager::Update(float deltaTime)
 		{
 			bullets[i].position.x += bullets[i].dir.x * 150.0f * deltaTime;
 			bullets[i].position.y += bullets[i].dir.y * 150.0f * deltaTime;
-			instance->RegisterCollider(FG::Vector2D(bullets[i].position.x, bullets[i].position.y), bullets[i].sprite->size, &bullets[i], true);
+			instance->RegisterCollider(FG::Vector2D(bullets[i].position.x, bullets[i].position.y), bullets[i].sprite.size, &bullets[i], true);
 		}
 	}
 }
@@ -49,13 +49,14 @@ void BulletManager::DisableBullet(int index)
 	freeIndices.Add(index);
 }
 
-void BulletManager::Render(FG::Camera* camera)
+void BulletManager::Render(Renderer* renderer)
 {
 	for (int i = 0; i < bullets.size(); i++)
 	{
 		if (bullets[i].active)
 		{
-			bullets[i].sprite->Render(camera, bullets[i].position);
+			renderer->Render(bullets[i].position, bullets[i].sprite);
+			//bullets[i].sprite->Render(camera, bullets[i].position);
 		}
 	}
 }

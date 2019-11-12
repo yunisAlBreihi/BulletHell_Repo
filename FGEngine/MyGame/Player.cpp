@@ -5,8 +5,8 @@
 #include <Sprite.h>
 #include <SDL_render.h>
 #include "CollisionSystem.h"
-Player::Player(FG::InputManager* inputManager, FG::Camera* camera) :
-	inputManager(inputManager), camera(camera)
+Player::Player(FG::InputManager* inputManager ) :
+	inputManager(inputManager)
 {}
 
 void Player::Update(float deltaTime)
@@ -17,25 +17,26 @@ void Player::Update(float deltaTime)
 	it->RegisterCollider(position, sprite->size, this, true);
 }
 
-void Player::Render(FG::Camera* const camera)
+void Player::Render(Renderer* const camera)
 {
-	SDL_Color oldDrawColor;
-	SDL_GetRenderDrawColor(camera->GetInternalRenderer(),
-		&oldDrawColor.r, &oldDrawColor.g, &oldDrawColor.b, &oldDrawColor.a);
+	//SDL_Color oldDrawColor;
+	//SDL_GetRenderDrawColor(camera->GetInternalRenderer(),
+	//	&oldDrawColor.r, &oldDrawColor.g, &oldDrawColor.b, &oldDrawColor.a);
 
-	sprite->Render(camera, position);
-	DrawBoundingBox();
-	isColliding = false;
+	//sprite->Render(camera, position);
+	//DrawBoundingBox();
+	//isColliding = false;
 
-	SDL_SetRenderDrawColor(camera->GetInternalRenderer(),
-		oldDrawColor.r, oldDrawColor.g, oldDrawColor.b, oldDrawColor.a);
+	//SDL_SetRenderDrawColor(camera->GetInternalRenderer(),
+	//	oldDrawColor.r, oldDrawColor.g, oldDrawColor.b, oldDrawColor.a);
 }
 
 SDL_Rect Player::GetColliderRectangle()
 {
-	FG::Vector2D finalPosition = position - camera->position;
-	return { (int)finalPosition.x, (int)finalPosition.y,
-	(int)sprite->size.x, (int)sprite->size.y };
+	//FG::Vector2D finalPosition = position - camera->position;
+	//return { (int)finalPosition.x, (int)finalPosition.y,
+	//(int)sprite->size.x, (int)sprite->size.y };
+	return { 0,0,0,0 };
 }
 
 void Player::OnCollision(FG::Entity* other)
@@ -45,17 +46,17 @@ void Player::OnCollision(FG::Entity* other)
 
 void Player::DrawBoundingBox()
 {
-	SDL_Color color = notCollidingColor;
-	if (isColliding)
-	{
-		color = CollidingColor;
-	}
+	//SDL_Color color = notCollidingColor;
+	//if (isColliding)
+	//{
+	//	color = CollidingColor;
+	//}
 
-	SDL_Rect finalRect = GetColliderRectangle();
-	SDL_SetRenderDrawColor(camera->GetInternalRenderer(),
-		color.r, color.g, color.b, color.a);
+	//SDL_Rect finalRect = GetColliderRectangle();
+	//SDL_SetRenderDrawColor(camera->GetInternalRenderer(),
+	//	color.r, color.g, color.b, color.a);
 
-	SDL_RenderDrawRect(camera->GetInternalRenderer(), &finalRect);
+	//SDL_RenderDrawRect(camera->GetInternalRenderer(), &finalRect);
 }
 
 void Player::MovePlayer(float deltaTime)
@@ -107,5 +108,5 @@ void Player::MoveCamera(float deltaTime)
 		movement.y = 1.0f;
 	}
 
-	camera->position += movement * speed * deltaTime;
+	//camera->position += movement * speed * deltaTime;
 }

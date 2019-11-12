@@ -21,13 +21,14 @@ namespace FG
 		}
 	}
 
-	void EntityManager::Render(Camera* const camera)
+	void EntityManager::Render(Renderer*const renderer)
 	{
 		for (auto entity : entities)
 		{
-			entity->Render(camera);
+			entity->Render(renderer);
 		}
 	}
+
 
 	void EntityManager::AddEntity(Entity* entity)
 	{

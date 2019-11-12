@@ -7,10 +7,8 @@ namespace FG
 {
 	class Window;
 	class InputManager;
-	class Camera;
 	class Sprite;
 }
-
 class BulletManager : public FG::Entity
 {
 	class _Bullet : public FG::Entity
@@ -19,7 +17,7 @@ class BulletManager : public FG::Entity
 		bool active = false;
 		FG::Vector2D position;
 		FG::Vector2D dir;
-		FG::Sprite* sprite;
+		FG::Sprite sprite;
 		BulletManager* bulletManager;
 		int index;
 
@@ -27,13 +25,13 @@ class BulletManager : public FG::Entity
 	};
 
 public:
-	BulletManager(size_t count, FG::Sprite* sprite);
+	BulletManager(size_t count, FG::Sprite sprite);
 
 	void Update(float deltaTime);
 	void Shoot(const FG::Vector2D& position, const FG::Vector2D& direction);
 	void DisableBullet(int index);
 
-	void Render(FG::Camera* camera);
+	void Render(Renderer* camera) override;
 
 private:
 	IntervalSet freeIndices;

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include "Renderer.h"
 
 namespace FG
 {
@@ -12,7 +13,7 @@ namespace FG
 		void Shutdown();
 
 		void Update(float deltaTime);
-		void Render(Camera* const camera);
+		void Render(Renderer*const renderer);
 
 		void AddEntity(Entity* entity);
 

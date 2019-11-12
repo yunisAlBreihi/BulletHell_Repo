@@ -2,15 +2,18 @@
 
 #include <Application.h>
 #include <Time.h>
+#include <memory>
 
 namespace FG
 {
 	class Window;
 	class InputManager;
-	class Camera;
 	class EntityManager;
 	class ResourceManager;
 }
+
+class Camera;
+class Renderer;
 
 class GameApplication : public FG::Application
 {
@@ -22,11 +25,13 @@ public:
 private:
 	FG::Window* window = nullptr;
 	FG::InputManager* inputManager = nullptr;
-	FG::Camera* camera = nullptr;
 	FG::EntityManager* entityManager = nullptr;
 	FG::ResourceManager* resourceManager = nullptr;
-
+	std::unique_ptr<Renderer> renderer;
 	FG::Time time;
+
+	Camera* camera;
+
 };
 
 FG::Application* FG::CreateApplication()

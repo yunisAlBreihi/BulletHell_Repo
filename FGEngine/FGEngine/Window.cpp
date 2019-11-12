@@ -9,7 +9,7 @@ namespace FG
 	{
 		window = SDL_CreateWindow(title.c_str(),
 			SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-			width, height, SDL_WINDOW_SHOWN);
+			width, height, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
 		if (!window)
 		{
 			FG::Logger::Log(SDL_GetError(), FG::Logger::RemovePathFromFile(__FILE__), __LINE__);

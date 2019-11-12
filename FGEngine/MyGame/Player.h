@@ -7,7 +7,6 @@ namespace FG
 {
 	class Window;
 	class InputManager;
-	class Camera;
 	class Sprite;
 }
 
@@ -17,18 +16,16 @@ public:
 	float speed = 100.0f;
 	FG::Sprite* sprite = nullptr;
 
-	Player(FG::InputManager* inputManager, FG::Camera* camera);
+	Player(FG::InputManager* inputManager);
 
 	void Update(float deltaTime) override;
-	void Render(FG::Camera* const camera) override;
+	void Render(Renderer* const camera) override;
 
 	SDL_Rect GetColliderRectangle();
 	void OnCollision(FG::Entity* other) override;
 
 private:
 	FG::InputManager* inputManager = nullptr;
-	FG::Camera* camera = nullptr;
-
 	FG::Vector2D position;
 
 	bool isColliding = false;

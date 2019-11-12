@@ -1,30 +1,20 @@
 #pragma once
-#pragma once
-#include <Windows.h>
-
+#include <SDL.h>
 #include "Vector2D.h"
-//#include "GL/glew.h"
 #include "float4.h"
 #include <memory>
-namespace FG
-{
-	class Camera;
-}
+#include "Sprite.h"
+
+class Camera;
 class RenderImpl;
-
-struct Sprite
-{
-	int textureIndex;
-	int spriteIndex;
-};
-
 class Renderer
 {
 	std::unique_ptr<RenderImpl> renderImpl;	
 public:
-	Renderer(const HDC& window);
-	~Renderer() = default;
+	Renderer(SDL_Window* window);
+	~Renderer();
 	void Clear(const float4& color);
-	void Render(const FG::Vector2D& position, const Sprite& sprite);
-	void Present(const FG::Camera *const camera);
+	void Render(const FG::Vector2D& position, const FG::Sprite& sprite);
+	void Present(const Camera *const camera);
 };
+
