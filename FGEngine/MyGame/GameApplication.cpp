@@ -12,6 +12,7 @@
 #include "Player.h"
 #include "Obstacle.h"
 #include "Projectile.h"
+#include "CollisionSystem.h"
 
 bool GameApplication::Initialize()
 {
@@ -38,14 +39,7 @@ bool GameApplication::Initialize()
 	resourceManager = new FG::ResourceManager();
 	FG::Sprite* sprite = new FG::Sprite();
 
-	sprite = new FG::Sprite();
-	sprite->LoadImage(camera->GetInternalRenderer(), "../../../assets/spriteSheets/rider.bmp", FG::Vector2D(0, 0), FG::Vector2D(32, 32));
-	Projectile* projectile = new Projectile(camera);
-	projectile->sprite = sprite;
 
-	sprite = new FG::Sprite();
-	sprite->LoadImage(camera->GetInternalRenderer(), "../../../assets/spriteSheets/ships_human.png",FG::Vector2D(0,143),FG::Vector2D(32,48));
-	resourceManager->AddResource("../../../assets/spriteSheets/ships_human.png", sprite);
 
 	sprite = new FG::Sprite();
 	sprite->LoadImage(camera->GetInternalRenderer(), "rocks.png");
@@ -57,7 +51,10 @@ bool GameApplication::Initialize()
 
 	entityManager = new FG::EntityManager();
 
-	Player* player = new Player(inputManager, camera, projectile);
+	sprite = new FG::Sprite();
+	sprite->LoadImage(camera->GetInternalRenderer(), "../../../assets/spriteSheets/rider.bmp", FG::Vector2D(0, 0), FG::Vector2D(32, 32));
+
+	Player* player = new Player(inputManager, camera, sprite);
 	player->sprite = resourceManager->GetResource<FG::Sprite>("../../../assets/spriteSheets/ships_human.png");
 
 	entityManager->AddEntity(player);
@@ -67,7 +64,8 @@ bool GameApplication::Initialize()
 	obstacle->position.x = 500.0f;
 	obstacle->position.y = 500.0f;
 	entityManager->AddEntity(obstacle);
-
+	auto it = CollisionSystem::GetInstance();
+	it->Setup(50000, 50000, 500);
 	return true;
 }
 
@@ -79,7 +77,8 @@ void GameApplication::Run()
 		time.StartFrame();
 		inputManager->Update(quit);
 		entityManager->Update(time.DeltaTime());
-		entityManager->DoCollisions();
+		auto it = CollisionSystem::GetInstance();
+		it->TestCollisions();
 		camera->StartRenderFrame();
 		entityManager->Render(camera);
 		camera->EndRenderFrame();

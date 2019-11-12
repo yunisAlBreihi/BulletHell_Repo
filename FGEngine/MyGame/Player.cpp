@@ -6,14 +6,12 @@
 #include <SDL_render.h>
 #include <iostream>
 #include "Projectile.h"
+#include "CollisionSystem.h"
 
-Player::Player(FG::InputManager* inputManager, FG::Camera* camera, Projectile* projectile) :
-	inputManager(inputManager), camera(camera), projectile(projectile)
+Player::Player(FG::InputManager* inputManager, FG::Camera* camera, FG::Sprite* sprite) :
+	inputManager(inputManager), camera(camera), bm(BulletManager(1, sprite))
 {
-	if (projectile==nullptr)
-	{
-		std::cout << "kaftn\n";
-	}
+
 }
 
 void Player::Update(float deltaTime)
@@ -21,6 +19,9 @@ void Player::Update(float deltaTime)
 	MovePlayer(deltaTime);
 	MoveCamera(deltaTime);
 	Shoot(deltaTime);
+	bm.Update(deltaTime);
+	auto it = CollisionSystem::GetInstance();
+	it->RegisterCollider(position, sprite->size, this, true);
 }
 
 void Player::Render(FG::Camera* const camera)
@@ -35,6 +36,8 @@ void Player::Render(FG::Camera* const camera)
 
 	SDL_SetRenderDrawColor(camera->GetInternalRenderer(),
 		oldDrawColor.r, oldDrawColor.g, oldDrawColor.b, oldDrawColor.a);
+
+	bm.Render(camera);
 }
 
 SDL_Rect Player::GetColliderRectangle()
@@ -92,10 +95,10 @@ void Player::MovePlayer(float deltaTime)
 
 void Player::Shoot(float deltaTime)
 {
-	if (inputManager->IsKeyDown(SDL_SCANCODE_SPACE))
+	if (inputManager->IsKeyDown(SDL_SCANCODE_F))
 	{
-		projectile->SetPosition(position);
-		
+		std::cout << "shoot\n";
+		bm.Shoot((position + FG::Vector2D(200,0)), { 1,0 });
 	}
 }
 

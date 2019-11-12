@@ -3,6 +3,7 @@
 #include<Sprite.h>
 #include <Camera.h>
 #include <SDL_render.h>
+#include "CollisionSystem.h"
 
 void Obstacle::Render(FG::Camera* const camera)
 {
@@ -16,6 +17,12 @@ void Obstacle::Render(FG::Camera* const camera)
 
 	SDL_SetRenderDrawColor(camera->GetInternalRenderer(),
 		oldDrawColor.r, oldDrawColor.g, oldDrawColor.b, oldDrawColor.a);
+}
+
+void Obstacle::Update(float deltaTime)
+{
+	auto it = CollisionSystem::GetInstance();
+	it->RegisterCollider(position, sprite->size, this, true);
 }
 
 SDL_Rect Obstacle::GetColliderRectangle()
