@@ -18,6 +18,7 @@ public:
 	Obstacle()  {}
 	void Render(Renderer* const camera) override;
 
+	void Update(float deltaTime);
 	SDL_Rect GetColliderRectangle();
 	void OnCollision(FG::Entity* other) override;
 
