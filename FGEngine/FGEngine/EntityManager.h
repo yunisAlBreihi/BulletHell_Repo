@@ -12,7 +12,6 @@ namespace FG
 		void Shutdown();
 
 		void Update(float deltaTime);
-		void DoCollisions();
 		void Render(Camera* const camera);
 
 		void AddEntity(Entity* entity);

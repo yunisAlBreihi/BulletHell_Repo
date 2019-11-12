@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SDL_rect.h>
+#include <iostream>
 
 namespace FG
 {
@@ -12,7 +13,7 @@ namespace FG
 
 		virtual void Update(float deltaTime) {}
 		virtual void Render(Camera* const camera) {}
-		virtual SDL_Rect GetColliderRectangle() = 0;
-		virtual void OnCollision(Entity* other) {}
+		virtual void OnCollision(Entity* other) { std::cout << "collided!" << std::endl; }
+		virtual void TestCollision(Entity* other) {}
 	};
 }
