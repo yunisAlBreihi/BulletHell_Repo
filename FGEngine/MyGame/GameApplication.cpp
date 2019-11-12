@@ -11,6 +11,7 @@
 
 #include "Player.h"
 #include "Obstacle.h"
+#include "Projectile.h"
 
 bool GameApplication::Initialize()
 {
@@ -36,17 +37,29 @@ bool GameApplication::Initialize()
 
 	resourceManager = new FG::ResourceManager();
 	FG::Sprite* sprite = new FG::Sprite();
-	sprite->LoadImage(camera->GetInternalRenderer(), "sports_car.png");
-	resourceManager->AddResource("sports_car.png", sprite);
+
+	sprite = new FG::Sprite();
+	sprite->LoadImage(camera->GetInternalRenderer(), "../../../assets/spriteSheets/rider.bmp", FG::Vector2D(0, 0), FG::Vector2D(32, 32));
+	Projectile* projectile = new Projectile(camera);
+	projectile->sprite = sprite;
+
+	sprite = new FG::Sprite();
+	sprite->LoadImage(camera->GetInternalRenderer(), "../../../assets/spriteSheets/ships_human.png",FG::Vector2D(0,143),FG::Vector2D(32,48));
+	resourceManager->AddResource("../../../assets/spriteSheets/ships_human.png", sprite);
 
 	sprite = new FG::Sprite();
 	sprite->LoadImage(camera->GetInternalRenderer(), "rocks.png");
 	resourceManager->AddResource("rocks.png", sprite);
 
+	sprite = new FG::Sprite();
+	sprite->LoadImage(camera->GetInternalRenderer(), "../../../assets/spriteSheets/ships_human.png", FG::Vector2D(0, 0), FG::Vector2D(32, 32));
+	resourceManager->AddResource("../../../assets/spriteSheets/ships_human.png", sprite);
+
 	entityManager = new FG::EntityManager();
 
-	Player* player = new Player(inputManager, camera);
-	player->sprite = resourceManager->GetResource<FG::Sprite>("sports_car.png");
+	Player* player = new Player(inputManager, camera, projectile);
+	player->sprite = resourceManager->GetResource<FG::Sprite>("../../../assets/spriteSheets/ships_human.png");
+
 	entityManager->AddEntity(player);
 
 	Obstacle* obstacle = new Obstacle(camera);

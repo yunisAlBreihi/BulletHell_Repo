@@ -2,6 +2,7 @@
 
 #include <Entity.h>
 #include <Vector2D.h>
+#include "Projectile.h"
 
 namespace FG
 {
@@ -16,8 +17,10 @@ class Player : public FG::Entity
 public:
 	float speed = 100.0f;
 	FG::Sprite* sprite = nullptr;
+	Projectile* projectile = nullptr;
 
-	Player(FG::InputManager* inputManager, FG::Camera* camera);
+
+	Player(FG::InputManager* inputManager, FG::Camera* camera, Projectile* projectile);
 
 	void Update(float deltaTime) override;
 	void Render(FG::Camera* const camera) override;
@@ -39,5 +42,6 @@ private:
 
 	void DrawBoundingBox();
 	void MovePlayer(float deltaTime);
+	void Shoot(float deltaTime);
 	void MoveCamera(float deltaTime);
 };

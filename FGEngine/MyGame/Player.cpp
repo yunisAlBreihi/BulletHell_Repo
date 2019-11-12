@@ -4,15 +4,23 @@
 #include <Camera.h>
 #include <Sprite.h>
 #include <SDL_render.h>
+#include <iostream>
+#include "Projectile.h"
 
-Player::Player(FG::InputManager* inputManager, FG::Camera* camera) :
-	inputManager(inputManager), camera(camera)
-{}
+Player::Player(FG::InputManager* inputManager, FG::Camera* camera, Projectile* projectile) :
+	inputManager(inputManager), camera(camera), projectile(projectile)
+{
+	if (projectile==nullptr)
+	{
+		std::cout << "kaftn\n";
+	}
+}
 
 void Player::Update(float deltaTime)
 {
 	MovePlayer(deltaTime);
 	MoveCamera(deltaTime);
+	Shoot(deltaTime);
 }
 
 void Player::Render(FG::Camera* const camera)
@@ -21,7 +29,7 @@ void Player::Render(FG::Camera* const camera)
 	SDL_GetRenderDrawColor(camera->GetInternalRenderer(),
 		&oldDrawColor.r, &oldDrawColor.g, &oldDrawColor.b, &oldDrawColor.a);
 
-	sprite->Render(camera, position);
+	sprite->Render(camera, position,true);
 	DrawBoundingBox();
 	isColliding = false;
 
@@ -80,6 +88,16 @@ void Player::MovePlayer(float deltaTime)
 	}
 
 	position += movement * speed * deltaTime;
+}
+
+void Player::Shoot(float deltaTime)
+{
+	if (inputManager->IsKeyDown(SDL_SCANCODE_SPACE))
+	{
+		projectile->SetPosition(position);
+		FG::Vector2D vec= projectile->GetPosition();
+		std::cout << vec.x;
+	}
 }
 
 void Player::MoveCamera(float deltaTime)
