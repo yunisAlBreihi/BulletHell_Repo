@@ -75,6 +75,13 @@ void BaseBullet::Update(float deltaTime)
 {
 	position.x += dir.x * speed * deltaTime;
 	position.y += dir.y * speed * deltaTime;
+
+
+	if (position.x > 5)
+	{
+		bulletManager->DisableBullet(index);
+	}
+
 }
 
 LightBullet::LightBullet()
@@ -87,6 +94,10 @@ void LightBullet::Update(float deltaTime)
 {
 	position.y += dir.x * speed * deltaTime;
 	position.y += dir.y * speed * deltaTime;
+	if (position.y > 10 || position.y < -10)
+	{
+		bulletManager->DisableBullet(index);
+	}
 }
 
 void LightBullet::OnCollision(Entity* other)
