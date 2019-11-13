@@ -72,7 +72,7 @@ Camera::Camera(float3 position, float fov, float near, float far)
 	this->position = float3(position);
 	lookAt = this->position + float3(0, 0, 1);
 	 mat4Util::lookAt(view, position, lookAt, {0, 1, 0});
-	projection = mat4Util::ortho(-zoom, zoom, -zoom, zoom, near, far);
+	projection = mat4Util::ortho(-zoom, zoom, -zoom, zoom, near, -far);
 }
 
 #include <iostream>
