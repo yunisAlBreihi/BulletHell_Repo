@@ -1,15 +1,15 @@
 #include "Renderer.h"
 #include "float4.h"
-//#include "GL/wglew.h"
-//#include "GL/glew.h"
-#include <vector>
 
+#include "GL/glew.h"
+#include "GL/wglew.h"
+#include <vector>
+#include "Shader.h"
+#include "Camera.h"
 #pragma warning(push)
 #pragma warning(disable : 4312)
 #pragma warning(push)
 #pragma warning(disable : 26451)
-
-
 
 struct VAOInfo
 {
@@ -93,26 +93,26 @@ inline void VBO::Init(void* arr, const uint32_t& size, const uint32_t& structSiz
 		Destroy();
 	}
 	this->structSize = structSize;
-	/*glGenBuffers(1, &vbo);
+	glGenBuffers(1, &vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glBufferData(GL_ARRAY_BUFFER, size * structSize, (void*)arr, GL_STREAM_DRAW);
 	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);*/
+	glBindVertexArray(vao);
 	for (int i = 0; i < vaoStructure.vaoStructure.size(); i++)
 	{
 		auto vaoStruct = vaoStructure.vaoStructure[i];
-		//glVertexAttribPointer(vaoStruct.pos, vaoStruct.count, GL_FLOAT, GL_FALSE, structSize, (GLvoid*)vaoStruct.offset);
-		//glEnableVertexAttribArray(vaoStruct.pos);
+		glVertexAttribPointer(vaoStruct.pos, vaoStruct.count, GL_FLOAT, GL_FALSE, structSize, (GLvoid*)vaoStruct.offset);
+		glEnableVertexAttribArray(vaoStruct.pos);
 	}
-	//glBindBuffer(GL_ARRAY_BUFFER, 0);
-	//glBindVertexArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
 }
 
 inline void VBO::BufferData(void* arr, const uint32_t& size)
 {
-	//glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	//glBufferData(GL_ARRAY_BUFFER, size * structSize, arr, GL_STREAM_DRAW);
-	//glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBufferData(GL_ARRAY_BUFFER, size * structSize, arr, GL_STREAM_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 inline void VAO::AddInfo(const VAOInfo& info)
@@ -122,8 +122,11 @@ inline void VAO::AddInfo(const VAOInfo& info)
 
 inline void VBO::Destroy()
 {
-	/*glDeleteBuffers(1, &vbo);
-	glDeleteVertexArrays(1, &vao);*/
+	if (vbo != 0)
+	{
+		glDeleteBuffers(1, &vbo);
+		glDeleteVertexArrays(1, &vao);
+	}
 }
 
 #pragma warning(pop)
@@ -131,74 +134,154 @@ inline void VBO::Destroy()
 
 class RenderImpl
 {
-	RenderImpl();
-public:
-	RenderImpl(HDC window)
-	{
-		hdc = window;
-		//wglSwapIntervalEXT(0);
-
-	//glEnable(GL_DEPTH_TEST);
-	//glDepthFunc(GL_LESS);
-	/*glEnable(GL_MULTISAMPLE_ARB);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glEnable(GL_BLEND);*/
-	}
 	class Batch
 	{
 	public:
 		Batch() {}
 		Batch(uint32_t vao, uint32_t vbo, uint32_t count, uint32_t shaderHandle) {}
+		~Batch() {}
 		uint32_t vao = 0;
 		uint32_t vbo = 0;
 		uint32_t count = 0;
 		uint32_t shaderHandle = 0;
 		uint32_t textureArray = 0;
 	};
-	std::vector<Batch> batches;
-	HDC hdc;
+
+	RenderImpl();
+	void ResetBatches() { batches.clear(); }
+	void Swap()
+	{
+		SDL_GL_SwapWindow(window);
+	}
+public:
+	~RenderImpl();
+	RenderImpl(SDL_Window* window);
 
 	void AddBatch(Batch batch) { batches.emplace_back(batch); }
-	void ResetBatches() { batches.clear(); }
-	std::vector<SpriteVertex> dynamicVertices;
+
+	void Render(const FG::Vector2D& position, const FG::Sprite& sprite)
+	{
+		SpriteVertex vertex;
+		vertex.i = sprite.spriteIndex << 16 | sprite.textureIndex & 0xffff;
+		vertex.x = position.x;
+		vertex.y = position.y;
+		vertex.r = 0;
+		vertex.sx = sprite.size.x;
+		vertex.sy = sprite.size.y;
+		vertices.emplace_back(vertex);
+	}
+
+	void Present(const Camera* const camera)
+	{
+		if (vertices.size() > 0)
+		{
+			if (!vbo.Initialized())
+			{
+				vbo.Init(vertices.data(), (GLuint)vertices.size(), (GLuint)sizeof(SpriteVertex), SpriteVertex::vao);
+				batch.shaderHandle = shader.handle;
+				batch.textureArray = 0;
+				batch.vao = vbo.Vao();
+				batch.vbo = vbo.Vbo();
+			}
+			else
+			{
+				vbo.BufferData(vertices.data(), (GLuint)vertices.size());
+			}
+
+			batch.count = vertices.size();
+			AddBatch(batch);
+		}
+
+		for (auto batch : batches)
+		{
+			glUseProgram(batch.shaderHandle);
+			unsigned int loc = glGetUniformLocation(batch.shaderHandle, "vp");
+			glUniformMatrix4fv(loc, 1, GL_FALSE, camera->GetVP().c);
+
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D_ARRAY, 1);
+			loc = glGetUniformLocation(batch.shaderHandle, "textureArray");
+			glUniform1i(loc, 0);
+
+			loc = glGetUniformLocation(batch.shaderHandle, "tilemapDataArray");
+			if (loc != 0)
+			{
+				int count = 0;
+				float* data = Texture2DHandler::getTextureArrayData(count);
+				glUniform4fv(loc, count, data);
+			}
+			glBindVertexArray(batch.vao);
+			glDrawArrays(GL_POINTS, 0, batch.count);
+		}
+		Swap();
+		vertices.clear();
+		batches.clear();
+	}
+
+private:
+	std::vector<SpriteVertex> vertices;
+	std::vector<Batch> batches;
+	SDL_Window* window;
+	RenderImpl::Batch batch;
+	VBO vbo;
+	Shader shader;
 };
 
-Renderer::Renderer(const HDC& window)
+RenderImpl::~RenderImpl()
+{
+
+}
+
+RenderImpl::RenderImpl(SDL_Window* window)
+{
+	vbo = VBO();
+	this->window = window;
+	SDL_GLContext gContext = SDL_GL_CreateContext(window);
+	if (gContext == NULL)
+	{
+		printf("OpenGL context could not be created! SDL Error: %s\n", SDL_GetError());
+	}
+
+	//	wglSwapIntervalEXT(0);
+	glewExperimental = GL_TRUE;
+	GLenum glewError = glewInit();
+	if (glewError != GLEW_OK)
+	{
+		printf("Error initializing GLEW! %s\n", glewGetErrorString(glewError));
+	}
+
+	//glEnable(GL_DEPTH_TEST);
+	//glDepthFunc(GL_LESS);
+	glEnable(GL_MULTISAMPLE_ARB);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND);
+
+	shader.LoadShaders("..//Shader//vertexShader.vert", "..//Shader//fragmentShader.frag", "..//Shader//geometryShader.geo");
+}
+
+Renderer::Renderer(SDL_Window* window)
 {
 	renderImpl = std::make_unique<RenderImpl>(window);
 }
 
+Renderer::~Renderer()
+{
+}
+
 void Renderer::Clear(const float4& color)
 {
-	/*glClearColor(0.15f, 0.15f, 0.15f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT);*/
+	glClearColor(color.x, color.y, color.z, color.w);
+	glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void Renderer::Present(const FG::Camera *const camera)
+void Renderer::Render(const FG::Vector2D& position, const FG::Sprite& sprite)
 {
-	for (auto batch : renderImpl->batches)
-	{
-		//glUseProgram(batch.shaderHandle);
-		//unsigned int loc = glGetUniformLocation(batch.shaderHandle, "vp");
-		////glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(camera->GetView() * camera->GetProjection()));
-
-		//glActiveTexture(GL_TEXTURE0);
-		//glBindTexture(GL_TEXTURE_2D_ARRAY, 1);
-		//loc = glGetUniformLocation(batch.shaderHandle, "textureArray");
-		//glUniform1i(loc, 0);
-
-		//loc = glGetUniformLocation(batch.shaderHandle, "tilemapDataArray");
-		//if (loc != 0)
-		//{
-		//	int count = 0;
-		//	//float* data = handler.getTextureArrayData(count);
-		//	//glUniform4fv(loc, count, data);
-		//}
-
-
-		//glBindVertexArray(batch.vao);
-		//glDrawArrays(GL_POINTS, 0, batch.count);
-	}
-	//SDL_SwapLayerBuffer
-	//wglSwapLayerBuffers(hdc, WGL_SWAP_MAIN_PLANE);
+	renderImpl->Render(position, sprite);
 }
+
+void Renderer::Present(const Camera *const camera)
+{
+	renderImpl->Present(camera);
+}
+
+

@@ -1,21 +1,21 @@
 #pragma once
 #include "BulletManager.h"
 #include "Entity.h"
+
 class Enemy : public FG::Entity
 {
 	BulletManager bullets;
 public:
-	FG::Sprite* sprite;
+	FG::Sprite sprite;
 	FG::Vector2D position;
-	FG::Camera* camera;
-	Enemy(FG::Vector2D position, FG::Sprite* sprite, FG::Sprite* bulletsSprites, FG::Camera* camera);
+	Enemy(FG::Vector2D position, FG::Sprite sprite, FG::Sprite bulletsSprites);
 
 	void Update(float deltaTime) override;
-	void Render(FG::Camera* const camera) override;
+	void Render(Renderer* const camera) override;
 	virtual void TestCollision(Entity* other) override;
 	void DrawBoundingBox();
 	SDL_Rect GetColliderRectangle();
-	void RenderBullets(FG::Camera* const camera);
+	void RenderBullets(Renderer* const camera);
 
 	bool isColliding = false;
 	SDL_Color notCollidingColor = { 0, 255, 0, 255 };

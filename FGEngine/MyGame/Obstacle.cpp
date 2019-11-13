@@ -4,10 +4,13 @@
 #include <Camera.h>
 #include <SDL_render.h>
 #include "CollisionSystem.h"
+#include "BulletManager.h"
+#include "Player.h"
 
-void Obstacle::Render(FG::Camera* const camera)
+void Obstacle::Render(Renderer* const camera)
 {
-	SDL_Color oldDrawColor;
+	camera->Render(position, sprite);
+	/*SDL_Color oldDrawColor;
 	SDL_GetRenderDrawColor(camera->GetInternalRenderer(),
 		&oldDrawColor.r, &oldDrawColor.g, &oldDrawColor.b, &oldDrawColor.a);
 
@@ -16,20 +19,21 @@ void Obstacle::Render(FG::Camera* const camera)
 	isColliding = false;
 
 	SDL_SetRenderDrawColor(camera->GetInternalRenderer(),
-		oldDrawColor.r, oldDrawColor.g, oldDrawColor.b, oldDrawColor.a);
+		oldDrawColor.r, oldDrawColor.g, oldDrawColor.b, oldDrawColor.a);*/
 }
 
 void Obstacle::Update(float deltaTime)
 {
 	auto it = CollisionSystem::GetInstance();
-	it->RegisterCollider(position, sprite->size, this, true);
+	it->RegisterCollider(position, sprite.size, this, true, it->GetObjectLayer<Obstacle>(), it->GetCollisionMask<_Bullet, Player>());
 }
 
 SDL_Rect Obstacle::GetColliderRectangle()
 {
-	FG::Vector2D finalPosition = position - camera->position;
+	/*FG::Vector2D finalPosition = position - camera->position;
 	return { (int)finalPosition.x, (int)finalPosition.y,
-	(int)sprite->size.x, (int)sprite->size.y };
+	(int)sprite->size.x, (int)sprite->size.y };*/
+	return { 0,0,0,0 };
 }
 
 void Obstacle::OnCollision(FG::Entity* other)
@@ -39,15 +43,15 @@ void Obstacle::OnCollision(FG::Entity* other)
 
 void Obstacle::DrawBoundingBox()
 {
-	SDL_Color color = notCollidingColor;
-	if (isColliding)
-	{
-		color = CollidingColor;
-	}
+	//SDL_Color color = notCollidingColor;
+	//if (isColliding)
+	//{
+	//	color = CollidingColor;
+	//}
 
-	SDL_Rect finalRect = GetColliderRectangle();
-	SDL_SetRenderDrawColor(camera->GetInternalRenderer(),
-		color.r, color.g, color.b, color.a);
+	//SDL_Rect finalRect = GetColliderRectangle();
+	//SDL_SetRenderDrawColor(camera->GetInternalRenderer(),
+	//	color.r, color.g, color.b, color.a);
 
-	SDL_RenderDrawRect(camera->GetInternalRenderer(), &finalRect);
+	//SDL_RenderDrawRect(camera->GetInternalRenderer(), &finalRect);
 }

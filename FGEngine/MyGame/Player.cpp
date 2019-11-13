@@ -2,16 +2,16 @@
 
 #include <InputManager.h>
 #include <Camera.h>
-#include <Sprite.h>
+
 #include <SDL_render.h>
-#include <iostream>
-#include "Projectile.h"
 #include "CollisionSystem.h"
+#include "Window.h"
+#include "Obstacle.h"
+#include "BulletManager.h"
 
-Player::Player(FG::InputManager* inputManager, FG::Camera* camera, FG::Sprite* sprite) :
-	inputManager(inputManager), camera(camera), bm(BulletManager(1, sprite))
+Player::Player(FG::InputManager* inputManager, FG::Sprite sprite ) :
+	inputManager(inputManager), bm(BulletManager(100, sprite)), sprite(sprite)
 {
-
 }
 
 void Player::Update(float deltaTime)
@@ -21,30 +21,51 @@ void Player::Update(float deltaTime)
 	Shoot(deltaTime);
 	bm.Update(deltaTime);
 	auto it = CollisionSystem::GetInstance();
-	it->RegisterCollider(position, sprite->size, this, true);
+
+	auto collisionLayer = it->GetObjectLayer<Player>();
+	auto collidesWith = it->GetCollisionMask<Obstacle>();
+	it->RegisterCollider(position, sprite.size, this, true, collisionLayer, collidesWith);
 }
 
-void Player::Render(FG::Camera* const camera)
+void Player::Render(Renderer* const camera)
 {
-	SDL_Color oldDrawColor;
-	SDL_GetRenderDrawColor(camera->GetInternalRenderer(),
-		&oldDrawColor.r, &oldDrawColor.g, &oldDrawColor.b, &oldDrawColor.a);
+	//sprite.SetIndex(sprite.spriteIndex + 1);
+	//if (sprite.spriteIndex >= 64)
+	//{
+	//	sprite.spriteIndex = 0;
+	//}
+	sprite.size = { 0.5f * FG::Window::aspectRatio, 0.5f * FG::Window::aspectRatio };
 
-	sprite->Render(camera, position,true);
-	DrawBoundingBox();
-	isColliding = false;
-
-	SDL_SetRenderDrawColor(camera->GetInternalRenderer(),
-		oldDrawColor.r, oldDrawColor.g, oldDrawColor.b, oldDrawColor.a);
+	camera->Render(position, sprite);
 
 	bm.Render(camera);
+
+	//SDL_Color oldDrawColor;
+	//SDL_GetRenderDrawColor(camera->GetInternalRenderer(),
+	//	&oldDrawColor.r, &oldDrawColor.g, &oldDrawColor.b, &oldDrawColor.a);
+
+	//sprite->Render(camera, position);
+	//DrawBoundingBox();
+	//isColliding = false;
+
+	//SDL_SetRenderDrawColor(camera->GetInternalRenderer(),
+	//	oldDrawColor.r, oldDrawColor.g, oldDrawColor.b, oldDrawColor.a);
+}
+
+void Player::Shoot(float deltaTime)
+{
+	if (inputManager->IsKeyDown(SDL_SCANCODE_SPACE))
+	{
+		bm.Shoot((position + FG::Vector2D(1, 0)), { 1,0 });
+	}
 }
 
 SDL_Rect Player::GetColliderRectangle()
 {
-	FG::Vector2D finalPosition = position - camera->position;
-	return { (int)finalPosition.x, (int)finalPosition.y,
-	(int)sprite->size.x, (int)sprite->size.y };
+	//FG::Vector2D finalPosition = position - camera->position;
+	//return { (int)finalPosition.x, (int)finalPosition.y,
+	//(int)sprite->size.x, (int)sprite->size.y };
+	return { 0,0,0,0 };
 }
 
 void Player::OnCollision(FG::Entity* other)
@@ -54,17 +75,17 @@ void Player::OnCollision(FG::Entity* other)
 
 void Player::DrawBoundingBox()
 {
-	SDL_Color color = notCollidingColor;
-	if (isColliding)
-	{
-		color = CollidingColor;
-	}
+	//SDL_Color color = notCollidingColor;
+	//if (isColliding)
+	//{
+	//	color = CollidingColor;
+	//}
 
-	SDL_Rect finalRect = GetColliderRectangle();
-	SDL_SetRenderDrawColor(camera->GetInternalRenderer(),
-		color.r, color.g, color.b, color.a);
+	//SDL_Rect finalRect = GetColliderRectangle();
+	//SDL_SetRenderDrawColor(camera->GetInternalRenderer(),
+	//	color.r, color.g, color.b, color.a);
 
-	SDL_RenderDrawRect(camera->GetInternalRenderer(), &finalRect);
+	//SDL_RenderDrawRect(camera->GetInternalRenderer(), &finalRect);
 }
 
 void Player::MovePlayer(float deltaTime)
@@ -93,15 +114,6 @@ void Player::MovePlayer(float deltaTime)
 	position += movement * speed * deltaTime;
 }
 
-void Player::Shoot(float deltaTime)
-{
-	if (inputManager->IsKeyDown(SDL_SCANCODE_F))
-	{
-		std::cout << "shoot\n";
-		bm.Shoot((position + FG::Vector2D(200,0)), { 1,0 });
-	}
-}
-
 void Player::MoveCamera(float deltaTime)
 {
 	FG::Vector2D movement;
@@ -125,5 +137,5 @@ void Player::MoveCamera(float deltaTime)
 		movement.y = 1.0f;
 	}
 
-	camera->position += movement * speed * deltaTime;
+	//camera->position += movement * speed * deltaTime;
 }

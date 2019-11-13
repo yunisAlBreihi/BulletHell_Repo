@@ -2,14 +2,12 @@
 
 #include <Entity.h>
 #include <Vector2D.h>
-#include "Projectile.h"
 #include "BulletManager.h"
-
+#include "Sprite.h"
 namespace FG
 {
 	class Window;
 	class InputManager;
-	class Camera;
 	class Sprite;
 }
 
@@ -17,23 +15,19 @@ class Player : public FG::Entity
 {
 public:
 	BulletManager bm;
+	float speed = 5.0f;
+	FG::Sprite sprite;
 
-	float speed = 100.0f;
-	FG::Sprite* sprite = nullptr;
-
-
-	Player(FG::InputManager* inputManager, FG::Camera* camera, FG::Sprite* sprite);
+	Player(FG::InputManager* inputManager, FG::Sprite sprite);
 
 	void Update(float deltaTime) override;
-	void Render(FG::Camera* const camera) override;
-
+	void Render(Renderer* const renderer) override;
+	void Shoot(float deltaTime);
 	SDL_Rect GetColliderRectangle();
 	void OnCollision(FG::Entity* other) override;
 
 private:
 	FG::InputManager* inputManager = nullptr;
-	FG::Camera* camera = nullptr;
-
 	FG::Vector2D position;
 
 	bool isColliding = false;
@@ -42,6 +36,5 @@ private:
 
 	void DrawBoundingBox();
 	void MovePlayer(float deltaTime);
-	void Shoot(float deltaTime);
 	void MoveCamera(float deltaTime);
 };

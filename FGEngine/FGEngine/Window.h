@@ -19,6 +19,7 @@ namespace FG
 
 		SDL_Window* GetInternalWindow() const { return window; }
 
+		static float aspectRatio;
 	protected:
 		SDL_Window* window = nullptr;
 	};
