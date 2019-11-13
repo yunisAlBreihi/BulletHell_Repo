@@ -1,7 +1,7 @@
 #pragma once
 #include <unordered_map>
 #include "float4.h"
-#include "GL/glew.h"
+#include "glew.h"
 struct Texture2D
 {
 	unsigned int textureHandle;

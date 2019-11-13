@@ -1,8 +1,8 @@
 #include "Renderer.h"
 #include "float4.h"
 
-#include "GL/glew.h"
-#include "GL/wglew.h"
+#include "glew.h"
+#include "wglew.h"
 #include <vector>
 #include "Shader.h"
 #include "Camera.h"
@@ -249,7 +249,7 @@ RenderImpl::RenderImpl(SDL_Window* window)
 	{
 		printf("Error initializing GLEW! %s\n", glewGetErrorString(glewError));
 	}
-
+	SDL_GL_SetSwapInterval(0);
 	//glEnable(GL_DEPTH_TEST);
 	//glDepthFunc(GL_LESS);
 	glEnable(GL_MULTISAMPLE_ARB);

@@ -2,7 +2,7 @@
 #include <iostream>
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
-#include "GL/glew.h"
+#include "glew.h"
 
 
 bool Texture2DHandler::dirty = false;

@@ -7,6 +7,7 @@
 
 class Camera;
 class RenderImpl;
+
 class Renderer
 {
 	std::unique_ptr<RenderImpl> renderImpl;	

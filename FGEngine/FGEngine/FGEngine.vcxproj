@@ -129,6 +129,7 @@
     <ClInclude Include="IResource.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="mat4.h" />
+    <ClInclude Include="Profiler.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="Shader.h" />

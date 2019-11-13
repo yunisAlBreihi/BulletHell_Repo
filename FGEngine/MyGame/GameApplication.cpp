@@ -16,6 +16,7 @@
 #include "CollisionSystem.h"
 #include "Renderer.h"
 #include "SDL_syswm.h"
+#include "Profiler.h"
 bool GameApplication::Initialize()
 {
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
@@ -88,17 +89,22 @@ bool GameApplication::Initialize()
 //	entityManager->AddEntity(new Enemy(FG::Vector2D(300, 300), sprite, tempSprite, camera));
 
 	auto instance = CollisionSystem::GetInstance();
-	instance->Setup(50000, 50000, 500);
+	instance->Setup(500, 500, 10);
 
 	return true;
 }
 
 void GameApplication::Run()
 {
+	Profiler profiler;
 	bool quit = false;
+	int fps = 0;  
+	float deltaTimeAccu = 0;
+
 	while (!quit)
 	{
 		time.StartFrame();
+		profiler.Start("frame time: ", false);
 		inputManager->Update(quit);
 		entityManager->Update(time.DeltaTime());
 
@@ -108,6 +114,16 @@ void GameApplication::Run()
 		renderer->Clear(float4(0.0f, 0.0f, 0.0f, 1.0f));
 		renderer->Present(camera);
 		entityManager->Render(renderer.get());
+
+		deltaTimeAccu += profiler.End();
+		if (deltaTimeAccu >= 1.0f)
+		{
+			std::cout << "FPS: " << fps << '\n';
+			deltaTimeAccu = 0;
+			fps = 0;
+		}
+		fps++;
+		profiler.End();
 		time.EndFrame();
 	}
 }

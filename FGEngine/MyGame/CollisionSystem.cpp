@@ -57,6 +57,7 @@ public:
 		_mm_store_ps(indices, res);
 	}
 
+
 	void RegisterCollider(const FG::Vector2D& pos, const FG::Vector2D& size, FG::Entity* entity, bool dynamic, uint64_t mask, uint64_t collidesWith)
 	{
 		SpatialObject object;
@@ -106,6 +107,10 @@ public:
 			buckets[i].clear();
 		}
 	}
+
+	//TODO: concurrent collision detection	
+	//Update buckets 
+
 
 	void TestCollisions()
 	{
