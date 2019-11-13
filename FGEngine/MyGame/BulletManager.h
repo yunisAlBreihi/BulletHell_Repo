@@ -24,6 +24,7 @@ public:
 	FG::Vector2D position;
 	FG::Vector2D dir;
 	float speed;
+
 	FG::Sprite sprite;
 	BulletManager* bulletManager;
 	int index;

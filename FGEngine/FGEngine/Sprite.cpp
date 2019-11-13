@@ -20,6 +20,14 @@ namespace FG
 		return sprite;
 	}
 
+	Sprite SpriteFactory::LoadSprite(unsigned char* buffer, int width, int height, float4 textureData)
+	{
+		Sprite sprite;
+		sprite.textureIndex = Texture2DHandler::LoadTextureIntoArray(buffer, width, height, textureData);
+		sprite.spriteIndex = 0;
+		return sprite;
+	}
+
 	uint16_t CalculateIndexFromRect(const float4& rect)
 	{
 		//TODO: Implement;

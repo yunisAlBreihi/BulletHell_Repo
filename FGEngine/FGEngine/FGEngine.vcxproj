@@ -48,6 +48,7 @@
     <TargetName>$(ProjectName)_d</TargetName>
     <OutDir>$(SolutionDir)builds\engine\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)builds\engine\$(Configuration)\</IntDir>
+    <IncludePath>$(SolutionDir)FGEngine\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -72,8 +73,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>SDL2_d.lib;glew32d.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)thirdParty\SDL2\libs\;$(SolutionDir)thirdParty\gl\libs\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2_d.lib;glew32d.lib;opengl32.lib;freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)thirdParty\SDL2\libs\;$(SolutionDir)thirdParty\gl\libs\;$(SolutionDir)thirdParty\freetype\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -97,8 +98,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>SDL2.lib;glew32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)thirdParty\SDL2\libs\;$(SolutionDir)thirdParty\gl\libs\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;glew32.lib;opengl32.lib;freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)thirdParty\SDL2\libs\;$(SolutionDir)thirdParty\gl\libs\;$(SolutionDir)thirdParty\freetype\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -126,6 +127,9 @@
     <ClInclude Include="EntityManager.h" />
     <ClInclude Include="float3.h" />
     <ClInclude Include="float4.h" />
+    <ClInclude Include="Font.h" />
+    <ClInclude Include="FontLoader.h" />
+    <ClInclude Include="ft2build.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="IResource.h" />
     <ClInclude Include="Logger.h" />

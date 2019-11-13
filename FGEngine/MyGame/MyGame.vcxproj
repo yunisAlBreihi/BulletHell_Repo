@@ -115,7 +115,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)FGEngine;$(SolutionDir)thirdParty\SDL2\include\;$(SolutionDir)thirdParty\stb\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)FGEngine;$(SolutionDir)thirdParty\SDL2\include\;$(SolutionDir)thirdParty\stb\;$(SolutionDir)thirdParty\gl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <EnableParallelCodeGeneration>false</EnableParallelCodeGeneration>
       <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
       <AdditionalOptions>/Qpar /Qpar-report:2 %(AdditionalOptions)</AdditionalOptions>

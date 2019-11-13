@@ -67,7 +67,7 @@ const float movementSpeed = 3.0f;
 
 Camera::Camera(float3 position, float fov, float near, float far)
 {
-	this->zoom = 5.0f;
+	this->zoom = 10.0f;
 	this->near = near;
 	this->fov = fov;
 	this->far = far;

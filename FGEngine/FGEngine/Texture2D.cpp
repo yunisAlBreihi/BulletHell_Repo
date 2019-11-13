@@ -191,6 +191,43 @@ uint16_t Texture2DHandler::LoadTextureIntoArray(const char* filename, const floa
 	return textureArrayPosition - 1;
 }
 
+//TODO: make sure its in map
+uint16_t Texture2DHandler::LoadTextureIntoArray(unsigned char* buffer, int width, int height, const float4& textureData)
+{
+	if (textureArray == 0)
+	{
+		glGenTextures(1, &textureArray);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D_ARRAY, textureArray);
+		glTexStorage3D(GL_TEXTURE_2D_ARRAY,
+			1,                    //5 mipmaps
+			GL_RGBA8,               //Internal format
+			textureSize, textureSize,           //width,height
+			nTextures                   //Number of layers
+		);
+
+		glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	}
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D_ARRAY, textureArray);
+	glTexSubImage3D(GL_TEXTURE_2D_ARRAY,
+		0,                      //Mipmap number
+		0, textureSize - height, textureArrayPosition, //xoffset, yoffset, zoffset
+		width, height, 1,          //width, height, depth
+		GL_RGBA,                 //format
+		GL_UNSIGNED_BYTE,       //type
+		buffer); //pointer to data
+	glBindTexture(GL_TEXTURE_2D_ARRAY, 0);
+	textureArrayData[textureArrayPosition] = textureData;
+	textureArrayPosition++;
+	dirty = true;
+	return textureArrayPosition - 1;
+}
+
 void Texture2DHandler::UnloadTextureArray()
 {
 	glDeleteTextures(nTextures, &textureArray);

@@ -20,6 +20,7 @@ public:
 	static void FreeTexture(Texture2D& texture);
 
 	static uint16_t LoadTextureIntoArray(const char* filename, const float4& textureData);
+	static uint16_t LoadTextureIntoArray(unsigned char* buffer, int width, int height, const float4& textureData);
 	static void UnloadTextureArray();
 
 	const static uint16_t nTextures = 16;

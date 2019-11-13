@@ -34,6 +34,7 @@ namespace FG
 		//no index or rect means you use index 0, if you set the texture data to (textureWidth, textureHeight, 1, 1), you render the whole texture
 		Sprite LoadSprite(const char* filePath, float4 textureData, const int index);
 		Sprite LoadSprite(const char* filePath, float4 textureData); // uses index 0
+		Sprite LoadSprite(unsigned char* buffer, int width, int height, float4 textureData);
 	/*	Sprite LoadSprite(const char* filePath, float4 textureData, const float4& rect);*/
 
 	};

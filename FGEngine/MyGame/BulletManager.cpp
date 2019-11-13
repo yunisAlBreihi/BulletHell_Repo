@@ -52,6 +52,9 @@ void BulletManager::Render(Renderer* renderer)
 
 BaseBullet::BaseBullet()
 {
+	index = 0;
+	speed = 0;
+	bulletManager = nullptr;
 	layer = EntityLayers::GetEntityLayer<BaseBullet>();
 	collidesWith = EntityLayers::GetEntityMask<Obstacle>();
 }
@@ -76,12 +79,10 @@ void BaseBullet::Update(float deltaTime)
 	position.x += dir.x * speed * deltaTime;
 	position.y += dir.y * speed * deltaTime;
 
-
 	if (position.x > 5)
 	{
 		bulletManager->DisableBullet(index);
 	}
-
 }
 
 LightBullet::LightBullet()

@@ -279,6 +279,19 @@ void Renderer::Render(const FG::Vector2D& position, const FG::Sprite& sprite)
 	renderImpl->Render(position, sprite);
 }
 
+void Renderer::SetFont(const Font& font)
+{
+
+}
+
+void Renderer::RenderQuad(const FG::Vector2D& position, const FG::Vector2D& size, const Color& color, const Color& fillColor)
+{
+}
+
+void Renderer::RenderText(const FG::Vector2D& position, const int textSize, const std::string& text)
+{
+}
+
 void Renderer::Present(const Camera *const camera)
 {
 	renderImpl->Present(camera);
