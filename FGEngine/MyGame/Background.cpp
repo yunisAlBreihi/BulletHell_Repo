@@ -1,13 +1,13 @@
 #include "Background.h"
-#include <stb_image.h>
-#include <SDL_stbimage.h>
+//#include <stb_image.h>
+//#include <SDL_stbimage.h>
 
 
 Background::Background(std::string filePath, SDL_Window* window, SDL_Renderer* renderer) :
 	window(window), renderer(renderer)
 {
-	SDL_Surface* surface = STBIMG_Load(filePath.c_str());
-	texture = SDL_CreateTextureFromSurface(renderer, surface);
+	//SDL_Surface* surface = STBIMG_Load(filePath.c_str());
+	//texture = SDL_CreateTextureFromSurface(renderer, surface);
 
 	SDL_QueryTexture(texture, NULL, NULL, &width, &height);
 	srcRect = { 0,0,width / 2,height };
