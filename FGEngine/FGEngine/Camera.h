@@ -13,7 +13,6 @@ class Camera
 #undef near
 #undef far
 	float fov, near, far, zoom;
-
 	float3 lookAt;
 
 public:

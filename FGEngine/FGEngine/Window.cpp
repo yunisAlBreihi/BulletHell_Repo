@@ -5,6 +5,8 @@
 
 namespace FG
 {
+	float Window::aspectRatio = 0.0f;
+
 	bool Window::Initialize(const std::string& title, int width, int height)
 	{
 		window = SDL_CreateWindow(title.c_str(),
@@ -15,6 +17,8 @@ namespace FG
 			FG::Logger::Log(SDL_GetError(), FG::Logger::RemovePathFromFile(__FILE__), __LINE__);
 			return false;
 		}
+
+		aspectRatio = (float)width / (float)height;
 
 		return true;
 	}
@@ -35,6 +39,8 @@ namespace FG
 
 	void Window::SetSize(int width, int height)
 	{
+		aspectRatio = (float)width / (float)height;
+
 		SDL_SetWindowSize(window, width, height);
 	}
 }

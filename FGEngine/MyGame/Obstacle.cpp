@@ -4,9 +4,12 @@
 #include <Camera.h>
 #include <SDL_render.h>
 #include "CollisionSystem.h"
+#include "BulletManager.h"
+#include "Player.h"
 
 void Obstacle::Render(Renderer* const camera)
 {
+	camera->Render(position, sprite);
 	/*SDL_Color oldDrawColor;
 	SDL_GetRenderDrawColor(camera->GetInternalRenderer(),
 		&oldDrawColor.r, &oldDrawColor.g, &oldDrawColor.b, &oldDrawColor.a);
@@ -22,7 +25,7 @@ void Obstacle::Render(Renderer* const camera)
 void Obstacle::Update(float deltaTime)
 {
 	auto it = CollisionSystem::GetInstance();
-	it->RegisterCollider(position, sprite->size, this, true);
+	it->RegisterCollider(position, sprite.size, this, true, it->GetObjectLayer<Obstacle>(), it->GetCollisionMask<_Bullet, Player>());
 }
 
 SDL_Rect Obstacle::GetColliderRectangle()

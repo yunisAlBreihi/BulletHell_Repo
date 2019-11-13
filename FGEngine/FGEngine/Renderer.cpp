@@ -183,7 +183,11 @@ public:
 				batch.vao = vbo.Vao();
 				batch.vbo = vbo.Vbo();
 			}
-			vbo.BufferData(vertices.data(), (GLuint)vertices.size());
+			else
+			{
+				vbo.BufferData(vertices.data(), (GLuint)vertices.size());
+			}
+
 			batch.count = vertices.size();
 			AddBatch(batch);
 		}
@@ -211,10 +215,10 @@ public:
 		}
 		Swap();
 		vertices.clear();
+		batches.clear();
 	}
 
 private:
-
 	std::vector<SpriteVertex> vertices;
 	std::vector<Batch> batches;
 	SDL_Window* window;
@@ -249,8 +253,8 @@ RenderImpl::RenderImpl(SDL_Window* window)
 	//glEnable(GL_DEPTH_TEST);
 	//glDepthFunc(GL_LESS);
 	glEnable(GL_MULTISAMPLE_ARB);
-	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	//glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND);
 
 	shader.LoadShaders("..//Shader//vertexShader.vert", "..//Shader//fragmentShader.frag", "..//Shader//geometryShader.geo");
 }
@@ -266,7 +270,7 @@ Renderer::~Renderer()
 
 void Renderer::Clear(const float4& color)
 {
-	glClearColor(1.0f, color.y, color.z, color.w);
+	glClearColor(color.x, color.y, color.z, color.w);
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 

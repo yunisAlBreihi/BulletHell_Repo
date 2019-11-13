@@ -5,8 +5,12 @@
 
 #include <SDL_render.h>
 #include "CollisionSystem.h"
+#include "Window.h"
+#include "Obstacle.h"
+#include "BulletManager.h"
+
 Player::Player(FG::InputManager* inputManager, FG::Sprite sprite ) :
-	inputManager(inputManager), bm(BulletManager(5, sprite)), sprite(sprite)
+	inputManager(inputManager), bm(BulletManager(100, sprite)), sprite(sprite)
 {
 }
 
@@ -15,14 +19,27 @@ void Player::Update(float deltaTime)
 	MovePlayer(deltaTime);
 	MoveCamera(deltaTime);
 	Shoot(deltaTime);
+	bm.Update(deltaTime);
 	auto it = CollisionSystem::GetInstance();
-	it->RegisterCollider(position, sprite.size, this, true);
+
+	auto collisionLayer = it->GetObjectLayer<Player>();
+	auto collidesWith = it->GetCollisionMask<Obstacle>();
+	it->RegisterCollider(position, sprite.size, this, true, collisionLayer, collidesWith);
 }
 
 void Player::Render(Renderer* const camera)
 {
-	sprite.size = { 0.5f, 0.5f };
+	//sprite.SetIndex(sprite.spriteIndex + 1);
+	//if (sprite.spriteIndex >= 64)
+	//{
+	//	sprite.spriteIndex = 0;
+	//}
+	sprite.size = { 0.5f * FG::Window::aspectRatio, 0.5f * FG::Window::aspectRatio };
+
 	camera->Render(position, sprite);
+
+	bm.Render(camera);
+
 	//SDL_Color oldDrawColor;
 	//SDL_GetRenderDrawColor(camera->GetInternalRenderer(),
 	//	&oldDrawColor.r, &oldDrawColor.g, &oldDrawColor.b, &oldDrawColor.a);
@@ -37,12 +54,10 @@ void Player::Render(Renderer* const camera)
 
 void Player::Shoot(float deltaTime)
 {
-
 	if (inputManager->IsKeyDown(SDL_SCANCODE_SPACE))
-		if (inputManager->IsKeyDown(SDL_SCANCODE_F))
-		{
-			bm.Shoot((position + FG::Vector2D(200, 0)), { 1,0 });
-		}
+	{
+		bm.Shoot((position + FG::Vector2D(1, 0)), { 1,0 });
+	}
 }
 
 SDL_Rect Player::GetColliderRectangle()
