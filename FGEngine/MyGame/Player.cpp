@@ -10,21 +10,20 @@
 #include "BulletManager.h"
 
 Player::Player(FG::InputManager* inputManager, FG::Sprite sprite ) :
-	inputManager(inputManager), bm(BulletManager(100, sprite)), sprite(sprite)
+	inputManager(inputManager), bm(BulletManager(LightBullet(), 5000, sprite)), sprite(sprite)
 {
+	collidesWith = EntityLayers::GetEntityMask<Obstacle>();
+	layer = EntityLayers::GetEntityLayer<Player>();
 }
 
 void Player::Update(float deltaTime)
 {
 	MovePlayer(deltaTime);
-	MoveCamera(deltaTime);
 	Shoot(deltaTime);
 	bm.Update(deltaTime);
 	auto it = CollisionSystem::GetInstance();
 
-	auto collisionLayer = it->GetObjectLayer<Player>();
-	auto collidesWith = it->GetCollisionMask<Obstacle>();
-	it->RegisterCollider(position, sprite.size, this, true, collisionLayer, collidesWith);
+	it->RegisterCollider(position, sprite.size, this, true);
 }
 
 void Player::Render(Renderer* const camera)
@@ -34,8 +33,6 @@ void Player::Render(Renderer* const camera)
 	//{
 	//	sprite.spriteIndex = 0;
 	//}
-	sprite.size = { 0.5f * FG::Window::aspectRatio, 0.5f * FG::Window::aspectRatio };
-
 	camera->Render(position, sprite);
 
 	bm.Render(camera);
@@ -70,7 +67,12 @@ SDL_Rect Player::GetColliderRectangle()
 
 void Player::OnCollision(FG::Entity* other)
 {
-	isColliding = true;
+	auto it = CollisionSystem::GetInstance();
+	if (other->layer == EntityLayers::GetEntityLayer<Obstacle>())
+	{
+		isColliding = true;
+		std::cout << "colliding!" << std::endl;
+	}
 }
 
 void Player::DrawBoundingBox()
@@ -112,30 +114,4 @@ void Player::MovePlayer(float deltaTime)
 	}
 
 	position += movement * speed * deltaTime;
-}
-
-void Player::MoveCamera(float deltaTime)
-{
-	FG::Vector2D movement;
-	if (inputManager->IsKeyDown(SDL_SCANCODE_LEFT))
-	{
-		movement.x = -1.0f;
-	}
-
-	if (inputManager->IsKeyDown(SDL_SCANCODE_RIGHT))
-	{
-		movement.x = 1.0f;
-	}
-
-	if (inputManager->IsKeyDown(SDL_SCANCODE_UP))
-	{
-		movement.y = -1.0f;
-	}
-
-	if (inputManager->IsKeyDown(SDL_SCANCODE_DOWN))
-	{
-		movement.y = 1.0f;
-	}
-
-	//camera->position += movement * speed * deltaTime;
 }

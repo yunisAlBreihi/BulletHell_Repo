@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include "Vector2D.h"
 
 struct SDL_Window;
 
@@ -20,6 +21,11 @@ namespace FG
 		SDL_Window* GetInternalWindow() const { return window; }
 
 		static float aspectRatio;
+		static FG::Vector2D GetSpriteSize(float width, float height)
+		{
+			return { width * aspectRatio, height * aspectRatio };
+		}
+
 	protected:
 		SDL_Window* window = nullptr;
 	};

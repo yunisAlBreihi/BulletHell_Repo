@@ -35,6 +35,7 @@ public:
 			b.y + b.h >= a.y);
 	}
 
+	//TODO: define a world size, since the game never moves, we can just divide the screen, anything outside is potato
 	void Setup(const int worldX, const int worldY, const float bucketSize)
 	{
 		float bucketSizeF = 1.0f / (float)bucketSize;
@@ -58,6 +59,7 @@ public:
 	}
 
 
+	//TODO: Don't use emplace back, use structure to count n stuff in buckets, we probably reuse most things anyway
 	void RegisterCollider(const FG::Vector2D& pos, const FG::Vector2D& size, FG::Entity* entity, bool dynamic, uint64_t mask, uint64_t collidesWith)
 	{
 		SpatialObject object;
@@ -108,10 +110,8 @@ public:
 		}
 	}
 
-	//TODO: concurrent collision detection	
-	//Update buckets 
-
-
+	//TODO: concurrent collision detection
+	//think about bucket collisions
 	void TestCollisions()
 	{
 		for (int bucket = 0; bucket < buckets.size(); bucket++)
@@ -126,21 +126,20 @@ public:
 
 					bool aCollidesWithB = (a.collidesWith >> b.mask) & 1U;
 					bool bCollidesWithA = (b.collidesWith >> a.mask) & 1U;
-					if (!aCollidesWithB && !bCollidesWithA)
+					if (aCollidesWithB || bCollidesWithA)
 					{
-						continue;
-					}
-					if (a.dynamic || b.dynamic)
-					{
-						if (isColliding(a, b))
+						if (a.dynamic || b.dynamic)
 						{
-							if (aCollidesWithB)
+							if (isColliding(a, b))
 							{
-								a.entity->OnCollision(b.entity);
-							}
-							if (bCollidesWithA)
-							{
-								b.entity->OnCollision(a.entity);
+								if (aCollidesWithB)
+								{
+									a.entity->OnCollision(b.entity);
+								}
+								if (bCollidesWithA)
+								{
+									b.entity->OnCollision(a.entity);
+								}
 							}
 						}
 					}
@@ -166,9 +165,9 @@ void CollisionSystem::Setup(const int worldX, const int worldY, const float buck
 	impl->Setup(worldX, worldY, bucketSize);
 }
 
-void CollisionSystem::RegisterCollider(const FG::Vector2D& pos, const FG::Vector2D& size, FG::Entity* entity, bool dynamic, uint64_t mask, uint64_t collidesWith)
+void CollisionSystem::RegisterCollider(const FG::Vector2D& pos, const FG::Vector2D& size, FG::Entity* entity, bool dynamic)
 {
-	impl->RegisterCollider(pos, size, entity, dynamic, mask, collidesWith);
+	impl->RegisterCollider(pos, size, entity, dynamic, entity->layer, entity->collidesWith);
 }
 
 void CollisionSystem::TestCollisions()

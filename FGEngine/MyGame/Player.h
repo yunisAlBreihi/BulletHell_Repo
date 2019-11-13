@@ -36,5 +36,4 @@ private:
 
 	void DrawBoundingBox();
 	void MovePlayer(float deltaTime);
-	void MoveCamera(float deltaTime);
 };

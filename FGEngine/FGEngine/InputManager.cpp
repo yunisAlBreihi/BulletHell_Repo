@@ -2,7 +2,8 @@
 
 #include <SDL_events.h>
 #include <SDL_timer.h>
-
+#include "Window.h"
+#include "glew.h"
 namespace FG
 {
 	void InputManager::Initialize()
@@ -38,6 +39,17 @@ namespace FG
 			case SDL_QUIT:
 				shouldQuit = true;
 				break;
+			case SDL_WINDOWEVENT:
+			{
+				if (event.window.event == SDL_WINDOWEVENT_RESIZED)
+				{
+					int screen_width = event.window.data1;
+					int screen_height = event.window.data2;
+					glViewport(0, 0, screen_width, screen_height);
+					Window::aspectRatio = (float)screen_height / (float)screen_width;
+				}
+			}
+			break;
 			}
 		}
 	}
