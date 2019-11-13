@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Background.cpp" />
     <ClCompile Include="CollisionSystem.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="BulletManager.cpp" />
@@ -20,6 +21,7 @@
     <ClCompile Include="Projectile.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Background.h" />
     <ClInclude Include="CollisionSystem.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="BulletManager.h" />
@@ -88,7 +90,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)FGEngine;$(SolutionDir)thirdParty\SDL2\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)FGEngine;$(SolutionDir)thirdParty\SDL2\include\;$(SolutionDir)thirdParty\stb\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <EnableParallelCodeGeneration>false</EnableParallelCodeGeneration>
       <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
       <AdditionalOptions>/Qpar /Qpar-report:2 %(AdditionalOptions)</AdditionalOptions>
@@ -110,7 +112,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)FGEngine;$(SolutionDir)thirdParty\SDL2\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)FGEngine;$(SolutionDir)thirdParty\SDL2\include\;$(SolutionDir)thirdParty\stb\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <EnableParallelCodeGeneration>false</EnableParallelCodeGeneration>
       <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
       <AdditionalOptions>/Qpar /Qpar-report:2 %(AdditionalOptions)</AdditionalOptions>
