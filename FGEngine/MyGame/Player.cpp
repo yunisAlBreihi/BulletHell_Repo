@@ -10,82 +10,72 @@
 #include "BulletManager.h"
 
 Player::Player(FG::InputManager* inputManager, FG::Sprite sprite ) :
-	inputManager(inputManager), bm(BulletManager(100, sprite)), sprite(sprite)
+	inputManager(inputManager), bm(BulletManager(BaseBullet(), 500, sprite)), sprite(sprite), lightBulletManager(BulletManager(LightBullet(), 500, sprite))
 {
+	this->sprite.size = { 2.5f, 2.5f };
+	collidesWith = EntityLayers::GetEntityMask<Obstacle>();
+	layer = EntityLayers::GetEntityLayer<Player>();
 }
 
 void Player::Update(float deltaTime)
 {
 	MovePlayer(deltaTime);
-	MoveCamera(deltaTime);
 	Shoot(deltaTime);
+	
 	bm.Update(deltaTime);
-	auto it = CollisionSystem::GetInstance();
+	lightBulletManager.Update(deltaTime);
 
-	auto collisionLayer = it->GetObjectLayer<Player>();
-	auto collidesWith = it->GetCollisionMask<Obstacle>();
-	it->RegisterCollider(position, sprite.size, this, true, collisionLayer, collidesWith);
+	auto it = CollisionSystem::GetInstance();
+	it->RegisterCollider(position, sprite.size, this, true);
 }
 
 void Player::Render(Renderer* const camera)
 {
-	//sprite.SetIndex(sprite.spriteIndex + 1);
-	//if (sprite.spriteIndex >= 64)
-	//{
-	//	sprite.spriteIndex = 0;
-	//}
-	sprite.size = { 0.5f * FG::Window::aspectRatio, 0.5f * FG::Window::aspectRatio };
-
 	camera->Render(position, sprite);
-
 	bm.Render(camera);
-
-	//SDL_Color oldDrawColor;
-	//SDL_GetRenderDrawColor(camera->GetInternalRenderer(),
-	//	&oldDrawColor.r, &oldDrawColor.g, &oldDrawColor.b, &oldDrawColor.a);
-
-	//sprite->Render(camera, position);
-	//DrawBoundingBox();
-	//isColliding = false;
-
-	//SDL_SetRenderDrawColor(camera->GetInternalRenderer(),
-	//	oldDrawColor.r, oldDrawColor.g, oldDrawColor.b, oldDrawColor.a);
+	lightBulletManager.Render(camera);
 }
 
 void Player::Shoot(float deltaTime)
 {
-	if (inputManager->IsKeyDown(SDL_SCANCODE_SPACE))
+	if (inputManager->IsKeyDown(SDL_SCANCODE_Q))
 	{
-		bm.Shoot((position + FG::Vector2D(1, 0)), { 1,0 });
+		usingLight = false;
+	}
+
+	if (inputManager->IsKeyDown(SDL_SCANCODE_E))
+	{
+		usingLight = true;
+	}
+	if (usingLight)
+	{
+		if (inputManager->IsKeyDown(SDL_SCANCODE_SPACE))
+		{
+			lightBulletManager.Shoot((position + FG::Vector2D(1, 0)), { 1,0 });
+		}
+	}
+	else
+	{
+		if (inputManager->IsKeyDown(SDL_SCANCODE_SPACE))
+		{
+			bm.Shoot((position + FG::Vector2D(1, 0)), { 1,0 });
+		}
 	}
 }
 
 SDL_Rect Player::GetColliderRectangle()
 {
-	//FG::Vector2D finalPosition = position - camera->position;
-	//return { (int)finalPosition.x, (int)finalPosition.y,
-	//(int)sprite->size.x, (int)sprite->size.y };
 	return { 0,0,0,0 };
 }
 
 void Player::OnCollision(FG::Entity* other)
 {
-	isColliding = true;
-}
-
-void Player::DrawBoundingBox()
-{
-	//SDL_Color color = notCollidingColor;
-	//if (isColliding)
-	//{
-	//	color = CollidingColor;
-	//}
-
-	//SDL_Rect finalRect = GetColliderRectangle();
-	//SDL_SetRenderDrawColor(camera->GetInternalRenderer(),
-	//	color.r, color.g, color.b, color.a);
-
-	//SDL_RenderDrawRect(camera->GetInternalRenderer(), &finalRect);
+	auto it = CollisionSystem::GetInstance();
+	if (other->layer == EntityLayers::GetEntityLayer<Obstacle>())
+	{
+		isColliding = true;
+		std::cout << "colliding!" << std::endl;
+	}
 }
 
 void Player::MovePlayer(float deltaTime)
@@ -112,30 +102,4 @@ void Player::MovePlayer(float deltaTime)
 	}
 
 	position += movement * speed * deltaTime;
-}
-
-void Player::MoveCamera(float deltaTime)
-{
-	FG::Vector2D movement;
-	if (inputManager->IsKeyDown(SDL_SCANCODE_LEFT))
-	{
-		movement.x = -1.0f;
-	}
-
-	if (inputManager->IsKeyDown(SDL_SCANCODE_RIGHT))
-	{
-		movement.x = 1.0f;
-	}
-
-	if (inputManager->IsKeyDown(SDL_SCANCODE_UP))
-	{
-		movement.y = -1.0f;
-	}
-
-	if (inputManager->IsKeyDown(SDL_SCANCODE_DOWN))
-	{
-		movement.y = 1.0f;
-	}
-
-	//camera->position += movement * speed * deltaTime;
 }

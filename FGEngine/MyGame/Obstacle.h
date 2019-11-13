@@ -15,7 +15,7 @@ public:
 	FG::Vector2D position;
 	FG::Sprite sprite;
 
-	Obstacle(FG::Vector2D position, FG::Sprite sprite) :position(position), sprite(sprite) { this->sprite.size = { 0.5f, 0.5f }; }
+	Obstacle(FG::Vector2D position, FG::Sprite sprite) ; 
 	void Render(Renderer* const camera) override;
 
 	void Update(float deltaTime);

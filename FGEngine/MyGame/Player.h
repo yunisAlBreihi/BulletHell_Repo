@@ -15,6 +15,7 @@ class Player : public FG::Entity
 {
 public:
 	BulletManager bm;
+	BulletManager lightBulletManager;
 	float speed = 5.0f;
 	FG::Sprite sprite;
 
@@ -35,6 +36,7 @@ private:
 	SDL_Color CollidingColor = { 255, 0, 0, 255 };
 
 	void DrawBoundingBox();
+
+	bool usingLight = false;
 	void MovePlayer(float deltaTime);
-	void MoveCamera(float deltaTime);
 };

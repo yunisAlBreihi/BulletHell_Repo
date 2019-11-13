@@ -4,6 +4,7 @@
 #include "Texture2D.h"
 namespace FG
 {
+
 	Sprite SpriteFactory::LoadSprite(const char* filePath, float4 textureData, const int index)
 	{
 		Sprite sprite;
@@ -25,12 +26,4 @@ namespace FG
 		return 0;
 	}
 
-	Sprite SpriteFactory::LoadSprite(const char* filePath, float4 textureData, const float4& rect)
-	{
-		uint16_t index = CalculateIndexFromRect(rect);
-		Sprite sprite;
-		sprite.textureIndex = Texture2DHandler::LoadTextureIntoArray(filePath, textureData);
-		sprite.spriteIndex = index;
-		return sprite;
-	}
 }

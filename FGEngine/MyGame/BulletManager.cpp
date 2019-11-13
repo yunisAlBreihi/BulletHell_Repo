@@ -4,34 +4,19 @@
 #include <iostream>
 #include "Obstacle.h"
 #include "CollisionSystem.h"
-BulletManager::BulletManager(size_t count, FG::Sprite sprite)
-{
-	freeIndices = IntervalSet(0, count);
-	bullets.resize(count);
-	for (int i = 0; i < count; i++)
-	{
-		freeIndices.Add(i);
-		bullets[i].position.x = 0;
-		bullets[i].position.y = 0;
-		bullets[i].sprite = sprite;
-		bullets[i].bulletManager = this;
-		bullets[i].index = i;
-	}
-}
+#include "Enemy.h"
+
 
 void BulletManager::Update(float deltaTime)
 {
 	auto instance = CollisionSystem::GetInstance();
-	auto collisionLayer = instance->GetObjectLayer<_Bullet>();
-	auto collidesWith = instance->GetCollisionMask<Obstacle>();
 	for (int i = 0; i < bullets.size(); i++)
 	{
-		if (bullets[i].active)
+		if (bullets[i]->active)
 		{
-			bullets[i].position.x += bullets[i].dir.x * 10.0f * deltaTime;
-			bullets[i].position.y += bullets[i].dir.y * 10.0f * deltaTime;
-			instance->RegisterCollider(bullets[i].position, bullets[i].sprite.size, &bullets[i], true, collisionLayer, collidesWith);
-			//instance->RegisterCollider(FG::Vector2D(bullets[i].position.x, bullets[i].position.y), bullets[i].sprite.size, &bullets[i], true);
+			bullets[i]->Update(deltaTime);
+
+			instance->RegisterCollider(bullets[i]->position, bullets[i]->sprite.size, bullets[i], true);
 		}
 	}
 }
@@ -41,31 +26,81 @@ void BulletManager::Shoot(const FG::Vector2D& position, const FG::Vector2D& dire
 	int index = freeIndices.GetFirst();
 	if (index != -1)
 	{
-		bullets[index].active = true;
-		bullets[index].position = position;
-		bullets[index].dir = direction;
+		bullets[index]->active = true;
+		bullets[index]->position = position;
+		bullets[index]->dir = direction;
 	}
 }
 
 void BulletManager::DisableBullet(int index)
 {
-	bullets[index].active = false;
-	freeIndices.Add(index);
+	bullets[index]->active = false;
+	freeIndices.Use(index);
 }
 
 void BulletManager::Render(Renderer* renderer)
 {
 	for (int i = 0; i < bullets.size(); i++)
 	{
-		if (bullets[i].active)
+		if (bullets[i]->active)
 		{
-			bullets[i].sprite.size = { 0.5f, 0.5f };
-			renderer->Render(bullets[i].position, bullets[i].sprite);
+			bullets[i]->sprite.size = { 0.5f, 0.5f };
+			renderer->Render(bullets[i]->position, bullets[i]->sprite);
 		}
 	}
 }
 
-void _Bullet::OnCollision(Entity* other)
+BaseBullet::BaseBullet()
+{
+	layer = EntityLayers::GetEntityLayer<BaseBullet>();
+	collidesWith = EntityLayers::GetEntityMask<Obstacle>();
+}
+
+void BaseBullet::Init(BulletManager* manager, int index, float speed)
+{
+	this->index = index;
+	this->speed = speed;
+	this->bulletManager = manager;
+}
+
+void BaseBullet::OnCollision(Entity* other)
+{
+	if (other->layer == EntityLayers::GetEntityLayer<Obstacle>())
+	{
+		bulletManager->DisableBullet(index);
+	}
+}
+
+void BaseBullet::Update(float deltaTime)
+{
+	position.x += dir.x * speed * deltaTime;
+	position.y += dir.y * speed * deltaTime;
+
+
+	if (position.x > 5)
+	{
+		bulletManager->DisableBullet(index);
+	}
+
+}
+
+LightBullet::LightBullet()
+{
+	layer = EntityLayers::GetEntityLayer<LightBullet>();
+	collidesWith = EntityLayers::GetEntityMask<Obstacle>();
+}
+
+void LightBullet::Update(float deltaTime)
+{
+	position.y += dir.x * speed * deltaTime;
+	position.y += dir.y * speed * deltaTime;
+	if (position.y > 10 || position.y < -10)
+	{
+		bulletManager->DisableBullet(index);
+	}
+}
+
+void LightBullet::OnCollision(Entity* other)
 {
 	bulletManager->DisableBullet(index);
 }

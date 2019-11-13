@@ -7,6 +7,14 @@
 #include "BulletManager.h"
 #include "Player.h"
 
+Obstacle::Obstacle(FG::Vector2D position, FG::Sprite sprite)
+	:position(position), sprite(sprite)
+{
+	this->sprite.size = { 0.5f, 0.5f }; 
+	layer = EntityLayers::GetEntityLayer<Obstacle>();
+	collidesWith = EntityLayers::GetEntityMask<BaseBullet>();
+}
+
 void Obstacle::Render(Renderer* const camera)
 {
 	camera->Render(position, sprite);
@@ -25,7 +33,7 @@ void Obstacle::Render(Renderer* const camera)
 void Obstacle::Update(float deltaTime)
 {
 	auto it = CollisionSystem::GetInstance();
-	it->RegisterCollider(position, sprite.size, this, true, it->GetObjectLayer<Obstacle>(), it->GetCollisionMask<_Bullet, Player>());
+	it->RegisterCollider(position, sprite.size, this, false);
 }
 
 SDL_Rect Obstacle::GetColliderRectangle()
@@ -55,3 +63,4 @@ void Obstacle::DrawBoundingBox()
 
 	//SDL_RenderDrawRect(camera->GetInternalRenderer(), &finalRect);
 }
+

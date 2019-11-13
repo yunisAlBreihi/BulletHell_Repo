@@ -17,6 +17,33 @@ public:
 	}
 };
 
+class EntityLayers
+{
+	template <typename... Ts>
+	static typename std::enable_if<sizeof...(Ts) == 0>::type GetEntityMaskA(uint64_t& mask) { }
+
+	template <typename T, typename... Ts>
+	static void GetEntityMaskA(uint64_t& mask) {
+
+		uint32_t id = CollisionMasker::id<T>();
+		mask |= 1ULL << id;
+		GetEntityMaskA<Ts...>(mask);
+	}
+public:
+	template<typename... Ts>
+	static uint64_t GetEntityMask()
+	{
+		uint64_t mask = 0;
+		GetEntityMaskA<Ts...>(mask);
+		return mask;
+	}
+	template <typename T>
+	static uint64_t GetEntityLayer()
+	{
+		return CollisionMasker::id<T>();
+	}
+};
+
 class CollisionSystem
 {
 	std::unique_ptr<CollisionSystemImpl> impl;
@@ -36,35 +63,9 @@ public:
 	}
 
 	void Setup(const int worldX, const int worldY, const float bucketSize);
-	void RegisterCollider(const FG::Vector2D& pos, const FG::Vector2D& size, FG::Entity* entity, bool dynamic, uint64_t objectLayer, uint64_t collidesWith);
+	void RegisterCollider(const FG::Vector2D& pos, const FG::Vector2D& size, FG::Entity* entity, bool dynamic);
 	void TestCollisions();
 	void Clear();
-
-private:
-
-	template <typename... Ts>
-	typename std::enable_if<sizeof...(Ts) == 0>::type GetCollisionMaskA(uint64_t& mask) { }
-
-	template <typename T, typename... Ts>
-	void GetCollisionMaskA(uint64_t& mask) {
-
-		uint32_t id = CollisionMasker::id<T>();
-		mask |= 1ULL << id;
-		GetCollisionMaskA<Ts...>(mask);
-	}
-public:
-	template<typename... Ts>
-	uint64_t GetCollisionMask()
-	{
-		uint64_t mask;
-		GetCollisionMaskA<Ts...>(mask);
-		return mask;
-	}
-	template <typename T>
-	uint64_t GetObjectLayer()
-	{
-		return CollisionMasker::id<T>();
-	}
 
 };
 
