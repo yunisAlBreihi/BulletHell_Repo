@@ -1,29 +1,29 @@
 #pragma once
 #include <string>
 #include <SDL.h>
+#include <Sprite.h>
+#include <Entity.h>	
 
-class Background
+class Background : public FG::Entity
 {
 
 public:
-	Background(std::string filePath, SDL_Window* window, SDL_Renderer* renderer);
+	Background(FG::Sprite sprite);
 	Background();
 
 	~Background();
 
-	void Update();
+	void Update(float deltaTime) override;
 
 private:
-	SDL_Texture* texture = nullptr;
-	SDL_Window* window;
-	SDL_Renderer* renderer;
+	FG::Sprite sprite;
 
-	SDL_Rect srcRect;
+	FG::Vector2D position;
 
 	int width{ 0 };
 	int height{ 0 };
 
-	void Render();
+	void Render(Renderer* const renderer) override;
 
 	
 };
