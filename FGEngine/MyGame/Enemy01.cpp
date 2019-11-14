@@ -5,7 +5,7 @@
 #include <cmath>
 
 Enemy01::Enemy01(FG::Vector2D position, FG::Sprite sprite, FG::Sprite bulletsSprites)
-	: sprite(sprite), position(position), bullets(BaseBullet(), 150, bulletsSprites)
+	: sprite(sprite), position(position), bullets(BaseBullet(), 30, bulletsSprites)
 { 
 
 }
@@ -54,7 +54,6 @@ SDL_Rect Enemy01::GetColliderRectangle()
 
 void Enemy01::BrushBulletSpread(float deltaTime) 
 {
-	if()
 	bulletSpread += 1.0f * deltaTime * bulletDirection;
 
 	if (bulletSpread < -0.85f || bulletSpread > 0.85f)
