@@ -21,7 +21,6 @@ public:
 
 	unsigned char* LoadFont(const char* fileName, int& width, int& height, std::vector<unsigned char>& bufferData, float4& textureData)
 	{
-
 		FT_Face face;
 		auto error = FT_New_Face(library, fileName, 0, &face);
 
@@ -33,7 +32,7 @@ public:
 		error = FT_Set_Char_Size(
 			face,    /* handle to face object           */
 			0,       /* char_width in 1/64th of points  */
-			16 * 64,   /* char_height in 1/64th of points */
+			100 * 64,   /* char_height in 1/64th of points */
 			1000,     /* horizontal device resolution    */
 			1000);   /* vertical device resolution      */
 

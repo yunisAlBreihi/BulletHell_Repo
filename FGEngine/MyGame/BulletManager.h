@@ -47,6 +47,7 @@ class BulletManager : public FG::Entity
 public:
 	template <class T>
 	BulletManager(T obj, size_t count, FG::Sprite sprite);
+
 	void Update(float deltaTime);
 	void Shoot(const FG::Vector2D& position, const FG::Vector2D& direction);
 	void DisableBullet(int index);
@@ -54,7 +55,7 @@ public:
 
 private:
 	IntervalSet freeIndices;
-	std::vector<BaseBullet*> bullets;
+	std::vector<BaseBullet> bullets;
 	
 };
 
@@ -65,12 +66,12 @@ inline BulletManager::BulletManager(T obj, size_t count, FG::Sprite sprite)
 	freeIndices = IntervalSet(0, count);
 	for (int i = 0; i < count; i++)
 	{
-		bullets.emplace_back(new T());
-		bullets[i]->Init(this, i, 10.0f);
+		bullets.emplace_back(T());
+		bullets[i].Init(this, i, 10.0f);
 
 		freeIndices.Use(i);
-		bullets[i]->position.x = 0;
-		bullets[i]->position.y = 0;
-		bullets[i]->sprite = sprite;
+		bullets[i].position.x = 0;
+		bullets[i].position.y = 0;
+		bullets[i].sprite = sprite;
 	}
 }
