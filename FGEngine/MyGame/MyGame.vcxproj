@@ -15,6 +15,7 @@
     <ClCompile Include="CollisionSystem.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="BulletManager.cpp" />
+    <ClCompile Include="Enemy01.cpp" />
     <ClCompile Include="GameApplication.cpp" />
     <ClCompile Include="Obstacle.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -25,6 +26,7 @@
     <ClInclude Include="CollisionSystem.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="BulletManager.h" />
+    <ClInclude Include="Enemy01.h" />
     <ClInclude Include="GameApplication.h" />
     <ClInclude Include="Intevals.h" />
     <ClInclude Include="Obstacle.h" />
