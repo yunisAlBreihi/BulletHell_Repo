@@ -2,6 +2,7 @@
 #include "Camera.h"
 #include "Sprite.h"
 #include <SDL_render.h>
+
 Enemy::Enemy(FG::Vector2D position, FG::Sprite sprite, FG::Sprite bulletsSprites)
 	: sprite(sprite), position(position), bullets(BaseBullet(), 30, bulletsSprites)
 {

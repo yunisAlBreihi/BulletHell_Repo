@@ -5,7 +5,7 @@
 #include <cmath>
 
 Enemy01::Enemy01(FG::Vector2D position, FG::Sprite sprite, FG::Sprite bulletsSprites)
-	: sprite(sprite), position(position), bullets(BaseBullet(), 30, bulletsSprites)
+	: sprite(sprite), position(position), bullets(BaseBullet(), 150, bulletsSprites)
 { 
 
 }
@@ -23,7 +23,7 @@ void Enemy01::Update(float deltaTime)
 		centerPos.x = 5.5f;
 	}
 
-	BrushBulletSpread(deltaTime);
+	BulletSpread(deltaTime);
 }
 
 void Enemy01::Render(Renderer* const camera)
@@ -51,21 +51,36 @@ SDL_Rect Enemy01::GetColliderRectangle()
 	return { 0,0,0,0 };
 }
 
-
-void Enemy01::BrushBulletSpread(float deltaTime) 
+void Enemy01::BulletSpread(float deltaTime) 
 {
-	bulletSpread += 1.0f * deltaTime * bulletDirection;
+	
 
-	if (bulletSpread < -0.85f || bulletSpread > 0.85f)
+	if (bs == Brush)
 	{
-		bulletDirection *= -1;
-	}
+		Shoot(deltaTime);
 
+		bulletDirection.y += 1.0f * deltaTime * bulletInvert;
+
+		if (bulletDirection.y < -0.85f || bulletDirection.y > 0.85f)
+		{
+			bulletInvert *= -1;
+		}
+	}
+	
+	bullets.Update(deltaTime);
+	
+	if (bs == Triple) 
+	{
+		Shoot(deltaTime);
+	}
+}
+
+void Enemy01::Shoot(float deltaTime)
+{
 	accu += deltaTime;
 	if (accu >= timer)
 	{
-		bullets.Shoot((position + FG::Vector2D(-1, 0)), { -0.5f, bulletSpread });
+		bullets.Shoot((position + FG::Vector2D(-1, 0)), { bulletDirection.x, bulletDirection.y });
 		accu = 0;
 	}
-	bullets.Update(deltaTime);
 }

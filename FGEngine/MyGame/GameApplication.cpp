@@ -17,6 +17,8 @@
 #include "Renderer.h"
 #include "SDL_syswm.h"
 #include "Profiler.h"
+#include "Enemy01.h"
+
 bool GameApplication::Initialize()
 {
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
@@ -35,14 +37,18 @@ bool GameApplication::Initialize()
 	inputManager = new FG::InputManager();
 	inputManager->Initialize();
 
-	renderer = std::make_unique<Renderer>(window->GetInternalWindow()); 
+	renderer = std::make_unique<Renderer>(window->GetInternalWindow());
 
-	camera = new Camera({0, 0, -1}, 45, -1, 100);
+	camera = new Camera({ 0, 0, -1 }, 45, -1, 100);
 
-	FG::SpriteFactory factory;	
-	FG::Sprite sprite = factory.LoadSprite("..//assets//images//test.png",  {0.125f , 0.125f , 8, 8});
+	FG::SpriteFactory factory;
+	FG::Sprite sprite = factory.LoadSprite("..//assets//images//test.png", { 0.125f , 0.125f , 8, 8 });
+	FG::Sprite enemy01Sprite = factory.LoadSprite("..//assets//images//LightSprites01.png", { 0.125f , 0.125f , 8, 8 });
+	enemy01Sprite.spriteIndex = 0;
+	FG::Sprite enemy01BulletSprite = factory.LoadSprite("..//assets//images//LightSprites01.png", { 0.125f , 0.125f , 8, 8 });
+	enemy01BulletSprite.spriteIndex = 6;
 	entityManager = new FG::EntityManager();
-	Enemy* enemy = new Enemy({5.0f,0}, sprite, sprite);
+	Enemy* enemy = new Enemy({ 5.0f,0 }, sprite, sprite);
 	entityManager->AddEntity(enemy);
 
 	enemy = new Enemy({ 1.0f,0 }, sprite, sprite);
@@ -52,6 +58,10 @@ bool GameApplication::Initialize()
 
 	enemy = new Enemy({ 3.0f,0 }, sprite, sprite);
 	entityManager->AddEntity(enemy);
+
+	Enemy01* enemy01 = new Enemy01({ 0, 0 }, enemy01Sprite, enemy01BulletSprite);
+	enemy01->sprite.size = {0.5f,0.75f};
+	entityManager->AddEntity(enemy01);
 
 	Player* player = new Player(inputManager, sprite);
 	entityManager->AddEntity(player);
