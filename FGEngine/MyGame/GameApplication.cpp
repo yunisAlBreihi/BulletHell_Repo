@@ -10,6 +10,7 @@
 #include <Logger.h>
 #include <SDL.h>
 
+#include "StartMenu.h"
 #include "Player.h"
 #include "Obstacle.h"
 #include "Enemy.h"
@@ -42,6 +43,10 @@ bool GameApplication::Initialize()
 	FG::SpriteFactory factory;	
 	FG::Sprite sprite = factory.LoadSprite("..//assets//images//test.png",  {0.125f , 0.125f , 8, 8});
 	entityManager = new FG::EntityManager();
+
+	StartMenu* startMenu = new StartMenu(FG::Vector2D(5, 5), sprite);
+	entityManager->AddEntity(startMenu);
+
 	Enemy* enemy = new Enemy({5.0f,0}, sprite, sprite);
 	entityManager->AddEntity(enemy);
 
