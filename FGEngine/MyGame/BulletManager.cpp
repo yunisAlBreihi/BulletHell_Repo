@@ -7,16 +7,17 @@
 #include "Enemy.h"
 
 
+
 void BulletManager::Update(float deltaTime)
 {
 	auto instance = CollisionSystem::GetInstance();
 	for (int i = 0; i < bullets.size(); i++)
 	{
-		if (bullets[i]->active)
+		if (bullets[i].active)
 		{
-			bullets[i]->Update(deltaTime);
+			bullets[i].Update(deltaTime);
 
-			instance->RegisterCollider(bullets[i]->position, bullets[i]->sprite.size, bullets[i], true);
+			instance->RegisterCollider(bullets[i].position, bullets[i].sprite.size, &bullets[i], true);
 		}
 	}
 }
@@ -26,15 +27,15 @@ void BulletManager::Shoot(const FG::Vector2D& position, const FG::Vector2D& dire
 	int index = freeIndices.GetFirst();
 	if (index != -1)
 	{
-		bullets[index]->active = true;
-		bullets[index]->position = position;
-		bullets[index]->dir = direction;
+		bullets[index].active = true;
+		bullets[index].position = position;
+		bullets[index].dir = direction;
 	}
 }
 
 void BulletManager::DisableBullet(int index)
 {
-	bullets[index]->active = false;
+	bullets[index].active = false;
 	freeIndices.Use(index);
 }
 
@@ -42,10 +43,10 @@ void BulletManager::Render(Renderer* renderer)
 {
 	for (int i = 0; i < bullets.size(); i++)
 	{
-		if (bullets[i]->active)
+		if (bullets[i].active)
 		{
-			bullets[i]->sprite.size = { 0.5f, 0.5f };
-			renderer->Render(bullets[i]->position, bullets[i]->sprite);
+			bullets[i].sprite.size = { 0.5f, 0.5f };
+			renderer->Render(bullets[i].position, bullets[i].sprite);
 		}
 	}
 }
