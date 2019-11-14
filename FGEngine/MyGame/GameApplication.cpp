@@ -17,6 +17,7 @@
 #include "Renderer.h"
 #include "SDL_syswm.h"
 #include "Profiler.h"
+#include "StartMenu.h"
 bool GameApplication::Initialize()
 {
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
@@ -61,6 +62,9 @@ bool GameApplication::Initialize()
 
 	Obstacle* obstacle = new Obstacle(FG::Vector2D(3, 1), sprite2);
 	entityManager->AddEntity(obstacle);
+
+	StartMenu* startMenu = new StartMenu(FG::Vector2D(3, 3), sprite3);
+	entityManager->AddEntity(startMenu);
 
 	//
 //#undef LoadImage

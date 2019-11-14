@@ -3,7 +3,7 @@
 #include "Sprite.h"
 #include <SDL_render.h>
 
-StartMenu::StartMenu(FG::Vector2D position, FG::Sprite sprite)
+StartMenu::StartMenu(FG::Vector2D position, FG::Sprite sprite) : sprite(sprite), position(position)
 {
 
 }
