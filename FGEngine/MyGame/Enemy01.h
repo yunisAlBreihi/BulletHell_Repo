@@ -5,9 +5,20 @@
 
 class Enemy01 : public FG::Entity
 {
-
-	BulletManager bullets;
 public:
+	BulletManager bullets;
+
+	enum BulletSpread 
+	{
+		Brush,
+		Circle,
+		Sun,
+		Forward,
+		UpDown,
+	};
+
+	BulletSpread bs = Brush;
+
 	FG::Sprite sprite;
 	FG::Vector2D position;
 	Enemy01(FG::Vector2D position, FG::Sprite sprite, FG::Sprite bulletsSprites);
@@ -18,6 +29,8 @@ public:
 	void DrawBoundingBox();
 	SDL_Rect GetColliderRectangle();
 	void RenderBullets(Renderer* const camera);
+
+	void BrushBulletSpread(float deltaTime);
 
 	bool isColliding = false;
 	SDL_Color notCollidingColor = { 0, 255, 0, 255 };

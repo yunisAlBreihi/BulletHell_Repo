@@ -23,9 +23,41 @@ void Enemy01::Update(float deltaTime)
 		centerPos.x = 5.5f;
 	}
 
-	bulletSpread += 1.0f* deltaTime *bulletDirection;
+	BrushBulletSpread(deltaTime);
+}
 
-	if (bulletSpread <-0.85f || bulletSpread > 0.85f)
+void Enemy01::Render(Renderer* const camera)
+{
+	camera->Render(position, sprite);
+	bullets.Render(camera);
+}
+
+void Enemy01::TestCollision(Entity* other)
+{
+	bullets.TestCollision(other);
+}
+
+void Enemy01::DrawBoundingBox()
+{
+}
+
+void Enemy01::RenderBullets(Renderer* const renderer)
+{
+	bullets.Render(renderer);
+}
+
+SDL_Rect Enemy01::GetColliderRectangle()
+{
+	return { 0,0,0,0 };
+}
+
+
+void Enemy01::BrushBulletSpread(float deltaTime) 
+{
+	if()
+	bulletSpread += 1.0f * deltaTime * bulletDirection;
+
+	if (bulletSpread < -0.85f || bulletSpread > 0.85f)
 	{
 		bulletDirection *= -1;
 	}
@@ -37,55 +69,4 @@ void Enemy01::Update(float deltaTime)
 		accu = 0;
 	}
 	bullets.Update(deltaTime);
-}
-
-void Enemy01::Render(Renderer* const camera)
-{
-	camera->Render(position, sprite);
-	bullets.Render(camera);
-	/*RenderBullets(camera);
-
-	SDL_Color oldDrawColor;
-	SDL_GetRenderDrawColor(camera->GetInternalRenderer(),
-		&oldDrawColor.r, &oldDrawColor.g, &oldDrawColor.b, &oldDrawColor.a);
-
-	sprite->Render(camera, position);
-	DrawBoundingBox();
-	isColliding = false;
-
-	SDL_SetRenderDrawColor(camera->GetInternalRenderer(),
-		oldDrawColor.r, oldDrawColor.g, oldDrawColor.b, oldDrawColor.a);*/
-}
-
-void Enemy01::TestCollision(Entity* other)
-{
-	bullets.TestCollision(other);
-}
-
-void Enemy01::DrawBoundingBox()
-{
-	//SDL_Color color = notCollidingColor;
-	//if (isColliding)
-	//{
-	//	color = CollidingColor;
-	//}
-
-	//SDL_Rect finalRect = GetColliderRectangle();
-	//SDL_SetRenderDrawColor(camera->GetInternalRenderer(),
-	//	color.r, color.g, color.b, color.a);
-
-	//SDL_RenderDrawRect(camera->GetInternalRenderer(), &finalRect);
-}
-
-void Enemy01::RenderBullets(Renderer* const renderer)
-{
-	bullets.Render(renderer);
-}
-
-SDL_Rect Enemy01::GetColliderRectangle()
-{
-	//FG::Vector2D finalPosition = position - camera->position;
-	//return { (int)finalPosition.x, (int)finalPosition.y,
-	//(int)sprite.size.x, (int)sprite.size.y };
-	return { 0,0,0,0 };
 }

@@ -39,7 +39,11 @@
     <ClCompile Include="Background.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="Enemy01.cpp">
+=======
+    <ClCompile Include="StartMenu.cpp">
+>>>>>>> 83011aa608e18043ceab5ea3e779df1dbe9fcc69
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -71,7 +75,11 @@
     <ClInclude Include="Background.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+<<<<<<< HEAD
     <ClInclude Include="Enemy01.h">
+=======
+    <ClInclude Include="StartMenu.h">
+>>>>>>> 83011aa608e18043ceab5ea3e779df1dbe9fcc69
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
