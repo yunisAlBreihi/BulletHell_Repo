@@ -19,11 +19,11 @@ public:
 	static void LoadTextureNoFlip(const char* fileName, Texture2D& texture);
 	static void FreeTexture(Texture2D& texture);
 
-	static uint16_t LoadTextureIntoArray(const char* filename, const float4& textureData);
-	static uint16_t LoadTextureIntoArray(unsigned char* buffer, int width, int height, const float4& textureData);
+	static uint16_t LoadTextureIntoArray(const char* filename, const int& rows, const int& columns, float& width, float& height, float& aspectRatio);
+	static uint16_t LoadTextureIntoArray(unsigned char* buffer, float width, float height, const float4& textureData);
 	static void UnloadTextureArray();
 
-	const static uint16_t nTextures = 16;
+	const static uint16_t nTextures = 32;
 	static const int textureSize = 2048;
 
 	static std::unordered_map<std::string, unsigned int> textures;

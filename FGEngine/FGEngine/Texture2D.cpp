@@ -113,7 +113,7 @@ void Texture2DHandler::FreeTexture(Texture2D& texture)
 	glDeleteTextures(1, &texture.textureHandle);
 }
 
-uint16_t Texture2DHandler::LoadTextureIntoArray(const char* filename, const float4& textureData)
+uint16_t Texture2DHandler::LoadTextureIntoArray(const char* filename, const int& rows, const int& columns, float& width, float& height, float& aspectRatio)
 {
 	if (textureArrayMap.find(filename) != textureArrayMap.end())
 	{
@@ -125,10 +125,10 @@ uint16_t Texture2DHandler::LoadTextureIntoArray(const char* filename, const floa
 		return -1;
 	}
 
-	int width, height, comp;
+	int textureWidth, textureHeight, comp;
 	unsigned char* imageData;
 
-	imageData = stbi_load(filename, &width, &height, &comp, STBI_rgb_alpha);
+	imageData = stbi_load(filename, &textureWidth, &textureHeight, &comp, STBI_rgb_alpha);
 
 	if (imageData == nullptr)
 	{
@@ -176,8 +176,8 @@ uint16_t Texture2DHandler::LoadTextureIntoArray(const char* filename, const floa
 	glBindTexture(GL_TEXTURE_2D_ARRAY, textureArray);
 	glTexSubImage3D(GL_TEXTURE_2D_ARRAY,
 		0,                      //Mipmap number
-		0, textureSize - height, textureArrayPosition, //xoffset, yoffset, zoffset
-		width, height, 1,          //width, height, depth
+		0, 0, textureArrayPosition, //xoffset, yoffset, zoffset
+		textureWidth, textureHeight, 1,          //width, height, depth
 		GL_RGBA,                 //format
 		GL_UNSIGNED_BYTE,       //type
 		imageData); //pointer to data
@@ -185,14 +185,34 @@ uint16_t Texture2DHandler::LoadTextureIntoArray(const char* filename, const floa
 	stbi_image_free(imageData);
 
 	textureArrayMap.emplace(filename, textureArrayPosition);
-	textureArrayData[textureArrayPosition] = textureData;
+	width = (float)textureWidth / (float)textureSize;
+	height = (float)textureHeight / (float)textureSize;
+	textureArrayData[textureArrayPosition] = float4((1.0f / (float)rows) * width, (1.0f / (float)columns) * height, rows ,columns);
 	textureArrayPosition++;
 	dirty = true;
+
+	if (textureWidth != textureHeight)
+	{
+		if (textureWidth > textureHeight)
+		{
+			aspectRatio = (float)textureWidth / (float)textureHeight;
+		}
+		else
+		{
+			aspectRatio = (float)textureWidth / (float)textureHeight;
+		}
+	
+	}
+	else
+	{
+		aspectRatio = 1.0f;
+	}
+
+
 	return textureArrayPosition - 1;
 }
 
-//TODO: make sure its in map
-uint16_t Texture2DHandler::LoadTextureIntoArray(unsigned char* buffer, int width, int height, const float4& textureData)
+uint16_t Texture2DHandler::LoadTextureIntoArray(unsigned char* buffer, float width, float height, const float4& textureData)
 {
 	if (textureArray == 0)
 	{

@@ -18,8 +18,8 @@ public:
 	~Renderer();
 	void Clear(const float4& color);
 	void Render(const FG::Vector2D& position, const FG::Sprite& sprite);
-	void SetFont(const Font& font);
-	void RenderQuad(const FG::Vector2D& position, const FG::Vector2D& size, const Color& color, const Color& fillColor);
+	void UseFont(const Font& font);
+	void RenderQuad(const FG::Vector2D& position, const FG::Vector2D& size, const Color& borderColor, const Color& fillColor);
 	void RenderText(const FG::Vector2D& position, const int textSize, const std::string& text);
 	void Present(const Camera *const camera);
 };

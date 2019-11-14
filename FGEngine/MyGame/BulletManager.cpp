@@ -17,7 +17,7 @@ void BulletManager::Update(float deltaTime)
 		{
 			bullets[i].Update(deltaTime);
 
-			instance->RegisterCollider(bullets[i].position, bullets[i].sprite.size, &bullets[i], true);
+			instance->RegisterCollider(bullets[i].position, bullets[i].sprite.GetScale(), &bullets[i], true);
 		}
 	}
 }
@@ -45,7 +45,7 @@ void BulletManager::Render(Renderer* renderer)
 	{
 		if (bullets[i].active)
 		{
-			bullets[i].sprite.size = { 0.5f, 0.5f };
+			bullets[i].sprite.SetScale({ 0.5f, 0.5f });
 			renderer->Render(bullets[i].position, bullets[i].sprite);
 		}
 	}

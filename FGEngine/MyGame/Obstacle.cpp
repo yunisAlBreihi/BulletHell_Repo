@@ -10,7 +10,7 @@
 Obstacle::Obstacle(FG::Vector2D position, FG::Sprite sprite)
 	:position(position), sprite(sprite)
 {
-	this->sprite.size = { 0.5f, 0.5f }; 
+	this->sprite.SetScale({0.5f, 0.5f }); 
 	layer = EntityLayers::GetEntityLayer<Obstacle>();
 	collidesWith = EntityLayers::GetEntityMask<BaseBullet>();
 }
@@ -33,7 +33,7 @@ void Obstacle::Render(Renderer* const camera)
 void Obstacle::Update(float deltaTime)
 {
 	auto it = CollisionSystem::GetInstance();
-	it->RegisterCollider(position, sprite.size, this, false);
+	it->RegisterCollider(position, sprite.GetScale(), this, false);
 }
 
 SDL_Rect Obstacle::GetColliderRectangle()
