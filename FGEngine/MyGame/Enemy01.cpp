@@ -4,26 +4,16 @@
 #include <SDL_render.h>
 #include <cmath>
 
-Enemy01::Enemy01(FG::Vector2D position, FG::Sprite sprite, FG::Sprite bulletsSprites)
-	: sprite(sprite), position(position), bullets(BaseBullet(), 150, bulletsSprites)
-{ 
-
+Enemy01::Enemy01(FG::Vector2D position, FG::Sprite sprite, FG::Sprite bulletsSprites, BulletSpreadType bulletSpreadType)
+	: sprite(sprite), position(position), bullets(BaseBullet(), 150, bulletsSprites), bs(bulletSpreadType)
+{
 }
 
 void Enemy01::Update(float deltaTime)
 {
-	centerPos.x -= speed * deltaTime;
+	Move(deltaTime);
 
-	angle += orbitSpeed * deltaTime;
-	position.x = centerPos.x + orbitRadius * cos(angle);
-	position.y = centerPos.y*1.75f + orbitRadius * sin(angle);
-
-	if (centerPos.x < -5.5f)
-	{
-		centerPos.x = 5.5f;
-	}
-
-	BulletSpread(deltaTime);
+	Shoot(deltaTime);
 }
 
 void Enemy01::Render(Renderer* const camera)
@@ -51,36 +41,145 @@ SDL_Rect Enemy01::GetColliderRectangle()
 	return { 0,0,0,0 };
 }
 
-void Enemy01::BulletSpread(float deltaTime) 
+void Enemy01::Shoot(float deltaTime)
 {
-	
-
-	if (bs == Brush)
+	if (bs == Forward)
 	{
-		Shoot(deltaTime);
+		accu += deltaTime;
+		if (accu >= timer)
+		{
+			bullets.Shoot((position + bulletSpawnPosition), { bulletDirection.x, bulletDirection.y });
+			accu = 0;
+		}
+	}
 
-		bulletDirection.y += 1.0f * deltaTime * bulletInvert;
+	if (bs == Wave)
+	{
+		bulletDirection.y += deltaTime * bulletInvert;
 
 		if (bulletDirection.y < -0.85f || bulletDirection.y > 0.85f)
 		{
 			bulletInvert *= -1;
 		}
+		accu += deltaTime;
+		if (accu >= timer)
+		{
+			bullets.Shoot((position + bulletSpawnPosition), { bulletDirection.x, bulletDirection.y });
+			accu = 0;
+		}
 	}
-	
-	bullets.Update(deltaTime);
-	
-	if (bs == Triple) 
+
+	if (bs == Circle)
 	{
-		Shoot(deltaTime);
+		bulletAngle += bulletRotateSpeed * deltaTime;
+
+		bulletSpawnPosition.x = 1.0f * cos(bulletAngle);
+		bulletSpawnPosition.y = 1.0f * sin(bulletAngle);
+
+		accu += deltaTime;
+		timer = .075f;
+		if (accu >= timer)
+		{
+			bullets.Shoot((position + bulletSpawnPosition), { bulletSpawnPosition.x, bulletSpawnPosition.y });
+
+			accu = 0;
+		}
 	}
+
+	if (bs == Triple)
+	{
+		accu += deltaTime;
+		if (accu >= timer)
+		{
+			bullets.Shoot((position + bulletSpawnPosition), { bulletDirection.x, 0.2 });
+			bullets.Shoot((position + bulletSpawnPosition), { bulletDirection.x, 0 });
+			bullets.Shoot((position + bulletSpawnPosition), { bulletDirection.x, -0.2 });
+
+			accu = 0;
+		}
+	}
+
+	if (bs == Double)
+	{
+
+
+		accu += deltaTime;
+		if (accu >= timer)
+		{
+			bullets.Shoot((position + bulletSpawnPosition), { bulletDirection.x, 0.2 });
+			bullets.Shoot((position + bulletSpawnPosition), { bulletDirection.x, -0.2 });
+
+			accu = 0;
+		}
+	}
+
+	if (bs == DoubleWave)
+	{
+		bulletDirection.y += 0.5f * deltaTime * bulletInvert;
+
+		if (bulletDirection.y < 0.0f || bulletDirection.y > 0.6f)
+		{
+			bulletInvert *= -1;
+		}
+
+		accu += deltaTime;
+		if (accu >= timer)
+		{
+			bullets.Shoot((position + bulletSpawnPosition), { bulletDirection.x, bulletDirection.y });
+			bullets.Shoot((position + bulletSpawnPosition), { bulletDirection.x, -bulletDirection.y });
+
+			accu = 0;
+		}
+	}
+
+	if (bs == VerticalDouble)
+	{
+		FG::Vector2D bulletSpawnPositionTop = { 0.2f,-0.4f };
+		FG::Vector2D bulletSpawnPositionBot = { 0.2f,0.8f };
+
+		accu += deltaTime;
+		if (accu >= timer)
+		{
+			bullets.Shoot((position + bulletSpawnPositionTop), { 0, -1 });
+			bullets.Shoot((position + bulletSpawnPositionBot), { 0, 1 });
+
+			accu = 0;
+		}
+	}
+
+	bullets.Update(deltaTime);
 }
 
-void Enemy01::Shoot(float deltaTime)
+void Enemy01::Move(float deltaTime)
 {
-	accu += deltaTime;
-	if (accu >= timer)
+	if (mt == Straight)
 	{
-		bullets.Shoot((position + FG::Vector2D(-1, 0)), { bulletDirection.x, bulletDirection.y });
-		accu = 0;
+		position.x -= speed * deltaTime;
+	}
+
+	if (mt == Circular)
+	{
+		speed = 0.5f;
+
+		centerPos.x -= speed * deltaTime;
+
+		angle += orbitSpeed * deltaTime;
+		position.x = centerPos.x + orbitRadius * cos(angle);
+		position.y = centerPos.y + orbitRadius * sin(angle);
+	}
+
+	if (mt == Sweep)
+	{
+		speed = 0.5f;
+		centerPos.x -= speed * deltaTime;
+
+		angle += orbitSpeed * deltaTime;
+		position.x = centerPos.x + orbitRadius * cos(angle);
+		position.y = centerPos.y + orbitRadius* sin(angle)/2;
+	}
+
+	if (centerPos.x < -5.5f)
+	{
+		centerPos.x = 5.5f;
 	}
 }
