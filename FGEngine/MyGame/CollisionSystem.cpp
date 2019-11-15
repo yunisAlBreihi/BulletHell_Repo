@@ -3,7 +3,7 @@
 #include <xmmintrin.h>
 #include <smmintrin.h>
 
-uint32_t CollisionMasker::counter = 0;
+uint32_t EntityTypeCounter::counter = 0;
 
 #pragma region IMPL
 class CollisionSystemImpl

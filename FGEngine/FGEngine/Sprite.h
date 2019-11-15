@@ -14,7 +14,7 @@ namespace FG
 		Vector2D size;
 
 	public:
-		
+		Sprite();
 		friend class SpriteFactory;
 		void SetScale(const Vector2D& scale) {
 			size.x = textureSize.x * scale.x;

@@ -18,7 +18,7 @@ public:
 	BulletManager lightBulletManager;
 	float speed = 5.0f;
 	FG::Sprite sprite;
-
+	Player();
 	Player(FG::InputManager* inputManager, FG::Sprite sprite);
 
 	void Update(float deltaTime) override;

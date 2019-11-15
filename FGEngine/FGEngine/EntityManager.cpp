@@ -4,7 +4,7 @@
 
 namespace FG
 {
-	void EntityManager::Shutdown()
+	/*void EntityManager::Shutdown()
 	{
 		for (auto it = entities.begin(); it != entities.end(); it++)
 		{
@@ -29,9 +29,52 @@ namespace FG
 		}
 	}
 
-
-	void EntityManager::AddEntity(Entity* entity)
+	void EntityManager::RemoveEntity(Entity* entity)
 	{
-		entities.push_back(entity);
+
+	}*/
+
+	EntityManager::EntityManager()
+	{
+		for (int i = 0; i < 64; i++)
+		{
+			used[i] = 0;
+			entities = new Entity*[64];
+		}
 	}
+
+	EntityManager::~EntityManager()
+	{
+	}
+
+	void EntityManager::Shutdown()
+	{
+	}
+
+	void EntityManager::Update(float deltaTime)
+	{
+		for (int i = 0; i < 64; i++)
+		{
+			for (int j = 0; j < used[i]; j++)
+			{
+				(entities[i] + j)->Update(deltaTime);
+			}
+		}
+	}
+
+	void EntityManager::Render(Renderer* const renderer)
+	{
+		for (int i = 0; i < 64; i++)
+		{
+			for (int j = 0; j < used[i]; j++)
+			{
+				(entities[i] + j)->Render(renderer);
+			}
+		}
+	}
+
+	void EntityManager::RemoveEntity(Entity* entity)
+	{
+	}
+
 }

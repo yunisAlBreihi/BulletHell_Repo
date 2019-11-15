@@ -44,7 +44,7 @@ bool GameApplication::Initialize()
 	FG::Sprite sprite = factory.LoadSprite("..//assets//images//bg.jpg", 1, 1);
 	FG::Sprite sprite2 = factory.LoadSprite("..//assets//images//test.png", 8, 8);
 	FG::Sprite sprite3 = factory.LoadSprite("..//assets//images//DarkSprites01.png", 8, 8);
-	entityManager = new FG::EntityManager();
+	entityManager = new FG::EntityManager();/*
 	Enemy* enemy = new Enemy({5.0f,0}, sprite3, sprite3);
 	entityManager->AddEntity(enemy);
 
@@ -60,7 +60,11 @@ bool GameApplication::Initialize()
 	entityManager->AddEntity(player);
 
 	Obstacle* obstacle = new Obstacle(FG::Vector2D(3, 1), sprite2);
-	entityManager->AddEntity(obstacle);
+	entityManager->AddEntity(obstacle);*/
+
+	entityManager->InitializeEntityArray<Player>(1);
+
+	Player* player = entityManager->CreateEntity<Player>();
 
 	//
 //#undef LoadImage

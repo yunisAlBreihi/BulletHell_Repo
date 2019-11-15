@@ -9,6 +9,15 @@
 #include "Obstacle.h"
 #include "BulletManager.h"
 
+Player::Player()
+	: bm(BaseBullet(), 500, FG::Sprite()), lightBulletManager(BaseBullet(), 500, FG::Sprite())
+{
+	this->sprite.spriteIndex = 0;
+	this->sprite.textureIndex = 0;
+	this->sprite.SetScale(FG::Vector2D(1.0f, 1.0f));
+
+}
+
 Player::Player(FG::InputManager* inputManager, FG::Sprite sprite ) :
 	inputManager(inputManager), bm(BulletManager(BaseBullet(), 500, sprite)), sprite(sprite), lightBulletManager(BulletManager(LightBullet(), 500, sprite))
 {
@@ -19,16 +28,15 @@ Player::Player(FG::InputManager* inputManager, FG::Sprite sprite ) :
 
 void Player::Update(float deltaTime)
 {
+	//MovePlayer(deltaTime);
+	//Shoot(deltaTime);
+	//
+	//bm.Update(deltaTime);
+	//lightBulletManager.Update(deltaTime);
 
-	MovePlayer(deltaTime);
-	Shoot(deltaTime);
-	
-	bm.Update(deltaTime);
-	lightBulletManager.Update(deltaTime);
+	//auto it = CollisionSystem::GetInstance();
 
-	auto it = CollisionSystem::GetInstance();
-
-	it->RegisterCollider(position, sprite.GetScale(), this, true);
+	//it->RegisterCollider(position, sprite.GetScale(), this, true);
 }
 
 void Player::Render(Renderer* const camera)

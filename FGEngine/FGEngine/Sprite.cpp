@@ -5,6 +5,11 @@
 namespace FG
 {
 
+	Sprite::Sprite()
+	{
+		textureSize = { 1.0f, 1.0f };
+	}
+
 	uint16_t CalculateIndexFromRect(const float4& rect)
 	{
 		//TODO: Implement;
