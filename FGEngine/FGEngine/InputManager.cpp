@@ -9,13 +9,14 @@ namespace FG
 	void InputManager::Initialize()
 	{
 		keys = SDL_GetKeyboardState(nullptr);
-		lastKeys = keys;
+		std::copy(keys, keys + 256, lastKeys);
+		//lastKeys = keys;
 	}
 
 	void InputManager::Update(bool& shouldQuit)
 	{
 		SDL_Event event;
-		lastKeys = keys;
+		std::copy(keys, keys+256, lastKeys);
 		keys = SDL_GetKeyboardState(nullptr);
 
 		while (SDL_PollEvent(&event))
@@ -56,15 +57,22 @@ namespace FG
 
 	bool InputManager::IsKeyPressed(SDL_Scancode key) const
 	{
-		if (!lastKeys[key] && keys[key])
-		{ return true; }
+		if (keys[key])
+		{ 
+			if (!lastKeys[key])
+			{
+				return true;
+			}
+		}
 		return false;
 	}
 
 	bool InputManager::IsKeyReleased(SDL_Scancode key) const
 	{
 		if (lastKeys[key] && !keys[key])
-		{ return true; }
+		{ 
+			return true; 
+		}
 		return false;
 	}
 
