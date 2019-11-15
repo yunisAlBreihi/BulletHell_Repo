@@ -33,9 +33,17 @@ namespace FG
 	
 	class SpriteFactory
 	{
+	private:
+		void _LoadSprite(const char* filePath, int rows, int columns, Sprite& sprite);
 	public:
+		SpriteFactory();
+
 		Sprite LoadSprite(const char* filePath);
 		Sprite LoadSprite(const char* filePath, int rows, int columns, const int index);
 		Sprite LoadSprite(const char* filePath, int rows, int columns); // uses index 0
+
+		std::unordered_map<std::string, Sprite> sprites;
+
+
 	};
 }
