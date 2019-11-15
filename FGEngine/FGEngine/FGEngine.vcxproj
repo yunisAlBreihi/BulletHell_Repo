@@ -128,6 +128,7 @@
     <ClInclude Include="float3.h" />
     <ClInclude Include="float4.h" />
     <ClInclude Include="InputManager.h" />
+    <ClInclude Include="Intevals.h" />
     <ClInclude Include="IResource.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="mat4.h" />

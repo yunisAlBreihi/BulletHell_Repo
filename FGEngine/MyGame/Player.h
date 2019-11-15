@@ -14,8 +14,8 @@ namespace FG
 class Player : public FG::Entity
 {
 public:
-	BulletManager bm;
-	BulletManager lightBulletManager;
+	BulletManager* bm;
+	BulletManager* lightBulletManager;
 	float speed = 5.0f;
 	FG::Sprite sprite;
 	Player();

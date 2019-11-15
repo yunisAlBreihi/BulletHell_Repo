@@ -44,6 +44,7 @@ bool GameApplication::Initialize()
 	FG::Sprite sprite = factory.LoadSprite("..//assets//images//bg.jpg", 1, 1);
 	FG::Sprite sprite2 = factory.LoadSprite("..//assets//images//test.png", 8, 8);
 	FG::Sprite sprite3 = factory.LoadSprite("..//assets//images//DarkSprites01.png", 8, 8);
+	FG::Sprite sprite4 = factory.LoadSprite("..//assets//images//DarkSprites01.png", 8, 8);
 	entityManager = new FG::EntityManager();/*
 	Enemy* enemy = new Enemy({5.0f,0}, sprite3, sprite3);
 	entityManager->AddEntity(enemy);
@@ -62,9 +63,16 @@ bool GameApplication::Initialize()
 	Obstacle* obstacle = new Obstacle(FG::Vector2D(3, 1), sprite2);
 	entityManager->AddEntity(obstacle);*/
 
-	entityManager->InitializeEntityArray<Player>(1);
+	entityManager->InitializeEntityArray<Player>(1, inputManager, sprite);
+	entityManager->InitializeEntityArray<Enemy>(10);
 
 	Player* player = entityManager->CreateEntity<Player>();
+	Enemy* enemy1 = entityManager->CreateEntity<Enemy>(FG::Vector2D(3.0f, 3.0f));
+	Enemy* enemy2 = entityManager->CreateEntity<Enemy>();
+	Enemy* enemy3 = entityManager->CreateEntity<Enemy>();
+	Enemy* enemy4 = entityManager->CreateEntity<Enemy>();
+	Enemy* enemy5 = entityManager->CreateEntity<Enemy>();
+	Enemy* enemy6 = entityManager->CreateEntity<Enemy>();
 
 	//
 //#undef LoadImage
@@ -108,12 +116,14 @@ void GameApplication::Run()
 	int fps = 0;  
 	float deltaTimeAccu = 0;
 
+
 	while (!quit)
 	{
 		time.StartFrame();
 		profiler.Start("frame time: ", false);
 		inputManager->Update(quit);
 		entityManager->Update(time.DeltaTime());
+
 		//renderer->RenderText({ 0, 0 }, 16, std::string("Hello World! abcdefghjklmnopqrstuvwxyz . - , > < ! \" / # ¤ % & ( ) = + : ;"));
 		auto instance = CollisionSystem::GetInstance();
 		instance->TestCollisions();
@@ -132,6 +142,7 @@ void GameApplication::Run()
 		fps++;
 		profiler.End();
 		time.EndFrame();
+
 	}
 }
 
@@ -150,12 +161,11 @@ void GameApplication::Shutdown()
 		resourceManager = nullptr;
 	}
 
-	//if (camera)
-	//{
-	//	camera->Shutdown();
-	//	delete camera;
-	//	camera = nullptr;
-	//}
+	if (camera)
+	{
+		delete camera;
+		camera = nullptr;
+	}
 
 	if (inputManager)
 	{

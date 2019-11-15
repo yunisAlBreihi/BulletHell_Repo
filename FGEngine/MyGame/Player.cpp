@@ -10,7 +10,7 @@
 #include "BulletManager.h"
 
 Player::Player()
-	: bm(BaseBullet(), 500, FG::Sprite()), lightBulletManager(BaseBullet(), 500, FG::Sprite())
+	: bm(new BulletManager(BaseBullet(), 500, FG::Sprite())), lightBulletManager(new BulletManager(BaseBullet(), 500, FG::Sprite()))
 {
 	this->sprite.spriteIndex = 0;
 	this->sprite.textureIndex = 0;
@@ -19,7 +19,7 @@ Player::Player()
 }
 
 Player::Player(FG::InputManager* inputManager, FG::Sprite sprite ) :
-	inputManager(inputManager), bm(BulletManager(BaseBullet(), 500, sprite)), sprite(sprite), lightBulletManager(BulletManager(LightBullet(), 500, sprite))
+	inputManager(inputManager), bm(new BulletManager(BulletManager(BaseBullet(), 500, sprite))), sprite(sprite), lightBulletManager(new BulletManager(LightBullet(), 500, sprite))
 {
 	this->sprite.SetScale({ 1.0f, 1.0f });
 	collidesWith = EntityLayers::GetEntityMask<Obstacle>();
@@ -28,48 +28,52 @@ Player::Player(FG::InputManager* inputManager, FG::Sprite sprite ) :
 
 void Player::Update(float deltaTime)
 {
-	//MovePlayer(deltaTime);
-	//Shoot(deltaTime);
-	//
-	//bm.Update(deltaTime);
-	//lightBulletManager.Update(deltaTime);
+	MovePlayer(deltaTime);
+	Shoot(deltaTime);
+	
+	bm->Update(deltaTime);
+	lightBulletManager->Update(deltaTime);
 
-	//auto it = CollisionSystem::GetInstance();
+	auto it = CollisionSystem::GetInstance();
 
-	//it->RegisterCollider(position, sprite.GetScale(), this, true);
+	it->RegisterCollider(position, sprite.GetScale(), this, true);
 }
 
 void Player::Render(Renderer* const camera)
 {
 	camera->Render(position, sprite);
-	bm.Render(camera);
-	lightBulletManager.Render(camera);
+	bm->Render(camera);
+	lightBulletManager->Render(camera);
 }
 
 void Player::Shoot(float deltaTime)
 {
-	if (inputManager->IsKeyDown(SDL_SCANCODE_Q))
+	if (inputManager->IsKeyPressed(SDL_SCANCODE_Q))
 	{
 		usingLight = false;
 	}
 
-	if (inputManager->IsKeyDown(SDL_SCANCODE_E))
+	if (inputManager->IsKeyPressed(SDL_SCANCODE_E))
 	{
 		usingLight = true;
 	}
 	if (usingLight)
 	{
-		if (inputManager->IsKeyDown(SDL_SCANCODE_SPACE))
+		if (inputManager->IsKeyPressed(SDL_SCANCODE_SPACE))
 		{
-			lightBulletManager.Shoot((position + FG::Vector2D(1, 0)), { 1,0 });
+			lightBulletManager->Shoot((position + FG::Vector2D(1, 0)), { 1,0 });
 		}
 	}
 	else
 	{
 		if (inputManager->IsKeyDown(SDL_SCANCODE_SPACE))
 		{
-			bm.Shoot((position + FG::Vector2D(1, 0)), { 1,0 });
+			if (inputManager->IsKeyPressed(SDL_SCANCODE_SPACE))
+			{
+				bm->Shoot((position + FG::Vector2D(1, 0)), { 1,0 });
+			}
 		}
+
 	}
 }
 

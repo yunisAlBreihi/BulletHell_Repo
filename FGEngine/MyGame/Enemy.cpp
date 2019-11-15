@@ -4,9 +4,20 @@
 #include <SDL_render.h>
 
 Enemy::Enemy(FG::Vector2D position, FG::Sprite sprite, FG::Sprite bulletsSprites)
-	: sprite(sprite), position(position), bullets(BaseBullet(), 30, bulletsSprites)
+	: sprite(sprite), position(position), bullets(new BulletManager(BaseBullet(), 30, bulletsSprites))
 {
 
+}
+
+void Enemy::Start()
+{
+	Entity::Start();
+}
+
+void Enemy::Start(FG::Vector2D position)
+{
+	Entity::Start();
+	this->position = position;
 }
 
 void Enemy::Update(float deltaTime)
@@ -14,10 +25,10 @@ void Enemy::Update(float deltaTime)
 	accu += deltaTime;
 	if (accu >= timer)
 	{
-		bullets.Shoot(position + FG::Vector2D(0, 100), FG::Vector2D(0, 10));
+		bullets->Shoot(position + FG::Vector2D(0, 100), FG::Vector2D(0, 10));
 		accu = 0;
 	}
-	bullets.Update(deltaTime);
+	bullets->Update(deltaTime);
 }
 
 void Enemy::Render(Renderer* const camera)
@@ -40,7 +51,7 @@ void Enemy::Render(Renderer* const camera)
 
 void Enemy::TestCollision(Entity* other)
 {
-	bullets.TestCollision(other);
+	bullets->TestCollision(other);
 }
 
 void Enemy::DrawBoundingBox()
@@ -60,7 +71,7 @@ void Enemy::DrawBoundingBox()
 
 void Enemy::RenderBullets(Renderer *const renderer)
 {
-	bullets.Render(renderer);
+	bullets->Render(renderer);
 }
 
 SDL_Rect Enemy::GetColliderRectangle()

@@ -29,7 +29,6 @@
     <ClInclude Include="BulletManager.h" />
     <ClInclude Include="Enemy01.h" />
     <ClInclude Include="GameApplication.h" />
-    <ClInclude Include="Intevals.h" />
     <ClInclude Include="Obstacle.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Projectile.h" />

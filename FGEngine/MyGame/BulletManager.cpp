@@ -8,16 +8,35 @@
 
 
 
+BulletManager::BulletManager()
+{
+//	(void)static_cast<BaseBullet*>((T*)0);
+	freeIndices = IntervalSet(0, 1);
+	bullets = std::vector<BaseBullet*>();
+	bullets.clear();
+	for (int i = 0; i < 1; i++)
+	{
+		bullets.emplace_back(new BaseBullet());
+		bullets[i]->Init(this, i, 10.0f);
+
+		freeIndices.FreeIndex(i);
+		bullets[i]->position.x = 0;
+		bullets[i]->position.y = 0;
+		bullets[i]->sprite = FG::Sprite();
+	}
+}
+
 void BulletManager::Update(float deltaTime)
 {
+
 	auto instance = CollisionSystem::GetInstance();
 	for (int i = 0; i < bullets.size(); i++)
 	{
-		if (bullets[i].active)
+		if (bullets[i]->active)
 		{
-			bullets[i].Update(deltaTime);
+			bullets[i]->Update(deltaTime);
 
-			instance->RegisterCollider(bullets[i].position, bullets[i].sprite.GetScale(), &bullets[i], true);
+			instance->RegisterCollider(bullets[i]->position, bullets[i]->sprite.GetScale(), bullets[i], true);
 		}
 	}
 }
@@ -27,26 +46,26 @@ void BulletManager::Shoot(const FG::Vector2D& position, const FG::Vector2D& dire
 	int index = freeIndices.GetFirst();
 	if (index != -1)
 	{
-		bullets[index].active = true;
-		bullets[index].position = position;
-		bullets[index].dir = direction;
+		bullets[index]->active = true;
+		bullets[index]->position = position;
+		bullets[index]->dir = direction;
 	}
 }
 
 void BulletManager::DisableBullet(int index)
 {
-	bullets[index].active = false;
-	freeIndices.Use(index);
+	bullets[index]->active = false;
+	freeIndices.FreeIndex(index);
 }
 
 void BulletManager::Render(Renderer* renderer)
 {
 	for (int i = 0; i < bullets.size(); i++)
 	{
-		if (bullets[i].active)
+		if (bullets[i]->active)
 		{
-			bullets[i].sprite.SetScale({ 0.5f, 0.5f });
-			renderer->Render(bullets[i].position, bullets[i].sprite);
+			bullets[i]->sprite.SetScale({ 0.5f, 0.5f });
+			renderer->Render(bullets[i]->position, bullets[i]->sprite);
 		}
 	}
 }
