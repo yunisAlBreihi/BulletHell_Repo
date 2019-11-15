@@ -26,5 +26,8 @@ public:
 	mat4 GetVP() const;
 	float3 GetPos() const;
 
+	FG::Vector2D WorldToScreen(const FG::Vector2D& point) const;
+	FG::Vector2D ScreenToWorld(const FG::Vector2D& point) const;
+
 	bool Contains(FG::Vector2D  pos, FG::Vector2D size);
 };

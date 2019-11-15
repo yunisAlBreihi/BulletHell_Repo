@@ -2,14 +2,27 @@
 #include "float4.h"
 #include "Texture2D.h"
 #include "Vector2D.h"
+#include "Window.h"
 namespace FG
 {
+	class SpriteFactory;
+
 	class Sprite 
 	{
-	public:
-		Sprite() {}
+	private:
+		Vector2D textureSize;
 		Vector2D size;
-		uint16_t spriteIndex;
+
+	public:
+		
+		friend class SpriteFactory;
+		void SetScale(const Vector2D& scale) {
+			size.x = textureSize.x * scale.x;
+			size.y = textureSize.y * scale.y;
+		}
+
+		const Vector2D GetScale() const { return size *FG::Window::aspectRatio;};
+		uint16_t spriteIndex;							 
 		uint16_t textureIndex;
 
 		void SetIndex(uint16_t index)
@@ -21,20 +34,8 @@ namespace FG
 	class SpriteFactory
 	{
 	public:
-		//textureData.x is 1.0f / texture width * width of the texture in pixels
-		//textureData.x is 1.0f / texture height * height of the texture in pixels
-		//ex. a texture with size 2048x2048, with 256x256 sized sprites 
-		//x = 1.0f / 2048.0f * 256.0f;
-		//y = 1.0f / 2048.0f * 256.0f;
-		//z and w  = number of sprites in a row/col
-		//in this example, it would be 8
-		//2048 / 256 = 8;
-		//index is the index of the sprite you want to use
-		//rect is used for the same thing, but if you don't want to calculate the index and instead want to just say the pixel coordinates of the sprite
-		//no index or rect means you use index 0, if you set the texture data to (textureWidth, textureHeight, 1, 1), you render the whole texture
-		Sprite LoadSprite(const char* filePath, float4 textureData, const int index);
-		Sprite LoadSprite(const char* filePath, float4 textureData); // uses index 0
-	/*	Sprite LoadSprite(const char* filePath, float4 textureData, const float4& rect);*/
-
+		Sprite LoadSprite(const char* filePath);
+		Sprite LoadSprite(const char* filePath, int rows, int columns, const int index);
+		Sprite LoadSprite(const char* filePath, int rows, int columns); // uses index 0
 	};
 }

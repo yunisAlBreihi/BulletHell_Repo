@@ -12,13 +12,14 @@
 Player::Player(FG::InputManager* inputManager, FG::Sprite sprite ) :
 	inputManager(inputManager), bm(BulletManager(BaseBullet(), 500, sprite)), sprite(sprite), lightBulletManager(BulletManager(LightBullet(), 500, sprite))
 {
-	this->sprite.size = { 2.5f, 2.5f };
+	this->sprite.SetScale({ 1.0f, 1.0f });
 	collidesWith = EntityLayers::GetEntityMask<Obstacle>();
 	layer = EntityLayers::GetEntityLayer<Player>();
 }
 
 void Player::Update(float deltaTime)
 {
+
 	MovePlayer(deltaTime);
 	Shoot(deltaTime);
 	
@@ -26,7 +27,8 @@ void Player::Update(float deltaTime)
 	lightBulletManager.Update(deltaTime);
 
 	auto it = CollisionSystem::GetInstance();
-	it->RegisterCollider(position, sprite.size, this, true);
+
+	it->RegisterCollider(position, sprite.GetScale(), this, true);
 }
 
 void Player::Render(Renderer* const camera)

@@ -17,8 +17,6 @@
 #include "Renderer.h"
 #include "SDL_syswm.h"
 #include "Profiler.h"
-#include "Enemy01.h"
-
 bool GameApplication::Initialize()
 {
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
@@ -37,36 +35,31 @@ bool GameApplication::Initialize()
 	inputManager = new FG::InputManager();
 	inputManager->Initialize();
 
-	renderer = std::make_unique<Renderer>(window->GetInternalWindow());
+	renderer = std::make_unique<Renderer>(window->GetInternalWindow()); 
 
-	camera = new Camera({ 0, 0, -1 }, 45, -1, 100);
+	camera = new Camera({0, 0, -1}, 45, -1, 100);
 
-	FG::SpriteFactory factory;
-	FG::Sprite sprite = factory.LoadSprite("..//assets//images//test.png", { 0.125f , 0.125f , 8, 8 });
-	FG::Sprite enemy01Sprite = factory.LoadSprite("..//assets//images//LightSprites01.png", { 0.125f , 0.125f , 8, 8 });
-	enemy01Sprite.spriteIndex = 0;
-	FG::Sprite enemy01BulletSprite = factory.LoadSprite("..//assets//images//LightSprites01.png", { 0.125f , 0.125f , 8, 8 });
-	enemy01BulletSprite.spriteIndex = 6;
+	FG::SpriteFactory factory;	
+
+	FG::Sprite sprite = factory.LoadSprite("..//assets//images//bg.jpg", 1, 1);
+	FG::Sprite sprite2 = factory.LoadSprite("..//assets//images//test.png", 8, 8);
+	FG::Sprite sprite3 = factory.LoadSprite("..//assets//images//DarkSprites01.png", 8, 8);
 	entityManager = new FG::EntityManager();
-	Enemy* enemy = new Enemy({ 5.0f,0 }, sprite, sprite);
+	Enemy* enemy = new Enemy({5.0f,0}, sprite3, sprite3);
 	entityManager->AddEntity(enemy);
 
-	enemy = new Enemy({ 1.0f,0 }, sprite, sprite);
+	enemy = new Enemy({ 1.0f,0 }, sprite3, sprite3);
 	entityManager->AddEntity(enemy);
-	enemy = new Enemy({ 2.0f,0 }, sprite, sprite);
-	entityManager->AddEntity(enemy);
-
-	enemy = new Enemy({ 3.0f,0 }, sprite, sprite);
+	enemy = new Enemy({ 2.0f,0 }, sprite3, sprite3);
 	entityManager->AddEntity(enemy);
 
-	Enemy01* enemy01 = new Enemy01({ 0, 0 }, enemy01Sprite, enemy01BulletSprite);
-	enemy01->sprite.size = {0.5f,0.75f};
-	entityManager->AddEntity(enemy01);
+	enemy = new Enemy({ 3.0f,0 }, sprite3, sprite3);
+	entityManager->AddEntity(enemy);
 
 	Player* player = new Player(inputManager, sprite);
 	entityManager->AddEntity(player);
 
-	Obstacle* obstacle = new Obstacle(FG::Vector2D(3, 1), sprite);
+	Obstacle* obstacle = new Obstacle(FG::Vector2D(3, 1), sprite2);
 	entityManager->AddEntity(obstacle);
 
 	//
@@ -117,7 +110,7 @@ void GameApplication::Run()
 		profiler.Start("frame time: ", false);
 		inputManager->Update(quit);
 		entityManager->Update(time.DeltaTime());
-
+		//renderer->RenderText({ 0, 0 }, 16, std::string("Hello World! abcdefghjklmnopqrstuvwxyz . - , > < ! \" / # ¤ % & ( ) = + : ;"));
 		auto instance = CollisionSystem::GetInstance();
 		instance->TestCollisions();
 		camera->Update(0.1f, FG::Vector2D(0, 0));

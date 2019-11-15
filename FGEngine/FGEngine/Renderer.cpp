@@ -61,6 +61,20 @@ public:
 	void BufferData(void* arr, const uint32_t& size);
 
 };
+
+struct TextVertex
+{
+	TextVertex(float x, float y, float sx, float sy, float id): x(x), y(y), sx(sx), sy(sy), i(id) { }
+	float x = 0, y = 0, sx = 0, sy = 0, i = 0;
+
+};
+
+struct QuadVertex
+{
+	QuadVertex(float x, float y, float sx, float sy, Color borderColor, Color fillCol) {}
+
+};
+
 struct SpriteVertex
 {
 	SpriteVertex(float x, float y, float sx, float sy, float r, float i) : x(x), y(y), sx(sx), sy(sy), r(r), i(i) {}
@@ -159,6 +173,28 @@ public:
 
 	void AddBatch(Batch batch) { batches.emplace_back(batch); }
 
+	void UseFont(const Font& font)
+	{
+
+	}
+
+	void RenderQuad(const FG::Vector2D& position, const FG::Vector2D& size, const Color& color, const Color& fillColor)
+	{
+
+	}
+
+	void RenderText(const FG::Vector2D& position, const int textSize, const std::string& text)
+	{
+		//for each character get character information
+		for (int i = 0; i < text.size(); i++)
+		{
+			int index = 0;
+			float characterYPos = 0;
+			float characterXPos = 0;
+			textVertices.push_back(TextVertex(position.x + i + characterYPos, position.y + characterYPos, textSize, textSize, index));
+		}
+	}
+
 	void Render(const FG::Vector2D& position, const FG::Sprite& sprite)
 	{
 		SpriteVertex vertex;
@@ -166,8 +202,8 @@ public:
 		vertex.x = position.x;
 		vertex.y = position.y;
 		vertex.r = 0;
-		vertex.sx = sprite.size.x;
-		vertex.sy = sprite.size.y;
+		vertex.sx = sprite.GetScale().x;
+		vertex.sy = sprite.GetScale().y;
 		vertices.emplace_back(vertex);
 	}
 
@@ -220,6 +256,8 @@ public:
 
 private:
 	std::vector<SpriteVertex> vertices;
+	std::vector<TextVertex> textVertices;
+	std::vector<QuadVertex> quadVertices;
 	std::vector<Batch> batches;
 	SDL_Window* window;
 	RenderImpl::Batch batch;
@@ -277,6 +315,21 @@ void Renderer::Clear(const float4& color)
 void Renderer::Render(const FG::Vector2D& position, const FG::Sprite& sprite)
 {
 	renderImpl->Render(position, sprite);
+}
+
+void Renderer::UseFont(const Font& font)
+{
+	renderImpl->UseFont(font);
+}
+
+void Renderer::RenderQuad(const FG::Vector2D& position, const FG::Vector2D& size, const Color& borderColor, const Color& fillColor)
+{
+	renderImpl->RenderQuad(position, size, borderColor, fillColor);
+}
+
+void Renderer::RenderText(const FG::Vector2D& position, const int textSize, const std::string& text)
+{
+	renderImpl->RenderText(position, textSize, text);
 }
 
 void Renderer::Present(const Camera *const camera)

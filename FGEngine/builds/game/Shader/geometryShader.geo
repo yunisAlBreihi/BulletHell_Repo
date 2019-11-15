@@ -38,19 +38,40 @@ void main()
     float yIndex = index / nWidth;
     float xIndex = index % nWidth;
 
-    gl_Position = vp *(gl_in[0].gl_Position + (vec4(-spriteWidth, -spriteHeight, 0, 0)) * rotation);
+
+    //left top rendering
+    gl_Position = vp *(gl_in[0].gl_Position + (vec4(0, 0, 0, 0)) * rotation);
         TexCoord = vec3(xIndex * tileMapData.x, tileMapData.y * yIndex, textureIndex);
     EmitVertex();
 
-    gl_Position =  vp *(gl_in[0].gl_Position + (vec4(spriteWidth, -spriteHeight, 0, 0)) * rotation);
+    gl_Position =  vp *(gl_in[0].gl_Position + (vec4(spriteWidth, 0, 0, 0)) * rotation);
     TexCoord = vec3((xIndex+1) * tileMapData.x, tileMapData.y * yIndex, textureIndex);
     EmitVertex();
 
-    gl_Position = vp *(gl_in[0].gl_Position + (vec4(-spriteWidth, spriteHeight, 0, 0))* rotation);
+    gl_Position = vp *(gl_in[0].gl_Position + (vec4(0, spriteHeight, 0, 0))* rotation);
     TexCoord = vec3(xIndex * tileMapData.x, tileMapData.y * (yIndex+1), textureIndex);
     EmitVertex();
 
     gl_Position = vp *(gl_in[0].gl_Position +  (vec4(spriteWidth, spriteHeight, 0, 0))* rotation);
     TexCoord = vec3((xIndex+1) * tileMapData.x, tileMapData.y * (yIndex+1), textureIndex);
     EmitVertex();
+
+
+    //centered rendering
+
+    //gl_Position = vp *(gl_in[0].gl_Position + (vec4(-spriteWidth, -spriteHeight, 0, 0)) * rotation);
+    //TexCoord = vec3(xIndex * tileMapData.x, tileMapData.y * yIndex, textureIndex);
+    //EmitVertex();
+
+    //gl_Position =  vp *(gl_in[0].gl_Position + (vec4(spriteWidth, -spriteHeight, 0, 0)) * rotation);
+    //TexCoord = vec3((xIndex+1) * tileMapData.x, tileMapData.y * yIndex, textureIndex);
+    //EmitVertex();
+
+    //gl_Position = vp *(gl_in[0].gl_Position + (vec4(-spriteWidth, spriteHeight, 0, 0))* rotation);
+    //TexCoord = vec3(xIndex * tileMapData.x, tileMapData.y * (yIndex+1), textureIndex);
+    //EmitVertex();
+
+    //gl_Position = vp *(gl_in[0].gl_Position +  (vec4(spriteWidth, spriteHeight, 0, 0))* rotation);
+    //TexCoord = vec3((xIndex+1) * tileMapData.x, tileMapData.y * (yIndex+1), textureIndex);
+    //EmitVertex();
 }

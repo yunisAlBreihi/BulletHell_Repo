@@ -22,7 +22,7 @@ void Enemy::Update(float deltaTime)
 
 void Enemy::Render(Renderer* const camera)
 {
-	sprite.size = { 0.5f, 0.5f };
+	//sprite.size = { 0.5f, 0.5f };
 	camera->Render(position, sprite);
 	/*RenderBullets(camera);
 

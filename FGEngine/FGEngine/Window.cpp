@@ -18,7 +18,7 @@ namespace FG
 			return false;
 		}
 
-		aspectRatio = (float)width / (float)height;
+		aspectRatio = (float)height / (float)width;
 
 		return true;
 	}
