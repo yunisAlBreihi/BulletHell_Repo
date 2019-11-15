@@ -66,6 +66,7 @@ void BulletManager::Render(Renderer* renderer)
 		{
 			bullets[i]->sprite.SetScale({ 0.5f, 0.5f });
 			renderer->Render(bullets[i]->position, bullets[i]->sprite);
+			renderer->RenderQuad(bullets[i]->position, bullets[i]->sprite.GetScale(), Color(), Color());
 		}
 	}
 }
@@ -76,7 +77,7 @@ BaseBullet::BaseBullet()
 	speed = 0;
 	bulletManager = nullptr;
 	layer = EntityLayers::GetEntityLayer<BaseBullet>();
-	collidesWith = EntityLayers::GetEntityMask<Obstacle>();
+	collidesWith = EntityLayers::GetEntityMask<Obstacle, Enemy>();
 }
 
 void BaseBullet::Init(BulletManager* manager, int index, float speed)
@@ -88,7 +89,7 @@ void BaseBullet::Init(BulletManager* manager, int index, float speed)
 
 void BaseBullet::OnCollision(Entity* other)
 {
-	if (other->layer == EntityLayers::GetEntityLayer<Obstacle>())
+	if (other->layer == EntityLayers::GetEntityLayer<Obstacle>() || other->layer == EntityLayers::GetEntityLayer<Enemy>())
 	{
 		bulletManager->DisableBullet(index);
 	}
@@ -108,7 +109,7 @@ void BaseBullet::Update(float deltaTime)
 LightBullet::LightBullet()
 {
 	layer = EntityLayers::GetEntityLayer<LightBullet>();
-	collidesWith = EntityLayers::GetEntityMask<Obstacle>();
+	collidesWith = EntityLayers::GetEntityMask<Obstacle, Enemy>();
 }
 
 void LightBullet::Update(float deltaTime)
