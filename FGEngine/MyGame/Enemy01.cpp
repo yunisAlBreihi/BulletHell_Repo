@@ -4,9 +4,27 @@
 #include <SDL_render.h>
 #include <cmath>
 
-Enemy01::Enemy01(FG::Vector2D position, FG::Sprite sprite, FG::Sprite bulletsSprites, BulletSpreadType bulletSpreadType)
-	: sprite(sprite), position(position), bullets(BaseBullet(), 150, bulletsSprites), bs(bulletSpreadType)
+Enemy01::Enemy01(FG::Vector2D position, FG::Sprite sprite, FG::Sprite bulletsSprites, BulletSpreadType bulletSpreadType, MovementType movementType)
+	: sprite(sprite), position(position), bullets(BaseBullet(), 150, bulletsSprites), bs(bulletSpreadType), mt(movementType)
 {
+
+}
+
+void Enemy01::Start(FG::Vector2D startPos)
+{
+	position = startPos;
+	centerPos = position;
+
+	if (mt == Sweep)
+	{
+		CreateSweepAnimation();
+	}
+	else if (mt == Circular)
+	{
+		CreateCircularAnimation();
+	}
+
+	Entity::Start();
 }
 
 void Enemy01::Update(float deltaTime)
@@ -101,8 +119,6 @@ void Enemy01::Shoot(float deltaTime)
 
 	if (bs == Double)
 	{
-
-
 		accu += deltaTime;
 		if (accu >= timer)
 		{
@@ -156,30 +172,45 @@ void Enemy01::Move(float deltaTime)
 	{
 		position.x -= speed * deltaTime;
 	}
-
-	if (mt == Circular)
+	else
 	{
-		speed = 0.5f;
-
-		centerPos.x -= speed * deltaTime;
-
-		angle += orbitSpeed * deltaTime;
-		position.x = centerPos.x + orbitRadius * cos(angle);
-		position.y = centerPos.y + orbitRadius * sin(angle);
+		if (curvePosition <= curveSamples)
+		{
+			position.x = animPath[0][curvePosition += animSpeed * deltaTime].x;
+			position.y = animPath[0][curvePosition += animSpeed * deltaTime].y;
+		}
 	}
+}
 
-	if (mt == Sweep)
-	{
-		speed = 0.5f;
-		centerPos.x -= speed * deltaTime;
+void Enemy01::CreateSweepAnimation()
+{
+	int currentPath = 0;
+	FG::BezierPath* path = new FG::BezierPath();
+	path->AddCurve({ FG::Vector2D(position.x,position.y),FG::Vector2D(position.x - 12.0f,position.y),FG::Vector2D(position.x - 12.0f, -position.y), FG::Vector2D(position.x,-position.y) }, curveSamples);
 
-		angle += orbitSpeed * deltaTime;
-		position.x = centerPos.x + orbitRadius * cos(angle);
-		position.y = centerPos.y + orbitRadius* sin(angle)/2;
-	}
+	animPath.push_back(std::vector<FG::Vector2D>());
+	path->Sample(&animPath[currentPath]);
+	delete path;
 
-	if (centerPos.x < -5.5f)
-	{
-		centerPos.x = 5.5f;
-	}
+	curveSamples *= 1;
+}
+
+void Enemy01::CreateCircularAnimation()
+{
+	int currentPath = 0;
+	FG::BezierPath* path = new FG::BezierPath();
+
+	path->AddCurve({ FG::Vector2D(position.x,position.y),FG::Vector2D(position.x - 2.0f,position.y),FG::Vector2D(position.x - 4.0f, position.y), FG::Vector2D(position.x - 6.0f, position.y) }, curveSamples);
+	path->AddCurve({ FG::Vector2D(position.x - 6.0f,position.y),FG::Vector2D(position.x - 7.5f,position.y),FG::Vector2D(position.x - 9.0f, position.y - 1.5f), FG::Vector2D(position.x - 9.0f, position.y - 3.0f) }, curveSamples);
+	path->AddCurve({ FG::Vector2D(position.x - 9.0f,position.y - 3.0f),FG::Vector2D(position.x - 9.0f,position.y - 4.5f),FG::Vector2D(position.x - 7.5f, position.y - 6.0f), FG::Vector2D(position.x - 6.0f, position.y - 6.0f) }, curveSamples);
+	path->AddCurve({ FG::Vector2D(position.x - 6.0f, position.y - 6.0f),FG::Vector2D(position.x - 4.5f,position.y - 6.0f),FG::Vector2D(position.x - 3.0f, position.y - 4.5f), FG::Vector2D(position.x - 3.0f, position.y - 3.0f) }, curveSamples);
+	path->AddCurve({ FG::Vector2D(position.x - 3.0f, position.y - 3.0f),FG::Vector2D(position.x - 3.0f,position.y - 1.5f),FG::Vector2D(position.x - 4.5f, position.y), FG::Vector2D(position.x -6.0f, position.y) }, curveSamples);
+	path->AddCurve({ FG::Vector2D(position.x - 6.0f, position.y),FG::Vector2D(position.x - 8.0f,position.y),FG::Vector2D(position.x - 10.0f, position.y), FG::Vector2D(position.x - 12.0f, position.y) }, curveSamples);
+
+
+	animPath.push_back(std::vector<FG::Vector2D>());
+	path->Sample(&animPath[currentPath]);
+	delete path;
+
+	curveSamples *= 6;
 }

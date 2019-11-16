@@ -2,12 +2,11 @@
 #include "BulletManager.h"
 #include "Entity.h"
 #include "Vector2D.h"
+#include "BezierPath.h"
 
 class Enemy01 : public FG::Entity
 {
 public:
-	BulletManager bullets;
-
 	enum MovementType
 	{
 		Straight,
@@ -27,13 +26,24 @@ public:
 	};
 
 	MovementType mt = Sweep;
-	BulletSpreadType bs = DoubleWave;
+	BulletSpreadType bs = Forward;
 
+	BulletManager bullets;
 
 	FG::Sprite sprite;
 	FG::Vector2D position;
-	Enemy01(FG::Vector2D position, FG::Sprite sprite, FG::Sprite bulletsSprites, BulletSpreadType bulletSpreadType);
 
+	//for curve animations
+	std::vector<std::vector<FG::Vector2D>> animPath;
+	int curveSamples = 500;
+	int animSpeed = 100;
+	float curvePosition = 0;
+	void CreateSweepAnimation();
+	void CreateCircularAnimation();
+
+	Enemy01(FG::Vector2D position, FG::Sprite sprite, FG::Sprite bulletsSprites, BulletSpreadType bulletSpreadType, MovementType movementType);
+
+	void Start(FG::Vector2D startPos);
 	void Update(float deltaTime) override;
 	void Render(Renderer* const camera) override;
 	virtual void TestCollision(Entity* other) override;
@@ -53,6 +63,7 @@ private:
 	float accu = 0.0f;
 	float speed = 2.0f;
 
+	
 	//For Brush bullet pattern
 	int bulletInvert = 1.0f;
 
@@ -62,7 +73,7 @@ private:
 	float bulletAngle = 0;
 	float bulletRotateSpeed = 3.0f;
 
-	FG::Vector2D centerPos = position;
+	FG::Vector2D centerPos;
 
 	void Shoot(float deltaTime);
 	void Move(float deltaTime);
