@@ -11,13 +11,12 @@ public:
 	Enemy() 
 	{
 		bullets = new BulletManager(BaseBullet(), 10, FG::Sprite());
-		std::cout << "Hello!" << std::endl;
 		this->sprite.SetScale({ 1.0f, 1.0f });
 	}
 	Enemy(FG::Vector2D position, FG::Sprite sprite, FG::Sprite bulletsSprites);
 
 	void Start() override;
-	void Start(FG::Vector2D position);
+	void Start(FG::Vector2D position, FG::Sprite sprite);
 
 	void Update(float deltaTime) override;
 	void Render(Renderer* const camera) override;

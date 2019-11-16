@@ -10,7 +10,7 @@
 #include "BulletManager.h"
 
 Player::Player()
-	: bm(new BulletManager(BaseBullet(), 500, FG::Sprite())), lightBulletManager(new BulletManager(BaseBullet(), 500, FG::Sprite()))
+	: bm(new BulletManager(BaseBullet(), 1000, FG::Sprite())), lightBulletManager(new BulletManager(BaseBullet(), 5000, FG::Sprite()))
 {
 	this->sprite.spriteIndex = 0;
 	this->sprite.textureIndex = 0;
@@ -19,7 +19,7 @@ Player::Player()
 }
 
 Player::Player(FG::InputManager* inputManager, FG::Sprite sprite ) :
-	inputManager(inputManager), bm(new BulletManager(BulletManager(BaseBullet(), 500, sprite))), sprite(sprite), lightBulletManager(new BulletManager(LightBullet(), 500, sprite))
+	inputManager(inputManager), bm(new BulletManager(BulletManager(BaseBullet(), 10000, sprite))), sprite(sprite), lightBulletManager(new BulletManager(LightBullet(), 10000, sprite))
 {
 	this->sprite.SetScale({ 1.0f, 1.0f });
 	collidesWith = EntityLayers::GetEntityMask<Obstacle>();
@@ -42,8 +42,11 @@ void Player::Update(float deltaTime)
 void Player::Render(Renderer* const camera)
 {
 	camera->Render(position, sprite);
+	camera->RenderQuad(position, sprite.GetScale(), Color(), Color());
 	bm->Render(camera);
 	lightBulletManager->Render(camera);
+
+
 }
 
 void Player::Shoot(float deltaTime)
@@ -59,7 +62,7 @@ void Player::Shoot(float deltaTime)
 	}
 	if (usingLight)
 	{
-		if (inputManager->IsKeyPressed(SDL_SCANCODE_SPACE))
+		if (inputManager->IsKeyDown(SDL_SCANCODE_SPACE))
 		{
 			lightBulletManager->Shoot((position + FG::Vector2D(1, 0)), { 1,0 });
 		}
@@ -68,12 +71,8 @@ void Player::Shoot(float deltaTime)
 	{
 		if (inputManager->IsKeyDown(SDL_SCANCODE_SPACE))
 		{
-			if (inputManager->IsKeyPressed(SDL_SCANCODE_SPACE))
-			{
-				bm->Shoot((position + FG::Vector2D(1, 0)), { 1,0 });
-			}
+			bm->Shoot((position + FG::Vector2D(1, 0)), { 1,0 });
 		}
-
 	}
 }
 

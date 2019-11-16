@@ -2,11 +2,12 @@
 #include "Camera.h"
 #include "Sprite.h"
 #include <SDL_render.h>
-
+#include "CollisionSystem.h"
 Enemy::Enemy(FG::Vector2D position, FG::Sprite sprite, FG::Sprite bulletsSprites)
 	: sprite(sprite), position(position), bullets(new BulletManager(BaseBullet(), 30, bulletsSprites))
 {
-
+	layer = EntityLayers::GetEntityLayer<Enemy>();
+	collidesWith = EntityLayers::GetEntityMask<BaseBullet>();
 }
 
 void Enemy::Start()
@@ -14,10 +15,12 @@ void Enemy::Start()
 	Entity::Start();
 }
 
-void Enemy::Start(FG::Vector2D position)
+void Enemy::Start(FG::Vector2D position, FG::Sprite sprite)
 {
 	Entity::Start();
 	this->position = position;
+	this->sprite = sprite;
+	//this->bullets->sprite = bulletsSprite;
 }
 
 void Enemy::Update(float deltaTime)
@@ -29,24 +32,14 @@ void Enemy::Update(float deltaTime)
 		accu = 0;
 	}
 	bullets->Update(deltaTime);
+	auto it = CollisionSystem::GetInstance();
+	it->RegisterCollider(position, sprite.GetScale(), this, true);
 }
 
 void Enemy::Render(Renderer* const camera)
 {
-	//sprite.size = { 0.5f, 0.5f };
+	camera->RenderQuad(position, sprite.GetScale(), Color(), Color());
 	camera->Render(position, sprite);
-	/*RenderBullets(camera);
-
-	SDL_Color oldDrawColor;
-	SDL_GetRenderDrawColor(camera->GetInternalRenderer(),
-		&oldDrawColor.r, &oldDrawColor.g, &oldDrawColor.b, &oldDrawColor.a);
-
-	sprite->Render(camera, position);
-	DrawBoundingBox();
-	isColliding = false;
-
-	SDL_SetRenderDrawColor(camera->GetInternalRenderer(),
-		oldDrawColor.r, oldDrawColor.g, oldDrawColor.b, oldDrawColor.a);*/
 }
 
 void Enemy::TestCollision(Entity* other)

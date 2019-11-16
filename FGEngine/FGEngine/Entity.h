@@ -25,7 +25,7 @@ namespace FG
 		}
 		virtual ~Entity() {}
 
-		virtual void Start() { isActive = true; std::cout << "Hello!" << std::endl; }
+		virtual void Start() { isActive = true; }
 		virtual void Disable() { isActive = false; }
 
 		virtual void Update(float deltaTime) {}

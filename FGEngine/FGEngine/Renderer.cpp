@@ -71,13 +71,26 @@ struct TextVertex
 
 struct QuadVertex
 {
-	QuadVertex(float x, float y, float sx, float sy, Color borderColor, Color fillCol) {}
+	QuadVertex(float x, float y, float sx, float sy, Color borderColor, Color fillCol) : x(x), y(y), sx(sx), sy(sy) { QuadVertex(); }
+	float x, y, sx, sy;
+	static VAO vao;
 
+	QuadVertex()
+	{
+		if (vao.vaoStructure.size() == 0)
+		{
+			vao.AddInfo(VAOInfo(0, 4, NULL));
+		}
+	}
 };
+
+VAO QuadVertex::vao = VAO();
 
 struct SpriteVertex
 {
-	SpriteVertex(float x, float y, float sx, float sy, float r, float i) : x(x), y(y), sx(sx), sy(sy), r(r), i(i) {}
+	SpriteVertex(float x, float y, float sx, float sy, float r, float i) : x(x), y(y), sx(sx), sy(sy), r(r), i(i) {
+		SpriteVertex();
+	}
 
 	//8 values
 	//x, y, half scales, theta
@@ -180,7 +193,12 @@ public:
 
 	void RenderQuad(const FG::Vector2D& position, const FG::Vector2D& size, const Color& color, const Color& fillColor)
 	{
-
+		QuadVertex vertex;
+		vertex.x = position.x;
+		vertex.y = position.y;
+		vertex.sx = size.x;
+		vertex.sy = size.y;
+		quadVertices.emplace_back(vertex);
 	}
 
 	void RenderText(const FG::Vector2D& position, const int textSize, const std::string& text)
@@ -228,6 +246,23 @@ public:
 			AddBatch(batch);
 		}
 
+		if (quadVertices.size() > 0)
+		{
+			if (!quadVBO.Initialized())
+			{
+				quadVBO.Init(quadVertices.data(), (GLuint)quadVertices.size(), (GLuint)sizeof(QuadVertex), QuadVertex::vao);
+				quadBatch.vao = quadVBO.Vao();
+				quadBatch.vbo = quadVBO.Vbo();
+				quadBatch.shaderHandle = quadShader.handle;
+			}
+			else
+			{
+				quadVBO.BufferData(quadVertices.data(), (GLuint)quadVertices.size());
+			}
+			quadBatch.count = quadVertices.size();
+			AddBatch(quadBatch);
+		}
+
 		for (auto batch : batches)
 		{
 			glUseProgram(batch.shaderHandle);
@@ -252,6 +287,7 @@ public:
 		Swap();
 		vertices.clear();
 		batches.clear();
+		quadVertices.clear();
 	}
 
 private:
@@ -261,7 +297,11 @@ private:
 	std::vector<Batch> batches;
 	SDL_Window* window;
 	RenderImpl::Batch batch;
+	Batch quadBatch;
 	VBO vbo;
+	VBO quadVBO;
+
+	Shader quadShader;
 	Shader shader;
 };
 
@@ -272,7 +312,7 @@ RenderImpl::~RenderImpl()
 
 RenderImpl::RenderImpl(SDL_Window* window)
 {
-	vbo = VBO();
+
 	this->window = window;
 	SDL_GLContext gContext = SDL_GL_CreateContext(window);
 	if (gContext == NULL)
@@ -287,6 +327,9 @@ RenderImpl::RenderImpl(SDL_Window* window)
 	{
 		printf("Error initializing GLEW! %s\n", glewGetErrorString(glewError));
 	}
+
+	quadVBO = VBO();
+	vbo = VBO();
 	SDL_GL_SetSwapInterval(0);
 	//glEnable(GL_DEPTH_TEST);
 	//glDepthFunc(GL_LESS);
@@ -295,6 +338,7 @@ RenderImpl::RenderImpl(SDL_Window* window)
 	glEnable(GL_BLEND);
 
 	shader.LoadShaders("..//Shader//vertexShader.vert", "..//Shader//fragmentShader.frag", "..//Shader//geometryShader.geo");
+	quadShader.LoadShaders("..//Shader//borderRectGeometry.vert", "..//Shader//borders.frag", "..//Shader//borderRectGeometry.geo");
 }
 
 Renderer::Renderer(SDL_Window* window)
