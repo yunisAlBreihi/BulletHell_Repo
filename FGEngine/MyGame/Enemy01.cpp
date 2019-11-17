@@ -5,7 +5,7 @@
 #include <cmath>
 
 Enemy01::Enemy01(FG::Vector2D position, FG::Sprite sprite, FG::Sprite bulletsSprites, BulletSpreadType bulletSpreadType, MovementType movementType)
-	: sprite(sprite), position(position), bullets(BaseBullet(), 150, bulletsSprites), bs(bulletSpreadType), mt(movementType)
+	: sprite(sprite), position(position), bs(bulletSpreadType), mt(movementType)
 {
 
 }
@@ -37,12 +37,12 @@ void Enemy01::Update(float deltaTime)
 void Enemy01::Render(Renderer* const camera)
 {
 	camera->Render(position, sprite);
-	bullets.Render(camera);
+	//bullets.Render(camera);
 }
 
 void Enemy01::TestCollision(Entity* other)
 {
-	bullets.TestCollision(other);
+	//bullets.TestCollision(other);
 }
 
 void Enemy01::DrawBoundingBox()
@@ -51,7 +51,7 @@ void Enemy01::DrawBoundingBox()
 
 void Enemy01::RenderBullets(Renderer* const renderer)
 {
-	bullets.Render(renderer);
+//	bullets.Render(renderer);
 }
 
 SDL_Rect Enemy01::GetColliderRectangle()
@@ -66,7 +66,7 @@ void Enemy01::Shoot(float deltaTime)
 		accu += deltaTime;
 		if (accu >= timer)
 		{
-			bullets.Shoot((position + bulletSpawnPosition), { bulletDirection.x, bulletDirection.y });
+		//	bullets.Shoot((position + bulletSpawnPosition), { bulletDirection.x, bulletDirection.y });
 			accu = 0;
 		}
 	}
@@ -82,7 +82,7 @@ void Enemy01::Shoot(float deltaTime)
 		accu += deltaTime;
 		if (accu >= timer)
 		{
-			bullets.Shoot((position + bulletSpawnPosition), { bulletDirection.x, bulletDirection.y });
+		//	bullets.Shoot((position + bulletSpawnPosition), { bulletDirection.x, bulletDirection.y });
 			accu = 0;
 		}
 	}
@@ -98,7 +98,7 @@ void Enemy01::Shoot(float deltaTime)
 		timer = .075f;
 		if (accu >= timer)
 		{
-			bullets.Shoot((position + bulletSpawnPosition), { bulletSpawnPosition.x, bulletSpawnPosition.y });
+		//	bullets.Shoot((position + bulletSpawnPosition), { bulletSpawnPosition.x, bulletSpawnPosition.y });
 
 			accu = 0;
 		}
@@ -109,9 +109,9 @@ void Enemy01::Shoot(float deltaTime)
 		accu += deltaTime;
 		if (accu >= timer)
 		{
-			bullets.Shoot((position + bulletSpawnPosition), { bulletDirection.x, 0.2 });
+		/*	bullets.Shoot((position + bulletSpawnPosition), { bulletDirection.x, 0.2 });
 			bullets.Shoot((position + bulletSpawnPosition), { bulletDirection.x, 0 });
-			bullets.Shoot((position + bulletSpawnPosition), { bulletDirection.x, -0.2 });
+			bullets.Shoot((position + bulletSpawnPosition), { bulletDirection.x, -0.2 });*/
 
 			accu = 0;
 		}
@@ -122,8 +122,8 @@ void Enemy01::Shoot(float deltaTime)
 		accu += deltaTime;
 		if (accu >= timer)
 		{
-			bullets.Shoot((position + bulletSpawnPosition), { bulletDirection.x, 0.2 });
-			bullets.Shoot((position + bulletSpawnPosition), { bulletDirection.x, -0.2 });
+			/*bullets.Shoot((position + bulletSpawnPosition), { bulletDirection.x, 0.2 });
+			bullets.Shoot((position + bulletSpawnPosition), { bulletDirection.x, -0.2 });*/
 
 			accu = 0;
 		}
@@ -141,8 +141,8 @@ void Enemy01::Shoot(float deltaTime)
 		accu += deltaTime;
 		if (accu >= timer)
 		{
-			bullets.Shoot((position + bulletSpawnPosition), { bulletDirection.x, bulletDirection.y });
-			bullets.Shoot((position + bulletSpawnPosition), { bulletDirection.x, -bulletDirection.y });
+		/*	bullets.Shoot((position + bulletSpawnPosition), { bulletDirection.x, bulletDirection.y });
+			bullets.Shoot((position + bulletSpawnPosition), { bulletDirection.x, -bulletDirection.y });*/
 
 			accu = 0;
 		}
@@ -156,14 +156,14 @@ void Enemy01::Shoot(float deltaTime)
 		accu += deltaTime;
 		if (accu >= timer)
 		{
-			bullets.Shoot((position + bulletSpawnPositionTop), { 0, -1 });
-			bullets.Shoot((position + bulletSpawnPositionBot), { 0, 1 });
+			/*bullets.Shoot((position + bulletSpawnPositionTop), { 0, -1 });
+			bullets.Shoot((position + bulletSpawnPositionBot), { 0, 1 });*/
 
 			accu = 0;
 		}
 	}
 
-	bullets.Update(deltaTime);
+	/*bullets.Update(deltaTime);*/
 }
 
 void Enemy01::Move(float deltaTime)

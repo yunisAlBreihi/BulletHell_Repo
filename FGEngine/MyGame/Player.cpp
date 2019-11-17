@@ -7,22 +7,22 @@
 #include "CollisionSystem.h"
 #include "Window.h"
 #include "Obstacle.h"
-#include "BulletManager.h"
+#include "Bullet.h"
+#include "EntityManager.h"
+#include "Enemy.h"
 
 Player::Player()
-	: bm(new BulletManager(BaseBullet(), 1000, FG::Sprite())), lightBulletManager(new BulletManager(BaseBullet(), 5000, FG::Sprite()))
 {
 	this->sprite.spriteIndex = 0;
 	this->sprite.textureIndex = 0;
 	this->sprite.SetScale(FG::Vector2D(1.0f, 1.0f));
-
 }
 
 Player::Player(FG::InputManager* inputManager, FG::Sprite sprite ) :
-	inputManager(inputManager), bm(new BulletManager(BulletManager(BaseBullet(), 10000, sprite))), sprite(sprite), lightBulletManager(new BulletManager(LightBullet(), 10000, sprite))
+	inputManager(inputManager), sprite(sprite)
 {
 	this->sprite.SetScale({ 1.0f, 1.0f });
-	collidesWith = EntityLayers::GetEntityMask<Obstacle>();
+	collidesWith = EntityLayers::GetEntityMask<Obstacle, BaseBullet>();
 	layer = EntityLayers::GetEntityLayer<Player>();
 }
 
@@ -30,12 +30,8 @@ void Player::Update(float deltaTime)
 {
 	MovePlayer(deltaTime);
 	Shoot(deltaTime);
-	
-	bm->Update(deltaTime);
-	lightBulletManager->Update(deltaTime);
 
 	auto it = CollisionSystem::GetInstance();
-
 	it->RegisterCollider(position, sprite.GetScale(), this, true);
 }
 
@@ -43,14 +39,11 @@ void Player::Render(Renderer* const camera)
 {
 	camera->Render(position, sprite);
 	camera->RenderQuad(position, sprite.GetScale(), Color(), Color());
-	bm->Render(camera);
-	lightBulletManager->Render(camera);
-
-
 }
 
 void Player::Shoot(float deltaTime)
 {
+	accu += deltaTime;
 	if (inputManager->IsKeyPressed(SDL_SCANCODE_Q))
 	{
 		usingLight = false;
@@ -60,18 +53,27 @@ void Player::Shoot(float deltaTime)
 	{
 		usingLight = true;
 	}
+
 	if (usingLight)
 	{
 		if (inputManager->IsKeyDown(SDL_SCANCODE_SPACE))
 		{
-			lightBulletManager->Shoot((position + FG::Vector2D(1, 0)), { 1,0 });
+			if (accu >= timer)
+			{
+				FG::EntityManager::Instance()->CreateEntity<LightBullet>(position, FG::Vector2D(1, 0), 10.0f, EntityLayers::GetEntityMask<Enemy>());
+				accu = 0;
+			}
 		}
 	}
 	else
 	{
 		if (inputManager->IsKeyDown(SDL_SCANCODE_SPACE))
 		{
-			bm->Shoot((position + FG::Vector2D(1, 0)), { 1,0 });
+			if (accu >= timer)
+			{
+				FG::EntityManager::Instance()->CreateEntity<BaseBullet>(position, FG::Vector2D(1, 0), 10.0f, EntityLayers::GetEntityMask<Enemy>());
+				accu = 0;
+			}
 		}
 	}
 }

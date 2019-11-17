@@ -2,8 +2,10 @@
 #include <vector>
 #include <xmmintrin.h>
 #include <smmintrin.h>
-
+#include "tbb/tbb.h"
 uint32_t EntityTypeCounter::counter = 0;
+using Range = tbb::blocked_range<int>;
+using namespace tbb;
 
 #pragma region IMPL
 class CollisionSystemImpl
@@ -20,8 +22,8 @@ class CollisionSystemImpl
 
 	__m128 c;
 	__m128 w;
-std::vector<std::vector<SpatialObject>> buckets;
-
+	std::vector<std::vector<SpatialObject>> buckets;
+	tbb::concurrent_vector<std::pair<FG::Entity*, FG::Entity*>> collisionPairs;
 public:
 	CollisionSystemImpl() : c(_mm_set_ps(0, 0, 0, 0)), w(_mm_set_ps(0, 0, 0, 0))
 	{
@@ -110,44 +112,111 @@ public:
 		}
 	}
 
-	//TODO: concurrent collision detection
-	//think about bucket collisions
-	void TestCollisions()
-	{
-		for (int bucket = 0; bucket < buckets.size(); bucket++)
-		{
-			std::vector<SpatialObject> objectsToTest = buckets[bucket];
-			for (int i = 0; i < ((int)objectsToTest.size()) - 1; i++)
-			{
-				SpatialObject a = objectsToTest[i];
-				for (int j = i + 1; j < objectsToTest.size(); j++)
-				{
-					SpatialObject b = objectsToTest[j];
 
-					bool aCollidesWithB = (a.collidesWith >> b.mask) & 1U;
-					bool bCollidesWithA = (b.collidesWith >> a.mask) & 1U;
-					if (aCollidesWithB || bCollidesWithA)
+	struct BoxTest
+	{
+		inline bool isColliding(const SpatialObject& a, const SpatialObject& b) const
+		{
+			return (a.x + a.w >= b.x &&
+				b.x + b.w >= a.x &&
+				a.y + a.h >= b.y &&
+				b.y + b.h >= a.y);
+		}
+
+		void operator()(const SpatialObject& objectToTest, const std::vector<SpatialObject>& objectsToTest, tbb::concurrent_vector<std::pair<FG::Entity*, FG::Entity*>>& collisionPairs, const int index)
+		{
+			for (int i = index + 1; i < objectsToTest.size(); i++)
+			{
+				SpatialObject b = objectsToTest[i];
+				if ((objectToTest.collidesWith >> b.mask) & 1U && (b.collidesWith >> objectToTest.mask) & 1U)
+				{
+					if (objectToTest.dynamic || b.dynamic)
 					{
-						if (a.dynamic || b.dynamic)
+						if (isColliding(objectToTest, b))
 						{
-							if (isColliding(a, b))
-							{
-								if (aCollidesWithB)
-								{
-									a.entity->OnCollision(b.entity);
-								}
-								if (bCollidesWithA)
-								{
-									b.entity->OnCollision(a.entity);
-								}
-							}
+							collisionPairs.emplace_back(std::make_pair(objectToTest.entity, b.entity));
 						}
 					}
 				}
 			}
 		}
+	};
+
+
+	void TestCollisions()
+	{
+		collisionPairs.reserve(buckets.size() * 10);
+		BoxTest boxTest;
+		parallel_for(Range(0, buckets.size()), [&boxTest, this](const Range& r) 
+		{
+			for (int i = r.begin(); i < r.end(); i++)
+			{
+				parallel_for(Range(0, buckets[i].size()), [&i, &boxTest, this](const Range& r2)
+					{
+						for (int j = r2.begin(); j < r2.end(); j++)
+						{
+							boxTest(buckets[i][j], buckets[i], collisionPairs, j);
+						}
+					});
+			}
+		});
+
+		auto size = collisionPairs.size();
+		for (int i = 0; i < size; i++)
+		{
+   			auto a = collisionPairs[i].first;
+			auto b = collisionPairs[i].second;
+
+			//TODO: Add narrowphase
+
+			a->OnCollision(b);
+			b->OnCollision(a);
+			
+		}
+		collisionPairs.clear();
 		Clear();
 	}
+
+
+
+	////TODO: concurrent collision detection
+	////think about bucket collisions
+	//void TestCollisions()
+	//{
+	//	for (int bucket = 0; bucket < buckets.size(); bucket++)
+	//	{
+	//		std::vector<SpatialObject> objectsToTest = buckets[bucket];
+	//		for (int i = 0; i < ((int)objectsToTest.size()) - 1; i++)
+	//		{
+	//			SpatialObject a = objectsToTest[i];
+	//			for (int j = i + 1; j < objectsToTest.size(); j++)
+	//			{
+	//				SpatialObject b = objectsToTest[j];
+
+	//				bool aCollidesWithB = (a.collidesWith >> b.mask) & 1U;
+	//				bool bCollidesWithA = (b.collidesWith >> a.mask) & 1U;
+	//				if (aCollidesWithB || bCollidesWithA)
+	//				{
+	//					if (a.dynamic || b.dynamic)
+	//					{
+	//						if (isColliding(a, b))
+	//						{
+	//							if (aCollidesWithB)
+	//							{
+	//								a.entity->OnCollision(b.entity);
+	//							}
+	//							if (bCollidesWithA)
+	//							{
+	//								b.entity->OnCollision(a.entity);
+	//							}
+	//						}
+	//					}
+	//				}
+	//			}
+	//		}
+	//	}
+	//	Clear();
+	//}
 };
 
 #pragma endregion

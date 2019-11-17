@@ -21,7 +21,7 @@ namespace FG
 			size.y = textureSize.y * scale.y;
 		}
 
-		const Vector2D GetScale() const { return size *FG::Window::aspectRatio;};
+		const Vector2D GetScale() const { return size;};
 		uint16_t spriteIndex;							 
 		uint16_t textureIndex;
 

@@ -14,7 +14,7 @@
     <ClCompile Include="Background.cpp" />
     <ClCompile Include="CollisionSystem.cpp" />
     <ClCompile Include="Enemy.cpp" />
-    <ClCompile Include="BulletManager.cpp" />
+    <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Enemy01.cpp" />
     <ClCompile Include="GameApplication.cpp" />
     <ClCompile Include="Obstacle.cpp" />
@@ -26,7 +26,7 @@
     <ClInclude Include="Background.h" />
     <ClInclude Include="CollisionSystem.h" />
     <ClInclude Include="Enemy.h" />
-    <ClInclude Include="BulletManager.h" />
+    <ClInclude Include="Bullet.h" />
     <ClInclude Include="Enemy01.h" />
     <ClInclude Include="GameApplication.h" />
     <ClInclude Include="Obstacle.h" />
@@ -93,7 +93,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)FGEngine;$(SolutionDir)thirdParty\SDL2\include\;$(SolutionDir)thirdParty\stb\;$(SolutionDir)thirdParty\gl\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)FGEngine;$(SolutionDir)thirdParty\SDL2\include\;$(SolutionDir)thirdParty\stb\;$(SolutionDir)thirdParty\gl\include\;%(AdditionalIncludeDirectories);$(SolutionDir)thirdParty\tbb\include\</AdditionalIncludeDirectories>
       <EnableParallelCodeGeneration>false</EnableParallelCodeGeneration>
       <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
       <AdditionalOptions>/Qpar /Qpar-report:2 %(AdditionalOptions)</AdditionalOptions>
@@ -102,8 +102,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glew32d.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)thirdParty\gl\libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glew32d.lib;opengl32.lib;tbb.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)thirdParty\gl\libs\;$(SolutionDir)thirdParty\tbb\libs\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -118,7 +118,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)FGEngine;$(SolutionDir)thirdParty\SDL2\include\;$(SolutionDir)thirdParty\stb\;$(SolutionDir)thirdParty\gl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)FGEngine;$(SolutionDir)thirdParty\SDL2\include\;$(SolutionDir)thirdParty\stb\;$(SolutionDir)thirdParty\gl\include;%(AdditionalIncludeDirectories);$(SolutionDir)thirdParty\tbb\include\</AdditionalIncludeDirectories>
       <EnableParallelCodeGeneration>false</EnableParallelCodeGeneration>
       <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
       <AdditionalOptions>/Qpar /Qpar-report:2 %(AdditionalOptions)</AdditionalOptions>
@@ -128,8 +128,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glew32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)thirdParty\gl\libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glew32.lib;opengl32.lib;%(AdditionalDependencies);tbb.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)thirdParty\gl\libs\;$(SolutionDir)thirdParty\tbb\libs\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

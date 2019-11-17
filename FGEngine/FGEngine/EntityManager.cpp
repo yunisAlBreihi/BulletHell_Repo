@@ -4,10 +4,25 @@
 
 namespace FG
 {
+	EntityManager* EntityManager::instance = new EntityManager();
+
+	EntityManager::EntityManager()
+	{
+	}
+
 	void EntityManager::Shutdown()
 	{
 		for (int i = 0; i < MAX_ENTITY_TYPES; i++)
 		{
+			//delete[] entities[i][0];
+			if (entities[i].size() > 0)
+			{
+				if (entities[i][0] != nullptr)
+				{
+					delete[] entities[i][0];
+				}
+			}
+
 			entities[i].clear();
 		}
 	}
@@ -18,7 +33,7 @@ namespace FG
 		{
 			for (int j = 0; j < allocated[i]; j++)
 			{
-				if (entities[i][j]->isActive)
+				if (entities[i][j]->isActive) //TODO: Remove this, we want to keep contigous arrays so we don't need to call this...
 				{
 					entities[i][j]->Update(deltaTime);
 				}
@@ -30,9 +45,9 @@ namespace FG
 	{
 		for (int i = 0; i < MAX_ENTITY_TYPES; i++)
 		{
-			for (int j = 0; j < used[i]; j++)
+			for (int j = 0; j < allocated[i]; j++)
 			{
-				if (entities[i][j]->isActive)
+				if (entities[i][j]->isActive)//TODO: Remove this, we want to keep contigous arrays so we don't need to call this...
 				{
 					entities[i][j]->Render(renderer);
 				}

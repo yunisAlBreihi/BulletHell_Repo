@@ -67,35 +67,23 @@ const float movementSpeed = 3.0f;
 
 Camera::Camera(float3 position, float fov, float near, float far)
 {
-	this->zoom = 5.0f;
+	this->zoom = 20.0f;
 	this->near = near;
 	this->fov = fov;
 	this->far = far;
 	this->position = float3(position);
 	lookAt = this->position + float3(0, 0, 1);
 	 mat4Util::lookAt(view, position, lookAt, {0, 1, 0});
-	projection = mat4Util::ortho(-zoom, zoom, -zoom, zoom, near, far);
+	//projection = mat4Util::ortho(-zoom, zoom, -zoom, zoom, near, far);
 }
 
 #include <iostream>
 void Camera::Update(float dt, FG::Vector2D look)
 {
-	//float aspectRat = (float)Engine::wr.w / (float)Engine::wr.z;
-	position = float3(look.x / zoom, -look.y / (zoom), 0) + float3(0.0f, 0, 0);
+	position = float3(look.x, look.y, -1);
 	lookAt = position;
 	mat4Util::lookAt(view, lookAt, lookAt + float3(0, 0, 1), float3(0, 1, 0));
-	projection = mat4Util::ortho(zoom, -zoom, zoom * FG::Window::aspectRatio, -zoom * FG::Window::aspectRatio, near, far);
-
-	//zoom functionality
-	/*float mWheel = input->GetMouseWheel();
-	if (mWheel != 0)
-	{
-		zoom += mWheel * zoomSpeed * 0.1f;
-		if (zoom <= 10)
-		{
-			zoom = 10.0f;
-		}
-	}*/
+	projection = mat4Util::ortho(zoom, 0, 0, -zoom * FG::Window::aspectRatio, near, far);
 }
 
 void Camera::SetPosition(float3 position)

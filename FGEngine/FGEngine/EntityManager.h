@@ -14,7 +14,19 @@ namespace FG
 	class Camera;
 	class EntityManager
 	{
+		EntityManager();
+		static EntityManager* instance;
 	public:
+
+		static EntityManager* Instance()
+		{
+			if (instance == nullptr) {
+				instance = new EntityManager();
+			}
+			return instance;
+		}
+		
+
 		void Shutdown();
 
 		void Update(float deltaTime);
@@ -29,7 +41,7 @@ namespace FG
 		void RemoveEntity(Entity* entity);
 
 	private:
-		std::vector<std::unique_ptr<Entity>> entities[MAX_ENTITY_TYPES];
+		std::vector<Entity*> entities[MAX_ENTITY_TYPES];
 		int used[MAX_ENTITY_TYPES] = {};
 		int allocated[MAX_ENTITY_TYPES] = {};
 		IntervalSet intervals[MAX_ENTITY_TYPES];
@@ -44,9 +56,13 @@ namespace FG
 		uint64_t index = EntityLayers::GetEntityLayer<T>();
 		entities[index].resize(count);
 
+		void* raw_memory = operator new[](count * sizeof(T));
+		T* ptr = static_cast<T*>(raw_memory);
+
 		for (int i = 0; i < count; i++)
 		{
-			entities[index][i] = std::make_unique<T>(args...);
+			new(&ptr[i])T(args...);
+			entities[index][i] = static_cast<Entity*>(&ptr[i]);
 			entities[index][i]->Initialize(i, index);
 		}
 		intervals[index] = IntervalSet(0, count);
@@ -59,8 +75,9 @@ namespace FG
 		(void)static_cast<Entity*>((T*)0); //Check if the requested type is an entity
 		uint64_t index = EntityLayers::GetEntityLayer<T>(); // get the entity type index
 		assert(used[index] < allocated[index]); // make sure we're not using memory we haven't allocated
-
-		T* ret = dynamic_cast<T*>(entities[index][intervals[index].GetFirst()].get()); //intervals.GetFirst() consumes the first index
+		auto i = intervals[index].GetFirst(); //intervals.GetFirst() consumes the left most index, i.e. the index closest to 0
+		T* ret = dynamic_cast<T*>(entities[index][i]); 	///IF YOU CRASH HERE: There are not enough entities allocated
+			//TODO: deal with out of bounds memory access if we're using too many entities
 		ret->Start(args...); //call start function on created entity
 		used[index]++;
 		return ret;

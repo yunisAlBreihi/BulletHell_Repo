@@ -1,5 +1,4 @@
 #pragma once
-#include "BulletManager.h"
 #include "Entity.h"
 #include "Vector2D.h"
 #include "BezierPath.h"
@@ -27,8 +26,6 @@ public:
 
 	MovementType mt = Sweep;
 	BulletSpreadType bs = Forward;
-
-	BulletManager bullets;
 
 	FG::Sprite sprite;
 	FG::Vector2D position;
