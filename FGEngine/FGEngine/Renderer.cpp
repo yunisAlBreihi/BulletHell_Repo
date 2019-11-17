@@ -244,7 +244,7 @@ public:
 		vertices.emplace_back(vertex);
 	}
 
-	void RenderLine(const FG::Vector2D& a, const FG::Vector2D& b, const Color& color)
+	void RenderLine(const FG::Vector2D& a, const FG::Vector2D& b, const Color& color, const float& size)
 	{
 
 	}
@@ -404,9 +404,9 @@ void Renderer::RenderText(const FG::Vector2D& position, const int textSize, cons
 	renderImpl->RenderText(position, textSize, text);
 }
 
-void Renderer::RenderLine(const FG::Vector2D& a, const FG::Vector2D& b, const Color& color)
+void Renderer::RenderLine(const FG::Vector2D& a, const FG::Vector2D& b, const Color& color, const float& size)
 {
-	renderImpl->RenderLine(a, b, color);
+	renderImpl->RenderLine(a, b, color, size);
 }
 
 void Renderer::Present(const Camera *const camera)
