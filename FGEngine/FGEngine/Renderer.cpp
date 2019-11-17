@@ -86,6 +86,25 @@ struct QuadVertex
 
 VAO QuadVertex::vao = VAO();
 
+
+struct LineVertex
+{
+	LineVertex(const float& ax, const float& ay, const float& bx, const float& by, const float3& color, const float& size) : ax(ax), ay(ay), bx(bx), by(by), color(color), size(size)
+	{
+		if (vao.vaoStructure.size() == 0)
+		{
+			vao.AddInfo(VAOInfo(0, 4, NULL));
+			vao.AddInfo(VAOInfo(0, 4, 4 * sizeof(float)));
+		}
+	}
+
+	float ax, ay, bx, by, size;
+	float3 color;
+	static VAO vao;
+};
+
+VAO LineVertex::vao = VAO();
+
 struct SpriteVertex
 {
 	SpriteVertex(float x, float y, float sx, float sy, float r, float i) : x(x), y(y), sx(sx), sy(sy), r(r), i(i) {
@@ -225,6 +244,11 @@ public:
 		vertices.emplace_back(vertex);
 	}
 
+	void RenderLine(const FG::Vector2D& a, const FG::Vector2D& b, const Color& color)
+	{
+
+	}
+
 	void Present(const Camera* const camera)
 	{
 		if (vertices.size() > 0)
@@ -294,15 +318,19 @@ private:
 	std::vector<SpriteVertex> vertices;
 	std::vector<TextVertex> textVertices;
 	std::vector<QuadVertex> quadVertices;
+	std::vector<LineVertex> lineVertices;
 	std::vector<Batch> batches;
 	SDL_Window* window;
-	RenderImpl::Batch batch;
+	Batch batch;
 	Batch quadBatch;
+	Batch lineBatch;
 	VBO vbo;
 	VBO quadVBO;
+	VBO lineVBO;
 
 	Shader quadShader;
 	Shader shader;
+	Shader lineShader;
 };
 
 RenderImpl::~RenderImpl()
@@ -374,6 +402,11 @@ void Renderer::RenderQuad(const FG::Vector2D& position, const FG::Vector2D& size
 void Renderer::RenderText(const FG::Vector2D& position, const int textSize, const std::string& text)
 {
 	renderImpl->RenderText(position, textSize, text);
+}
+
+void Renderer::RenderLine(const FG::Vector2D& a, const FG::Vector2D& b, const Color& color)
+{
+	renderImpl->RenderLine(a, b, color);
 }
 
 void Renderer::Present(const Camera *const camera)

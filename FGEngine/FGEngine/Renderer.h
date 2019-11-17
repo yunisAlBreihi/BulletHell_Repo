@@ -21,6 +21,7 @@ public:
 	void UseFont(const Font& font);
 	void RenderQuad(const FG::Vector2D& position, const FG::Vector2D& size, const Color& borderColor, const Color& fillColor);
 	void RenderText(const FG::Vector2D& position, const int textSize, const std::string& text);
+	void RenderLine(const FG::Vector2D& a, const FG::Vector2D& b, const Color& color);
 	void Present(const Camera *const camera);
 };
 
