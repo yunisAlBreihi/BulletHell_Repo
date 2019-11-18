@@ -205,6 +205,7 @@ void Enemy01::CreateSweepAnimation()
 	path->Sample(&animPath[currentPath]);
 	delete path;
 
+	//This needs to be the same as the sum of samples on the AddCurve functions
 	curveSamples = 330;
 }
 
@@ -225,5 +226,6 @@ void Enemy01::CreateCircularAnimation()
 	path->Sample(&animPath[currentPath]);
 	delete path;
 
+	//This needs to be the same as the sum of samples on the AddCurve functions
 	curveSamples = 372;
 }
