@@ -13,6 +13,7 @@
 #include "Player.h"
 #include "Obstacle.h"
 #include "Enemy.h"
+#include "Enemy01.h"
 #include "CollisionSystem.h"
 #include "Renderer.h"
 #include "SDL_syswm.h"
@@ -44,14 +45,21 @@ bool GameApplication::Initialize()
 	FG::Sprite sprite2 = factory.LoadSprite("..//assets//images//test.png", 8, 8);
 	FG::Sprite sprite3 = factory.LoadSprite("..//assets//images//DarkSprites01.png", 8, 8, 1);
 	FG::Sprite sprite4 = factory.LoadSprite("..//assets//images//DarkSprites01.png", 8, 8,5);
+	FG::Sprite enemy01Sprite = factory.LoadSprite("..//assets//images//LightSprites01.png", 8, 8, 1);
+	FG::Sprite enemy01BulletSprite = enemy01Sprite;
+	enemy01BulletSprite.SetIndex(6);
+
 
 	entityManager = FG::EntityManager::Instance();
 	entityManager->InitializeEntityArray<Player>(4, inputManager, sprite3);
 	entityManager->InitializeEntityArray<Enemy>(150);
 	entityManager->InitializeEntityArray<BaseBullet>(10000);
 	entityManager->InitializeEntityArray<LightBullet>(1000);
+	//Enemy01::Enemy01(FG::Vector2D position, FG::Sprite sprite, FG::Sprite bulletsSprites, BulletSpreadType bulletSpreadType, MovementType movementType)
+	entityManager->InitializeEntityArray<Enemy01>(1, FG::Vector2D(0,0), enemy01Sprite, enemy01BulletSprite, Enemy01::DoubleWave, Enemy01::Straight);
 
 	player1 = entityManager->CreateEntity<Player>();
+	Enemy01* enemy01 = entityManager->CreateEntity<Enemy01>(FG::Vector2D(5.5f,0.0f));
 
 	for (int i = 0; i < 10; i++)
 	{

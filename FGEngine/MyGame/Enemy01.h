@@ -67,6 +67,7 @@ private:
 	//For Circle bullet pattern
 	FG::Vector2D bulletDirection = { -0.5f,0.0f };
 	FG::Vector2D bulletSpawnPosition = { -0.6f, 0.15f };
+	float bulletSpeed = 10.0f;
 	float bulletAngle = 0;
 	float bulletRotateSpeed = 3.0f;
 

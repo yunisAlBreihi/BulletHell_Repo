@@ -1,6 +1,9 @@
 #include "Enemy01.h"
 #include "Camera.h"
 #include "Sprite.h"
+#include "Bullet.h"
+#include "Player.h"
+#include "EntityManager.h"
 #include <SDL_render.h>
 #include <cmath>
 
@@ -51,7 +54,8 @@ void Enemy01::DrawBoundingBox()
 
 void Enemy01::RenderBullets(Renderer* const renderer)
 {
-//	bullets.Render(renderer);
+	//	bullets.Render(renderer);
+
 }
 
 SDL_Rect Enemy01::GetColliderRectangle()
@@ -66,7 +70,8 @@ void Enemy01::Shoot(float deltaTime)
 		accu += deltaTime;
 		if (accu >= timer)
 		{
-		//	bullets.Shoot((position + bulletSpawnPosition), { bulletDirection.x, bulletDirection.y });
+			//	bullets.Shoot((position + bulletSpawnPosition), { bulletDirection.x, bulletDirection.y });
+			FG::EntityManager::Instance()->CreateEntity<LightBullet>(position + bulletSpawnPosition, bulletDirection, bulletSpeed, EntityLayers::GetEntityMask<Player>());
 			accu = 0;
 		}
 	}
@@ -82,7 +87,8 @@ void Enemy01::Shoot(float deltaTime)
 		accu += deltaTime;
 		if (accu >= timer)
 		{
-		//	bullets.Shoot((position + bulletSpawnPosition), { bulletDirection.x, bulletDirection.y });
+			//	bullets.Shoot((position + bulletSpawnPosition), { bulletDirection.x, bulletDirection.y });
+			FG::EntityManager::Instance()->CreateEntity<LightBullet>(position + bulletSpawnPosition, bulletDirection, bulletSpeed, EntityLayers::GetEntityMask<Player>());
 			accu = 0;
 		}
 	}
@@ -98,8 +104,8 @@ void Enemy01::Shoot(float deltaTime)
 		timer = .075f;
 		if (accu >= timer)
 		{
-		//	bullets.Shoot((position + bulletSpawnPosition), { bulletSpawnPosition.x, bulletSpawnPosition.y });
-
+			//	bullets.Shoot((position + bulletSpawnPosition), { bulletSpawnPosition.x, bulletSpawnPosition.y });
+			FG::EntityManager::Instance()->CreateEntity<LightBullet>(position + bulletSpawnPosition, bulletDirection, bulletSpeed, EntityLayers::GetEntityMask<Player>());
 			accu = 0;
 		}
 	}
@@ -109,9 +115,12 @@ void Enemy01::Shoot(float deltaTime)
 		accu += deltaTime;
 		if (accu >= timer)
 		{
-		/*	bullets.Shoot((position + bulletSpawnPosition), { bulletDirection.x, 0.2 });
-			bullets.Shoot((position + bulletSpawnPosition), { bulletDirection.x, 0 });
-			bullets.Shoot((position + bulletSpawnPosition), { bulletDirection.x, -0.2 });*/
+			/*	bullets.Shoot((position + bulletSpawnPosition), { bulletDirection.x, 0.2 });
+				bullets.Shoot((position + bulletSpawnPosition), { bulletDirection.x, 0 });
+				bullets.Shoot((position + bulletSpawnPosition), { bulletDirection.x, -0.2 });*/
+			FG::EntityManager::Instance()->CreateEntity<LightBullet>(position + bulletSpawnPosition, FG::Vector2D(bulletDirection.x, 0.2f), bulletSpeed, EntityLayers::GetEntityMask<Player>());
+			FG::EntityManager::Instance()->CreateEntity<LightBullet>(position + bulletSpawnPosition, bulletDirection, bulletSpeed, EntityLayers::GetEntityMask<Player>());
+			FG::EntityManager::Instance()->CreateEntity<LightBullet>(position + bulletSpawnPosition, FG::Vector2D(bulletDirection.x, -0.2f), bulletSpeed, EntityLayers::GetEntityMask<Player>());
 
 			accu = 0;
 		}
@@ -124,7 +133,8 @@ void Enemy01::Shoot(float deltaTime)
 		{
 			/*bullets.Shoot((position + bulletSpawnPosition), { bulletDirection.x, 0.2 });
 			bullets.Shoot((position + bulletSpawnPosition), { bulletDirection.x, -0.2 });*/
-
+			FG::EntityManager::Instance()->CreateEntity<LightBullet>(position + bulletSpawnPosition, FG::Vector2D(bulletDirection.x, 0.2f), bulletSpeed, EntityLayers::GetEntityMask<Player>());
+			FG::EntityManager::Instance()->CreateEntity<LightBullet>(position + bulletSpawnPosition, FG::Vector2D(bulletDirection.x, -0.2f), bulletSpeed, EntityLayers::GetEntityMask<Player>());
 			accu = 0;
 		}
 	}
@@ -141,8 +151,8 @@ void Enemy01::Shoot(float deltaTime)
 		accu += deltaTime;
 		if (accu >= timer)
 		{
-		/*	bullets.Shoot((position + bulletSpawnPosition), { bulletDirection.x, bulletDirection.y });
-			bullets.Shoot((position + bulletSpawnPosition), { bulletDirection.x, -bulletDirection.y });*/
+			FG::EntityManager::Instance()->CreateEntity<LightBullet>(position + bulletSpawnPosition, FG::Vector2D(bulletDirection.x, bulletDirection.y), bulletSpeed, EntityLayers::GetEntityMask<Player>());
+			FG::EntityManager::Instance()->CreateEntity<LightBullet>(position + bulletSpawnPosition, FG::Vector2D(bulletDirection.x, -bulletDirection.y), bulletSpeed, EntityLayers::GetEntityMask<Player>());
 
 			accu = 0;
 		}
@@ -158,7 +168,8 @@ void Enemy01::Shoot(float deltaTime)
 		{
 			/*bullets.Shoot((position + bulletSpawnPositionTop), { 0, -1 });
 			bullets.Shoot((position + bulletSpawnPositionBot), { 0, 1 });*/
-
+			FG::EntityManager::Instance()->CreateEntity<LightBullet>(position + bulletSpawnPositionTop, FG::Vector2D(0,-1), bulletSpeed, EntityLayers::GetEntityMask<Player>());
+			FG::EntityManager::Instance()->CreateEntity<LightBullet>(position + bulletSpawnPositionBot, FG::Vector2D(0, 1), bulletSpeed, EntityLayers::GetEntityMask<Player>());
 			accu = 0;
 		}
 	}
@@ -204,7 +215,7 @@ void Enemy01::CreateCircularAnimation()
 	path->AddCurve({ FG::Vector2D(position.x - 6.0f,position.y),FG::Vector2D(position.x - 7.5f,position.y),FG::Vector2D(position.x - 9.0f, position.y - 1.5f), FG::Vector2D(position.x - 9.0f, position.y - 3.0f) }, curveSamples);
 	path->AddCurve({ FG::Vector2D(position.x - 9.0f,position.y - 3.0f),FG::Vector2D(position.x - 9.0f,position.y - 4.5f),FG::Vector2D(position.x - 7.5f, position.y - 6.0f), FG::Vector2D(position.x - 6.0f, position.y - 6.0f) }, curveSamples);
 	path->AddCurve({ FG::Vector2D(position.x - 6.0f, position.y - 6.0f),FG::Vector2D(position.x - 4.5f,position.y - 6.0f),FG::Vector2D(position.x - 3.0f, position.y - 4.5f), FG::Vector2D(position.x - 3.0f, position.y - 3.0f) }, curveSamples);
-	path->AddCurve({ FG::Vector2D(position.x - 3.0f, position.y - 3.0f),FG::Vector2D(position.x - 3.0f,position.y - 1.5f),FG::Vector2D(position.x - 4.5f, position.y), FG::Vector2D(position.x -6.0f, position.y) }, curveSamples);
+	path->AddCurve({ FG::Vector2D(position.x - 3.0f, position.y - 3.0f),FG::Vector2D(position.x - 3.0f,position.y - 1.5f),FG::Vector2D(position.x - 4.5f, position.y), FG::Vector2D(position.x - 6.0f, position.y) }, curveSamples);
 	path->AddCurve({ FG::Vector2D(position.x - 6.0f, position.y),FG::Vector2D(position.x - 8.0f,position.y),FG::Vector2D(position.x - 10.0f, position.y), FG::Vector2D(position.x - 12.0f, position.y) }, curveSamples);
 
 
