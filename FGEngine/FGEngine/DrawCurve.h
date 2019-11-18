@@ -1,17 +1,18 @@
 #pragma once
 #include <SDL.h>
+#include "Renderer.h"
 
 namespace FG
 {
 	class DrawCurve
 	{
 	public:
-		DrawCurve(SDL_Renderer* renderer);
+		DrawCurve(Renderer* renderer);
 
 
-		void DrawLine(float startX, float StartY, float endX, float endY);
+		void DrawLine(FG::Vector2D vecA, FG::Vector2D vecB);
 
 	private:
-		SDL_Renderer* renderer = nullptr;
+		Renderer* renderer = nullptr;
 	};
 }

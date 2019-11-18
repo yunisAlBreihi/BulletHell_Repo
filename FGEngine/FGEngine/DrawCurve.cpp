@@ -2,12 +2,10 @@
 
 namespace FG
 {
-	DrawCurve::DrawCurve(SDL_Renderer* renderer) : renderer(renderer) {}
+	DrawCurve::DrawCurve(Renderer* renderer) : renderer(renderer) {}
 
-	void DrawCurve::DrawLine(float startX, float StartY, float endX, float endY)
+	void DrawCurve::DrawLine(FG::Vector2D vecA, FG::Vector2D vecB)
 	{
-		SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
-		SDL_RenderDrawLine(renderer, startX, StartY, endX, endY);
-		SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+		renderer->RenderLine(vecA, vecB, {255,0,0},0.1f);
 	}
 }

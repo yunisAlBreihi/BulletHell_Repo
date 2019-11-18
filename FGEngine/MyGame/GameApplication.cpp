@@ -18,6 +18,7 @@
 #include "Renderer.h"
 #include "SDL_syswm.h"
 #include "Profiler.h"
+
 bool GameApplication::Initialize()
 {
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
@@ -56,11 +57,11 @@ bool GameApplication::Initialize()
 	entityManager->InitializeEntityArray<BaseBullet>(10000);
 	entityManager->InitializeEntityArray<LightBullet>(1000);
 	//Enemy01::Enemy01(FG::Vector2D position, FG::Sprite sprite, FG::Sprite bulletsSprites, BulletSpreadType bulletSpreadType, MovementType movementType)
-	entityManager->InitializeEntityArray<Enemy01>(1, FG::Vector2D(0,0), enemy01Sprite, enemy01BulletSprite, Enemy01::DoubleWave, Enemy01::Straight);
+	entityManager->InitializeEntityArray<Enemy01>(1, FG::Vector2D(0,0), enemy01Sprite, enemy01BulletSprite, Enemy01::DoubleWave, Enemy01::Circular);
 
 	player1 = entityManager->CreateEntity<Player>();
-	Enemy01* enemy01 = entityManager->CreateEntity<Enemy01>(FG::Vector2D(5.5f,0.0f));
-
+	Enemy01* enemy01 = entityManager->CreateEntity<Enemy01>(FG::Vector2D(20.0f,6.0f));
+	 
 	for (int i = 0; i < 10; i++)
 	{
 		Enemy* enemy1 = entityManager->CreateEntity<Enemy>(FG::Vector2D(0, (i % 10)), sprite2);

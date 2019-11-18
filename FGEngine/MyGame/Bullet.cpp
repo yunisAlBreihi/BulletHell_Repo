@@ -63,7 +63,7 @@ LightBullet::LightBullet()
 
 void LightBullet::Update(float deltaTime)
 {
-	position.y += dir.x * speed * deltaTime;
+	position.x += dir.x * speed * deltaTime;
 	position.y += dir.y * speed * deltaTime;
 	if (position.y > 10 || position.y < -10)
 	{

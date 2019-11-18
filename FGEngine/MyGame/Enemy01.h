@@ -8,20 +8,20 @@ class Enemy01 : public FG::Entity
 public:
 	enum MovementType
 	{
-		Straight,
-		Circular,
-		Sweep,
+		Straight=0,
+		Circular=1,
+		Sweep=2,
 	};
 
 	enum BulletSpreadType
 	{
-		Forward,
-		Wave,
-		Circle,
-		Triple,
-		Double,
-		DoubleWave,
-		VerticalDouble,
+		Forward=0,
+		Wave=1,
+		Circle=2,
+		Triple=3,
+		Double=4,
+		DoubleWave=5,
+		DoubleVertical=6,
 	};
 
 	MovementType mt = Sweep;
@@ -32,8 +32,8 @@ public:
 
 	//for curve animations
 	std::vector<std::vector<FG::Vector2D>> animPath;
-	int curveSamples = 500;
-	int animSpeed = 100;
+	int curveSamples = 0;
+	int animSpeed = 25;
 	float curvePosition = 0;
 	void CreateSweepAnimation();
 	void CreateCircularAnimation();
@@ -65,7 +65,7 @@ private:
 	int bulletInvert = 1.0f;
 
 	//For Circle bullet pattern
-	FG::Vector2D bulletDirection = { -0.5f,0.0f };
+	FG::Vector2D bulletDirection = { -1.0f,0.0f };
 	FG::Vector2D bulletSpawnPosition = { -0.6f, 0.15f };
 	float bulletSpeed = 10.0f;
 	float bulletAngle = 0;
