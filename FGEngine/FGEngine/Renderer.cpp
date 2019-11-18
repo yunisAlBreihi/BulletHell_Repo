@@ -67,6 +67,7 @@ struct TextVertex
 	TextVertex(float x, float y, float sx, float sy, float id): x(x), y(y), sx(sx), sy(sy), i(id) { }
 	float x = 0, y = 0, sx = 0, sy = 0, i = 0;
 
+	static VAO vao;
 };
 
 struct QuadVertex
@@ -94,12 +95,13 @@ struct LineVertex
 		if (vao.vaoStructure.size() == 0)
 		{
 			vao.AddInfo(VAOInfo(0, 4, NULL));
-			vao.AddInfo(VAOInfo(0, 4, 4 * sizeof(float)));
+			vao.AddInfo(VAOInfo(1, 4, 4 * sizeof(float)));
 		}
 	}
 
-	float ax, ay, bx, by, size;
+	float ax, ay, bx, by;
 	float3 color;
+	float size;
 	static VAO vao;
 };
 
@@ -244,9 +246,10 @@ public:
 		vertices.emplace_back(vertex);
 	}
 
-	void RenderLine(const FG::Vector2D& a, const FG::Vector2D& b, const Color& color, const float& size)
+	void RenderLine(const FG::Vector2D& a, const FG::Vector2D& b, const float3& color, const float& size)
 	{
-
+		LineVertex vertex = LineVertex(a.x, a.y, b.x, b.y, color, size);
+		lineVertices.push_back(vertex);
 	}
 
 	void Present(const Camera* const camera)
@@ -287,6 +290,23 @@ public:
 			AddBatch(quadBatch);
 		}
 
+		if (lineVertices.size() > 0)
+		{
+			if (!lineVBO.Initialized())
+			{
+				lineVBO.Init(lineVertices.data(), (GLuint)lineVertices.size(), (GLuint)sizeof(LineVertex), LineVertex::vao);
+				lineBatch.vao = lineVBO.Vao();
+				lineBatch.vbo = lineVBO.Vbo();
+				lineBatch.shaderHandle = lineShader.handle;
+			}
+			else
+			{
+				lineVBO.BufferData(lineVertices.data(), (GLuint)lineVertices.size());
+			}
+			lineBatch.count = lineVertices.size();
+			AddBatch(lineBatch);
+		}
+
 		for (auto batch : batches)
 		{
 			glUseProgram(batch.shaderHandle);
@@ -311,6 +331,8 @@ public:
 		Swap();
 		vertices.clear();
 		batches.clear();
+		lineVertices.clear();
+		textVertices.clear();
 		quadVertices.clear();
 	}
 
@@ -356,6 +378,7 @@ RenderImpl::RenderImpl(SDL_Window* window)
 		printf("Error initializing GLEW! %s\n", glewGetErrorString(glewError));
 	}
 
+	lineVBO = VBO();
 	quadVBO = VBO();
 	vbo = VBO();
 	SDL_GL_SetSwapInterval(0);
@@ -365,8 +388,9 @@ RenderImpl::RenderImpl(SDL_Window* window)
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
 
-	shader.LoadShaders("..//Shader//vertexShader.vert", "..//Shader//fragmentShader.frag", "..//Shader//geometryShader.geo");
-	quadShader.LoadShaders("..//Shader//borderRectGeometry.vert", "..//Shader//borders.frag", "..//Shader//borderRectGeometry.geo");
+	shader.LoadShaders("..//Shader//sprite.vert", "..//Shader//sprite.frag", "..//Shader//sprite.geo");
+	quadShader.LoadShaders("..//Shader//rect.vert", "..//Shader//rect.frag", "..//Shader//rect.geo");
+	lineShader.LoadShaders("..//Shader//line.vert", "..//Shader//line.frag", "..//Shader//line.geo");
 }
 
 Renderer::Renderer(SDL_Window* window)
@@ -404,7 +428,7 @@ void Renderer::RenderText(const FG::Vector2D& position, const int textSize, cons
 	renderImpl->RenderText(position, textSize, text);
 }
 
-void Renderer::RenderLine(const FG::Vector2D& a, const FG::Vector2D& b, const Color& color, const float& size)
+void Renderer::RenderLine(const FG::Vector2D& a, const FG::Vector2D& b, const float3& color, const float& size)
 {
 	renderImpl->RenderLine(a, b, color, size);
 }

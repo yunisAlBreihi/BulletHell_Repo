@@ -6,6 +6,7 @@
 #include "Sprite.h"
 #include "Color.h"
 #include "Font.h"
+#include "float3.h"
 
 class Camera;
 class RenderImpl;
@@ -21,7 +22,7 @@ public:
 	void UseFont(const Font& font);
 	void RenderQuad(const FG::Vector2D& position, const FG::Vector2D& size, const Color& borderColor, const Color& fillColor);
 	void RenderText(const FG::Vector2D& position, const int textSize, const std::string& text);
-	void RenderLine(const FG::Vector2D& a, const FG::Vector2D& b, const Color& color, const float& size);
+	void RenderLine(const FG::Vector2D& a, const FG::Vector2D& b, const float3& color, const float& size);
 	void Present(const Camera *const camera);
 };
 
