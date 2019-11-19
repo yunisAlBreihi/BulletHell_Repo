@@ -63,11 +63,11 @@ void Player::Shoot(float deltaTime)
 	{
 		if (playerState == PLAYER_LIGHT_STATE)
 		{
-			SingleLightWeapon::Shoot(position, PLAYER_SHOOT_DIR, EntityLayers::GetEntityMask<BaseEnemy>());
+			BurstLightWeapon::Shoot(position, PLAYER_SHOOT_DIR, EntityLayers::GetEntityMask<BaseEnemy>());
 		}
 		else if (playerState == PLAYER_DARK_STATE)
 		{
-			SingleDarkWeapon::Shoot(position, PLAYER_SHOOT_DIR, EntityLayers::GetEntityMask<BaseEnemy>());
+			BurstDarkWeapon::Shoot(position, PLAYER_SHOOT_DIR, EntityLayers::GetEntityMask<BaseEnemy>());
 		}
 		shootTimer.Use();
 	}
