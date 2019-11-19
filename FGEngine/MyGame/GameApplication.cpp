@@ -39,9 +39,6 @@ bool GameApplication::Initialize()
 	inputManager->Initialize();
 
 	renderer = std::make_unique<Renderer>(window->GetInternalWindow()); 
-
-	camera = new Camera({0, 0, -1}, 45, -1, 100);
-
 	FG::SpriteFactory factory;	
 	FG::Sprite sprite = factory.LoadSprite("..//assets//images//bg.jpg", 1, 1);
 	FG::Sprite sprite2 = factory.LoadSprite("..//assets//images//test.png", 8, 8);
@@ -75,6 +72,7 @@ bool GameApplication::Initialize()
 
 void GameApplication::Run()
 {
+	Camera camera = Camera({ 0, 0, -1 }, 45, -1, 100);
 	Profiler profiler;
 	bool quit = false;
 	int fps = 0;  
@@ -88,9 +86,9 @@ void GameApplication::Run()
 		inputManager->Update(quit);
 		entityManager->Update(time.DeltaTime());
 		instance->TestCollisions();
-		camera->Update(0.1f, FG::Vector2D(1.0f, 1.0f));
+		camera.Update(0.1f, FG::Vector2D(1.0f, 1.0f));
 		renderer->Clear(float4(0.0f, 0.0f, 0.0f, 1.0f));
-		renderer->Present(camera);
+		renderer->Present(&camera);
 		entityManager->Render(renderer.get());
 
 		deltaTimeAccu += profiler.End();
@@ -122,11 +120,6 @@ void GameApplication::Shutdown()
 		resourceManager = nullptr;
 	}
 
-	if (camera)
-	{
-		delete camera;
-		camera = nullptr;
-	}
 
 	if (inputManager)
 	{

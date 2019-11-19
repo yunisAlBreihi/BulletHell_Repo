@@ -31,7 +31,6 @@ private:
 	std::unique_ptr<Renderer> renderer;
 	FG::Time time;
 	Player* player1;
-	Camera* camera;
 
 };
 
