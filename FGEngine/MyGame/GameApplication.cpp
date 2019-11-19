@@ -15,6 +15,8 @@
 #include "Enemy.h"
 #include "BaseEnemy.h"
 #include "EnemyWaveStraight.h"
+#include "EnemyTripleCircular.h"
+#include "EnemyDoubleWaveSweep.h"
 #include "CollisionSystem.h"
 #include "Renderer.h"
 #include "SDL_syswm.h"
@@ -58,12 +60,15 @@ bool GameApplication::Initialize()
 	entityManager->InitializeEntityArray<BaseBullet>(10000);
 	entityManager->InitializeEntityArray<LightBullet>(1000);
 	//Enemy01::Enemy01(FG::Vector2D position, FG::Sprite sprite, FG::Sprite bulletsSprites, BulletSpreadType bulletSpreadType, MovementType movementType)
-	entityManager->InitializeEntityArray<BaseEnemy>(1, FG::Vector2D(0,0), enemy01Sprite, enemy01BulletSprite, BaseEnemy::ShootCircle, BaseEnemy::MoveCircular);
-	entityManager->InitializeEntityArray<EnemyWaveStraight>(1, FG::Vector2D(0, 0), enemy01Sprite, enemy01BulletSprite, EnemyWaveStraight::ShootWave, EnemyWaveStraight::MoveStraight);
+	entityManager->InitializeEntityArray<EnemyWaveStraight>(1, FG::Vector2D(0, 0), enemy01Sprite, enemy01BulletSprite, BaseEnemy::ShootWave, BaseEnemy::MoveStraight, BaseEnemy::Dark);
+	entityManager->InitializeEntityArray<EnemyTripleCircular>(1, FG::Vector2D(0, 0), enemy01Sprite, enemy01BulletSprite, BaseEnemy::ShootTriple, BaseEnemy::MoveCircular, BaseEnemy::Light);
+	entityManager->InitializeEntityArray<EnemyDoubleWaveSweep>(1, FG::Vector2D(0, 0), enemy01Sprite, enemy01BulletSprite, BaseEnemy::ShootDoubleWave, BaseEnemy::MoveSweep, BaseEnemy::Double);
+
 
 	player1 = entityManager->CreateEntity<Player>();
-	BaseEnemy* enemy01 = entityManager->CreateEntity<BaseEnemy>(FG::Vector2D(20.0f,6.0f));
-	EnemyWaveStraight* enemy02 = entityManager->CreateEntity<EnemyWaveStraight>(FG::Vector2D(30.0f, 8.0f));
+	EnemyWaveStraight* enemy02 = entityManager->CreateEntity<EnemyWaveStraight>(FG::Vector2D(20.0f, 8.0f));
+	EnemyTripleCircular* enemy03 = entityManager->CreateEntity<EnemyTripleCircular>(FG::Vector2D(20.0f, 5.0f));
+	EnemyDoubleWaveSweep* enemy04 = entityManager->CreateEntity<EnemyDoubleWaveSweep>(FG::Vector2D(20.0f, 7.0f));
 
 	
 	 

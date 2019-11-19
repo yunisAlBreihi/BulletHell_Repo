@@ -8,8 +8,8 @@
 #include <cmath>
 #include "CollisionSystem.h"
 
-BaseEnemy::BaseEnemy(FG::Vector2D position, FG::Sprite sprite, FG::Sprite bulletsSprite, BulletSpreadType bulletSpreadType, MovementType movementType)
-	: sprite(sprite), position(position), bs(bulletSpreadType), mt(movementType)
+BaseEnemy::BaseEnemy(FG::Vector2D position, FG::Sprite sprite, FG::Sprite bulletsSprite, BulletSpreadType bulletSpreadType, MovementType movementType, BulletColor bulletColor)
+	: sprite(sprite), position(position), bs(bulletSpreadType), mt(movementType), bc(bulletColor)
 {
 
 }
@@ -61,116 +61,267 @@ void BaseEnemy::OnCollision(Entity* other)
 
 void BaseEnemy::Shoot(float deltaTime)
 {
-	if (bs == ShootForward)
+	if (bc == Light)
 	{
-		accu += deltaTime;
-		if (accu >= timer)
+		if (bs == ShootForward)
 		{
-			//	bullets.Shoot((position + bulletSpawnPosition), { bulletDirection.x, bulletDirection.y });
-			FG::EntityManager::Instance()->CreateEntity<LightBullet>(position + bulletSpawnPosition, bulletDirection, bulletSpeed, EntityLayers::GetEntityMask<Player>());
-			accu = 0;
+			accu += deltaTime;
+			if (accu >= timer)
+			{
+				FG::EntityManager::Instance()->CreateEntity<LightBullet>(position + bulletSpawnPosition, bulletDirection, bulletSpeed, EntityLayers::GetEntityMask<Player>());
+				accu = 0;
+			}
+		}
+
+		if (bs == ShootWave)
+		{
+			bulletDirection.y += deltaTime * bulletInvert;
+
+			if (bulletDirection.y < -0.85f || bulletDirection.y > 0.85f)
+			{
+				bulletInvert *= -1;
+			}
+			accu += deltaTime;
+			if (accu >= timer)
+			{
+				FG::EntityManager::Instance()->CreateEntity<LightBullet>(position + bulletSpawnPosition, bulletDirection, bulletSpeed, EntityLayers::GetEntityMask<Player>());
+				accu = 0;
+			}
+		}
+
+		if (bs == ShootCircle)
+		{
+			bulletAngle += bulletRotateSpeed * deltaTime;
+
+			bulletSpawnPosition.x = 1.0f * cos(bulletAngle);
+			bulletSpawnPosition.y = 1.0f * sin(bulletAngle);
+
+			accu += deltaTime;
+			timer = .075f;
+			if (accu >= timer)
+			{
+				FG::EntityManager::Instance()->CreateEntity<LightBullet>(position + bulletSpawnPosition, bulletSpawnPosition, bulletSpeed, EntityLayers::GetEntityMask<Player>());
+				accu = 0;
+			}
+		}
+
+		if (bs == ShootTriple)
+		{
+			accu += deltaTime;
+			if (accu >= timer)
+			{
+				FG::EntityManager::Instance()->CreateEntity<LightBullet>(position + bulletSpawnPosition, FG::Vector2D(bulletDirection.x, 0.2f), bulletSpeed, EntityLayers::GetEntityMask<Player>());
+				FG::EntityManager::Instance()->CreateEntity<LightBullet>(position + bulletSpawnPosition, bulletDirection, bulletSpeed, EntityLayers::GetEntityMask<Player>());
+				FG::EntityManager::Instance()->CreateEntity<LightBullet>(position + bulletSpawnPosition, FG::Vector2D(bulletDirection.x, -0.2f), bulletSpeed, EntityLayers::GetEntityMask<Player>());
+
+				accu = 0;
+			}
+		}
+
+		if (bs == ShootDouble)
+		{
+			accu += deltaTime;
+			if (accu >= timer)
+			{
+				FG::EntityManager::Instance()->CreateEntity<LightBullet>(position + bulletSpawnPosition, FG::Vector2D(bulletDirection.x, 0.2f), bulletSpeed, EntityLayers::GetEntityMask<Player>());
+				FG::EntityManager::Instance()->CreateEntity<LightBullet>(position + bulletSpawnPosition, FG::Vector2D(bulletDirection.x, -0.2f), bulletSpeed, EntityLayers::GetEntityMask<Player>());
+				accu = 0;
+			}
+		}
+
+		if (bs == ShootDoubleWave)
+		{
+			bulletDirection.y += 0.5f * deltaTime * bulletInvert;
+
+			if (bulletDirection.y < 0.0f || bulletDirection.y > 0.6f)
+			{
+				bulletInvert *= -1;
+			}
+
+			accu += deltaTime;
+			if (accu >= timer)
+			{
+				FG::EntityManager::Instance()->CreateEntity<LightBullet>(position + bulletSpawnPosition, FG::Vector2D(bulletDirection.x, bulletDirection.y), bulletSpeed, EntityLayers::GetEntityMask<Player>());
+				FG::EntityManager::Instance()->CreateEntity<LightBullet>(position + bulletSpawnPosition, FG::Vector2D(bulletDirection.x, -bulletDirection.y), bulletSpeed, EntityLayers::GetEntityMask<Player>());
+
+				accu = 0;
+			}
+		}
+
+		if (bs == ShootDoubleVertical)
+		{
+			FG::Vector2D bulletSpawnPositionTop = { 0.2f,-0.4f };
+			FG::Vector2D bulletSpawnPositionBot = { 0.2f,0.8f };
+
+			accu += deltaTime;
+			if (accu >= timer)
+			{
+				FG::EntityManager::Instance()->CreateEntity<LightBullet>(position + bulletSpawnPositionTop, FG::Vector2D(0, -1), bulletSpeed, EntityLayers::GetEntityMask<Player>());
+				FG::EntityManager::Instance()->CreateEntity<LightBullet>(position + bulletSpawnPositionBot, FG::Vector2D(0, 1), bulletSpeed, EntityLayers::GetEntityMask<Player>());
+				accu = 0;
+			}
 		}
 	}
-
-	if (bs == ShootWave)
+	else if (bc == Dark)
 	{
-		bulletDirection.y += deltaTime * bulletInvert;
-
-		if (bulletDirection.y < -0.85f || bulletDirection.y > 0.85f)
+		if (bs == ShootForward)
 		{
-			bulletInvert *= -1;
+			accu += deltaTime;
+			if (accu >= timer)
+			{
+				FG::EntityManager::Instance()->CreateEntity<BaseBullet>(position + bulletSpawnPosition, bulletDirection, bulletSpeed, EntityLayers::GetEntityMask<Player>());
+				accu = 0;
+			}
 		}
-		accu += deltaTime;
-		if (accu >= timer)
+
+		if (bs == ShootWave)
 		{
-			//	bullets.Shoot((position + bulletSpawnPosition), { bulletDirection.x, bulletDirection.y });
-			FG::EntityManager::Instance()->CreateEntity<LightBullet>(position + bulletSpawnPosition, bulletDirection, bulletSpeed, EntityLayers::GetEntityMask<Player>());
-			accu = 0;
+			bulletDirection.y += deltaTime * bulletInvert;
+
+			if (bulletDirection.y < -0.85f || bulletDirection.y > 0.85f)
+			{
+				bulletInvert *= -1;
+			}
+			accu += deltaTime;
+			if (accu >= timer)
+			{
+				FG::EntityManager::Instance()->CreateEntity<BaseBullet>(position + bulletSpawnPosition, bulletDirection, bulletSpeed, EntityLayers::GetEntityMask<Player>());
+				accu = 0;
+			}
+		}
+
+		if (bs == ShootCircle)
+		{
+			bulletAngle += bulletRotateSpeed * deltaTime;
+
+			bulletSpawnPosition.x = 1.0f * cos(bulletAngle);
+			bulletSpawnPosition.y = 1.0f * sin(bulletAngle);
+
+			accu += deltaTime;
+			timer = .075f;
+			if (accu >= timer)
+			{
+				FG::EntityManager::Instance()->CreateEntity<BaseBullet>(position + bulletSpawnPosition, bulletSpawnPosition, bulletSpeed, EntityLayers::GetEntityMask<Player>());
+				accu = 0;
+			}
+		}
+
+		if (bs == ShootTriple)
+		{
+			accu += deltaTime;
+			if (accu >= timer)
+			{
+				FG::EntityManager::Instance()->CreateEntity<BaseBullet>(position + bulletSpawnPosition, FG::Vector2D(bulletDirection.x, 0.2f), bulletSpeed, EntityLayers::GetEntityMask<Player>());
+				FG::EntityManager::Instance()->CreateEntity<BaseBullet>(position + bulletSpawnPosition, bulletDirection, bulletSpeed, EntityLayers::GetEntityMask<Player>());
+				FG::EntityManager::Instance()->CreateEntity<BaseBullet>(position + bulletSpawnPosition, FG::Vector2D(bulletDirection.x, -0.2f), bulletSpeed, EntityLayers::GetEntityMask<Player>());
+
+				accu = 0;
+			}
+		}
+
+		if (bs == ShootDouble)
+		{
+			accu += deltaTime;
+			if (accu >= timer)
+			{
+				FG::EntityManager::Instance()->CreateEntity<BaseBullet>(position + bulletSpawnPosition, FG::Vector2D(bulletDirection.x, 0.2f), bulletSpeed, EntityLayers::GetEntityMask<Player>());
+				FG::EntityManager::Instance()->CreateEntity<BaseBullet>(position + bulletSpawnPosition, FG::Vector2D(bulletDirection.x, -0.2f), bulletSpeed, EntityLayers::GetEntityMask<Player>());
+				accu = 0;
+			}
+		}
+
+		if (bs == ShootDoubleWave)
+		{
+			bulletDirection.y += 0.5f * deltaTime * bulletInvert;
+
+			if (bulletDirection.y < 0.0f || bulletDirection.y > 0.6f)
+			{
+				bulletInvert *= -1;
+			}
+
+			accu += deltaTime;
+			if (accu >= timer)
+			{
+				FG::EntityManager::Instance()->CreateEntity<BaseBullet>(position + bulletSpawnPosition, FG::Vector2D(bulletDirection.x, bulletDirection.y), bulletSpeed, EntityLayers::GetEntityMask<Player>());
+				FG::EntityManager::Instance()->CreateEntity<BaseBullet>(position + bulletSpawnPosition, FG::Vector2D(bulletDirection.x, -bulletDirection.y), bulletSpeed, EntityLayers::GetEntityMask<Player>());
+
+				accu = 0;
+			}
+		}
+
+		if (bs == ShootDoubleVertical)
+		{
+			FG::Vector2D bulletSpawnPositionTop = { 0.2f,-0.4f };
+			FG::Vector2D bulletSpawnPositionBot = { 0.2f,0.8f };
+
+			accu += deltaTime;
+			if (accu >= timer)
+			{
+				FG::EntityManager::Instance()->CreateEntity<BaseBullet>(position + bulletSpawnPositionTop, FG::Vector2D(0, -1), bulletSpeed, EntityLayers::GetEntityMask<Player>());
+				FG::EntityManager::Instance()->CreateEntity<BaseBullet>(position + bulletSpawnPositionBot, FG::Vector2D(0, 1), bulletSpeed, EntityLayers::GetEntityMask<Player>());
+				accu = 0;
+			}
 		}
 	}
-
-	if (bs == ShootCircle)
+	else if (bc == Double)
 	{
-		bulletAngle += bulletRotateSpeed * deltaTime;
-
-		bulletSpawnPosition.x = 1.0f * cos(bulletAngle);
-		bulletSpawnPosition.y = 1.0f * sin(bulletAngle);
-
-		accu += deltaTime;
-		timer = .075f;
-		if (accu >= timer)
+		if (bs == ShootTriple)
 		{
-			//	bullets.Shoot((position + bulletSpawnPosition), { bulletSpawnPosition.x, bulletSpawnPosition.y });
-			FG::EntityManager::Instance()->CreateEntity<LightBullet>(position + bulletSpawnPosition, bulletSpawnPosition, bulletSpeed, EntityLayers::GetEntityMask<Player>());
-			accu = 0;
+			accu += deltaTime;
+			if (accu >= timer)
+			{
+				FG::EntityManager::Instance()->CreateEntity<BaseBullet>(position + bulletSpawnPosition, FG::Vector2D(bulletDirection.x, 0.2f), bulletSpeed, EntityLayers::GetEntityMask<Player>());
+				FG::EntityManager::Instance()->CreateEntity<LightBullet>(position + bulletSpawnPosition, bulletDirection, bulletSpeed, EntityLayers::GetEntityMask<Player>());
+				FG::EntityManager::Instance()->CreateEntity<BaseBullet>(position + bulletSpawnPosition, FG::Vector2D(bulletDirection.x, -0.2f), bulletSpeed, EntityLayers::GetEntityMask<Player>());
+
+				accu = 0;
+			}
+		}
+
+		if (bs == ShootDouble)
+		{
+			accu += deltaTime;
+			if (accu >= timer)
+			{
+				FG::EntityManager::Instance()->CreateEntity<LightBullet>(position + bulletSpawnPosition, FG::Vector2D(bulletDirection.x, 0.2f), bulletSpeed, EntityLayers::GetEntityMask<Player>());
+				FG::EntityManager::Instance()->CreateEntity<BaseBullet>(position + bulletSpawnPosition, FG::Vector2D(bulletDirection.x, -0.2f), bulletSpeed, EntityLayers::GetEntityMask<Player>());
+				accu = 0;
+			}
+		}
+
+		if (bs == ShootDoubleWave)
+		{
+			bulletDirection.y += 0.5f * deltaTime * bulletInvert;
+
+			if (bulletDirection.y < 0.0f || bulletDirection.y > 0.6f)
+			{
+				bulletInvert *= -1;
+			}
+
+			accu += deltaTime;
+			if (accu >= timer)
+			{
+				FG::EntityManager::Instance()->CreateEntity<BaseBullet>(position + bulletSpawnPosition, FG::Vector2D(bulletDirection.x, bulletDirection.y), bulletSpeed, EntityLayers::GetEntityMask<Player>());
+				FG::EntityManager::Instance()->CreateEntity<LightBullet>(position + bulletSpawnPosition, FG::Vector2D(bulletDirection.x, -bulletDirection.y), bulletSpeed, EntityLayers::GetEntityMask<Player>());
+
+				accu = 0;
+			}
+		}
+
+		if (bs == ShootDoubleVertical)
+		{
+			FG::Vector2D bulletSpawnPositionTop = { 0.2f,-0.4f };
+			FG::Vector2D bulletSpawnPositionBot = { 0.2f,0.8f };
+
+			accu += deltaTime;
+			if (accu >= timer)
+			{
+				FG::EntityManager::Instance()->CreateEntity<BaseBullet>(position + bulletSpawnPositionTop, FG::Vector2D(0, -1), bulletSpeed, EntityLayers::GetEntityMask<Player>());
+				FG::EntityManager::Instance()->CreateEntity<LightBullet>(position + bulletSpawnPositionBot, FG::Vector2D(0, 1), bulletSpeed, EntityLayers::GetEntityMask<Player>());
+				accu = 0;
+			}
 		}
 	}
-
-	if (bs == ShootTriple)
-	{
-		accu += deltaTime;
-		if (accu >= timer)
-		{
-			/*	bullets.Shoot((position + bulletSpawnPosition), { bulletDirection.x, 0.2 });
-				bullets.Shoot((position + bulletSpawnPosition), { bulletDirection.x, 0 });
-				bullets.Shoot((position + bulletSpawnPosition), { bulletDirection.x, -0.2 });*/
-			FG::EntityManager::Instance()->CreateEntity<LightBullet>(position + bulletSpawnPosition, FG::Vector2D(bulletDirection.x, 0.2f), bulletSpeed, EntityLayers::GetEntityMask<Player>());
-			FG::EntityManager::Instance()->CreateEntity<LightBullet>(position + bulletSpawnPosition, bulletDirection, bulletSpeed, EntityLayers::GetEntityMask<Player>());
-			FG::EntityManager::Instance()->CreateEntity<LightBullet>(position + bulletSpawnPosition, FG::Vector2D(bulletDirection.x, -0.2f), bulletSpeed, EntityLayers::GetEntityMask<Player>());
-
-			accu = 0;
-		}
-	}
-
-	if (bs == ShootDouble)
-	{
-		accu += deltaTime;
-		if (accu >= timer)
-		{
-			/*bullets.Shoot((position + bulletSpawnPosition), { bulletDirection.x, 0.2 });
-			bullets.Shoot((position + bulletSpawnPosition), { bulletDirection.x, -0.2 });*/
-			FG::EntityManager::Instance()->CreateEntity<LightBullet>(position + bulletSpawnPosition, FG::Vector2D(bulletDirection.x, 0.2f), bulletSpeed, EntityLayers::GetEntityMask<Player>());
-			FG::EntityManager::Instance()->CreateEntity<LightBullet>(position + bulletSpawnPosition, FG::Vector2D(bulletDirection.x, -0.2f), bulletSpeed, EntityLayers::GetEntityMask<Player>());
-			accu = 0;
-		}
-	}
-
-	if (bs == ShootDoubleWave)
-	{
-		bulletDirection.y += 0.5f * deltaTime * bulletInvert;
-
-		if (bulletDirection.y < 0.0f || bulletDirection.y > 0.6f)
-		{
-			bulletInvert *= -1;
-		}
-
-		accu += deltaTime;
-		if (accu >= timer)
-		{
-			FG::EntityManager::Instance()->CreateEntity<LightBullet>(position + bulletSpawnPosition, FG::Vector2D(bulletDirection.x, bulletDirection.y), bulletSpeed, EntityLayers::GetEntityMask<Player>());
-			FG::EntityManager::Instance()->CreateEntity<LightBullet>(position + bulletSpawnPosition, FG::Vector2D(bulletDirection.x, -bulletDirection.y), bulletSpeed, EntityLayers::GetEntityMask<Player>());
-
-			accu = 0;
-		}
-	}
-
-	if (bs == ShootDoubleVertical)
-	{
-		FG::Vector2D bulletSpawnPositionTop = { 0.2f,-0.4f };
-		FG::Vector2D bulletSpawnPositionBot = { 0.2f,0.8f };
-
-		accu += deltaTime;
-		if (accu >= timer)
-		{
-			/*bullets.Shoot((position + bulletSpawnPositionTop), { 0, -1 });
-			bullets.Shoot((position + bulletSpawnPositionBot), { 0, 1 });*/
-			FG::EntityManager::Instance()->CreateEntity<LightBullet>(position + bulletSpawnPositionTop, FG::Vector2D(0, -1), bulletSpeed, EntityLayers::GetEntityMask<Player>());
-			FG::EntityManager::Instance()->CreateEntity<LightBullet>(position + bulletSpawnPositionBot, FG::Vector2D(0, 1), bulletSpeed, EntityLayers::GetEntityMask<Player>());
-			accu = 0;
-		}
-	}
-
-	/*bullets.Update(deltaTime);*/
 }
 
 void BaseEnemy::Move(float deltaTime)
@@ -209,7 +360,7 @@ void BaseEnemy::CreateCircularAnimation()
 {
 	int currentPath = 0;
 	FG::BezierPath* path = new FG::BezierPath();
-	
+
 	path->AddCurve({ FG::Vector2D(position.x,position.y),FG::Vector2D(position.x - 4.0f,position.y),FG::Vector2D(position.x - 8.0f, position.y), FG::Vector2D(position.x - 12.0f, position.y) }, 100);
 	path->AddCurve({ FG::Vector2D(position.x - 12.0f,position.y),FG::Vector2D(position.x - 13.5f,position.y),FG::Vector2D(position.x - 15.0f, position.y - 1.5f), FG::Vector2D(position.x - 15.0f, position.y - 3.0f) }, 43);
 	path->AddCurve({ FG::Vector2D(position.x - 15.0f,position.y - 3.0f),FG::Vector2D(position.x - 15.0f,position.y - 4.5f),FG::Vector2D(position.x - 13.5f, position.y - 6.0f), FG::Vector2D(position.x - 12.0f, position.y - 6.0f) }, 43);
