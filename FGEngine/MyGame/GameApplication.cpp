@@ -59,7 +59,7 @@ bool GameApplication::Initialize()
 	entityManager->InitializeEntityArray<EnemyDoubleWaveSweep>(1, FG::Vector2D(0, 0), enemy01Sprite, enemy01BulletSprite, BaseEnemy::ShootDoubleWave, BaseEnemy::MoveSweep, BaseEnemy::Double);
 
 
-	player1 = entityManager->CreateEntity<Player>(FG::Vector2D(1,1));
+	player = entityManager->CreateEntity<Player>(FG::Vector2D(1,1));
 	EnemyWaveStraight* enemy02 = entityManager->CreateEntity<EnemyWaveStraight>(FG::Vector2D(20.0f, 8.0f));
 	EnemyTripleCircular* enemy03 = entityManager->CreateEntity<EnemyTripleCircular>(FG::Vector2D(20.0f, 5.0f));
 	EnemyDoubleWaveSweep* enemy04 = entityManager->CreateEntity<EnemyDoubleWaveSweep>(FG::Vector2D(20.0f, 7.0f));
@@ -99,6 +99,15 @@ void GameApplication::Run()
 			fps = 0;
 		}
 		fps++;
+		
+#ifndef _DEBUG
+		if (player->IsDead())
+		{
+			break;
+		}
+#endif // _DEBUG
+
+
 		profiler.End();
 		time.EndFrame();
 

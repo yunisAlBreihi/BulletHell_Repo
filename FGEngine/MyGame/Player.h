@@ -16,7 +16,7 @@ namespace FG
 const static float PLAYER_SHOOT_TIMER = 0.05f;
 const static int PLAYER_LIGHT_STATE = 0;
 const static int PLAYER_DARK_STATE = 1;
-const static int PLAYER_HEALTH = 3;
+const static int PLAYER_HEALTH = 10;
 const static int PLAYER_START_STATE = PLAYER_LIGHT_STATE;
 const static float PLAYER_MOVEMENTSPEED = 5.0f;
 const static float PLAYER_BULLET_SPEED = 10.0f;
@@ -35,6 +35,10 @@ public:
 	void Shoot(float deltaTime);
 	void OnCollision(FG::Entity* other) override;
 	
+	bool IsDead() const
+	{
+		return health <= 0; 
+	}
 
 private:
 	FG::InputManager* inputManager = nullptr;

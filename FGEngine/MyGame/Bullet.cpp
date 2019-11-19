@@ -34,7 +34,7 @@ void BaseBullet::Update(float deltaTime)
 void BaseBullet::Render(Renderer* const renderer)
 {
 	renderer->Render(position, sprite);
-	renderer->RenderQuad(position, sprite.GetScale(), Color(), Color());
+	renderer->RenderQuad(position, sprite.GetScale(), Color(1.0f, 1.0f, 1.0f, 1.0f), Color());
 }
 
 LightBullet::LightBullet()

@@ -30,7 +30,7 @@ private:
 	FG::ResourceManager* resourceManager = nullptr;
 	std::unique_ptr<Renderer> renderer;
 	FG::Time time;
-	Player* player1;
+	Player* player;
 
 };
 

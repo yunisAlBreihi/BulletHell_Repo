@@ -74,6 +74,7 @@ struct QuadVertex
 {
 	QuadVertex(float x, float y, float sx, float sy, Color borderColor, Color fillCol) : x(x), y(y), sx(sx), sy(sy) { QuadVertex(); }
 	float x, y, sx, sy;
+	Color fillColor, borderColor;
 	static VAO vao;
 
 	QuadVertex()
@@ -81,6 +82,8 @@ struct QuadVertex
 		if (vao.vaoStructure.size() == 0)
 		{
 			vao.AddInfo(VAOInfo(0, 4, NULL));
+			vao.AddInfo(VAOInfo(1, 4, 4 * sizeof(float)));
+			vao.AddInfo(VAOInfo(2, 4, 8 * sizeof(float)));
 		}
 	}
 };
@@ -212,13 +215,15 @@ public:
 
 	}
 
-	void RenderQuad(const FG::Vector2D& position, const FG::Vector2D& size, const Color& color, const Color& fillColor)
+	void RenderQuad(const FG::Vector2D& position, const FG::Vector2D& size, const Color& fillColor, const Color& borderColor)
 	{
 		QuadVertex vertex;
 		vertex.x = position.x;
 		vertex.y = position.y;
 		vertex.sx = size.x;
 		vertex.sy = size.y;
+		vertex.fillColor = fillColor;
+		vertex.borderColor = borderColor;
 		quadVertices.emplace_back(vertex);
 	}
 
@@ -418,9 +423,9 @@ void Renderer::UseFont(const Font& font)
 	renderImpl->UseFont(font);
 }
 
-void Renderer::RenderQuad(const FG::Vector2D& position, const FG::Vector2D& size, const Color& borderColor, const Color& fillColor)
+void Renderer::RenderQuad(const FG::Vector2D& position, const FG::Vector2D& size, const Color& fillColor, const Color& borderColor)
 {
-	renderImpl->RenderQuad(position, size, borderColor, fillColor);
+	renderImpl->RenderQuad(position, size, fillColor, borderColor);
 }
 
 void Renderer::RenderText(const FG::Vector2D& position, const int textSize, const std::string& text)

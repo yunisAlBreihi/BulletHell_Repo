@@ -20,7 +20,7 @@ public:
 	void Clear(const float4& color);
 	void Render(const FG::Vector2D& position, const FG::Sprite& sprite);
 	void UseFont(const Font& font);
-	void RenderQuad(const FG::Vector2D& position, const FG::Vector2D& size, const Color& borderColor, const Color& fillColor);
+	void RenderQuad(const FG::Vector2D& position, const FG::Vector2D& size, const Color& fillColor, const Color& borderColor);
 	void RenderText(const FG::Vector2D& position, const int textSize, const std::string& text);
 	void RenderLine(const FG::Vector2D& a, const FG::Vector2D& b, const float3& color, const float& size);
 	void Present(const Camera *const camera);

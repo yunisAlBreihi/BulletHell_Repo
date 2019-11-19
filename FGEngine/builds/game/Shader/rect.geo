@@ -9,6 +9,13 @@ in RectInfo{
    vec2 data;
 } RectIn[];
 
+
+
+in vec4 GEOFill[];
+in vec4 GEOBorder[];
+
+out vec4 Fill;
+out vec4 Border;
 void main()
 {
     float spriteWidth = RectIn[0].data.x;
@@ -17,17 +24,25 @@ void main()
     //left top rendering
     gl_Position = vp *(gl_in[0].gl_Position + (vec4(0, 0, 0, 0)));
     TexCoord = vec2(0, 0);
+    Fill = GEOFill[0];
+    Border = GEOBorder[0];
     EmitVertex();
 
     gl_Position =  vp *(gl_in[0].gl_Position + (vec4(spriteWidth, 0, 0, 0)));
     TexCoord = vec2(1, 0);
+    Fill = GEOFill[0];
+    Border = GEOBorder[0];
     EmitVertex();
 
     gl_Position = vp *(gl_in[0].gl_Position + (vec4(0, spriteHeight, 0, 0)));
     TexCoord = vec2(0, 1);
+    Fill = GEOFill[0];
+    Border = GEOBorder[0];
     EmitVertex();
 
     gl_Position = vp *(gl_in[0].gl_Position +  (vec4(spriteWidth, spriteHeight, 0, 0)));
     TexCoord = vec2(1, 1);
+    Fill = GEOFill[0];
+    Border = GEOBorder[0];
     EmitVertex();
 }

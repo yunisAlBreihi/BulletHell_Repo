@@ -1,6 +1,3 @@
 #pragma once
-
-struct Color
-{
-
-};
+#include "float4.h"
+typedef float4 Color;
