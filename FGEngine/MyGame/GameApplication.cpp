@@ -13,11 +13,12 @@
 #include "Player.h"
 #include "Obstacle.h"
 #include "Enemy.h"
+#include "Enemy01.h"
 #include "CollisionSystem.h"
 #include "Renderer.h"
 #include "SDL_syswm.h"
 #include "Profiler.h"
-#include "StartMenu.h"
+
 bool GameApplication::Initialize()
 {
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
@@ -41,62 +42,38 @@ bool GameApplication::Initialize()
 	camera = new Camera({0, 0, -1}, 45, -1, 100);
 
 	FG::SpriteFactory factory;	
-
 	FG::Sprite sprite = factory.LoadSprite("..//assets//images//bg.jpg", 1, 1);
 	FG::Sprite sprite2 = factory.LoadSprite("..//assets//images//test.png", 8, 8);
-	FG::Sprite sprite3 = factory.LoadSprite("..//assets//images//DarkSprites01.png", 8, 8);
-	entityManager = new FG::EntityManager();
-	Enemy* enemy = new Enemy({5.0f,0}, sprite3, sprite3);
-	entityManager->AddEntity(enemy);
+	FG::Sprite sprite3 = factory.LoadSprite("..//assets//images//DarkSprites01.png", 8, 8, 1);
+	FG::Sprite sprite4 = factory.LoadSprite("..//assets//images//DarkSprites01.png", 8, 8,5);
+	FG::Sprite enemy01Sprite = factory.LoadSprite("..//assets//images//LightSprites01.png", 8, 8, 1);
+	FG::Sprite enemy01BulletSprite = enemy01Sprite;
+	enemy01BulletSprite.SetIndex(6);
 
-	enemy = new Enemy({ 1.0f,0 }, sprite3, sprite3);
-	entityManager->AddEntity(enemy);
-	enemy = new Enemy({ 2.0f,0 }, sprite3, sprite3);
-	entityManager->AddEntity(enemy);
 
-	enemy = new Enemy({ 3.0f,0 }, sprite3, sprite3);
-	entityManager->AddEntity(enemy);
+	entityManager = FG::EntityManager::Instance();
+	entityManager->InitializeEntityArray<Player>(4, inputManager, sprite3);
+	entityManager->InitializeEntityArray<Enemy>(150);
+	entityManager->InitializeEntityArray<BaseBullet>(10000);
+	entityManager->InitializeEntityArray<LightBullet>(1000);
+	//Enemy01::Enemy01(FG::Vector2D position, FG::Sprite sprite, FG::Sprite bulletsSprites, BulletSpreadType bulletSpreadType, MovementType movementType)
+	entityManager->InitializeEntityArray<Enemy01>(1, FG::Vector2D(0,0), enemy01Sprite, enemy01BulletSprite, Enemy01::Circle, Enemy01::Circular);
 
-	Player* player = new Player(inputManager, sprite);
-	entityManager->AddEntity(player);
+	player1 = entityManager->CreateEntity<Player>();
+	Enemy01* enemy01 = entityManager->CreateEntity<Enemy01>(FG::Vector2D(20.0f,6.0f));
 
-	Obstacle* obstacle = new Obstacle(FG::Vector2D(3, 1), sprite2);
-	entityManager->AddEntity(obstacle);
-
-	StartMenu* startMenu = new StartMenu(FG::Vector2D(3, 3), sprite3);
-	entityManager->AddEntity(startMenu);
-
-	//
-//#undef LoadImage
-//	resourceManager = new FG::ResourceManager();
-//	FG::Sprite* sprite = new FG::Sprite();
-//	sprite->SetImage(camera->GetInternalRenderer(), "sports_car.png");
-//	resourceManager->AddResource("sports_car.png", sprite);
-//
-//	sprite = new FG::Sprite();
-//	sprite->SetImage(camera->GetInternalRenderer(), "rocks.png");
-//	resourceManager->AddResource("rocks.png", sprite);
-//
 	
-//
-//	Player* player = new Player(inputManager, camera);
-//	player->sprite = resourceManager->GetResource<FG::Sprite>("sports_car.png");
-//	entityManager->AddEntity(player);
-//
-//	Obstacle* obstacle = new Obstacle(camera);
-//	obstacle->sprite = resourceManager->GetResource<FG::Sprite>("rocks.png");
-//	obstacle->position.x = 500.0f;
-//	obstacle->position.y = 500.0f;
-//	entityManager->AddEntity(obstacle);
-//	sprite = new FG::Sprite();
-//	sprite->SetImage(camera->GetInternalRenderer(), "rocks.png");
-//
-//	auto tempSprite = new FG::Sprite();
-//	tempSprite->SetImage(camera->GetInternalRenderer(), "rocks.png");
-//	entityManager->AddEntity(new Enemy(FG::Vector2D(300, 300), sprite, tempSprite, camera));
+	 
+	for (int i = 0; i < 10; i++)
+	{
+		Enemy* enemy1 = entityManager->CreateEntity<Enemy>(FG::Vector2D(0, (i % 10)), sprite2);
+		Enemy* enemy2 = entityManager->CreateEntity<Enemy>(FG::Vector2D(9, (i % 10)), sprite3);
+		Enemy* enemy3 = entityManager->CreateEntity<Enemy>(FG::Vector2D((i % 10), 0), sprite4);
+		Enemy* enemy4 = entityManager->CreateEntity<Enemy>(FG::Vector2D((i % 10), 9), sprite4);
+	}
 
 	auto instance = CollisionSystem::GetInstance();
-	instance->Setup(500, 500, 10);
+	instance->Setup(10, 10, 1);
 
 	return true;
 }
@@ -108,16 +85,18 @@ void GameApplication::Run()
 	int fps = 0;  
 	float deltaTimeAccu = 0;
 
+	auto instance = CollisionSystem::GetInstance();
 	while (!quit)
 	{
 		time.StartFrame();
 		profiler.Start("frame time: ", false);
 		inputManager->Update(quit);
 		entityManager->Update(time.DeltaTime());
+		renderer->RenderLine(FG::Vector2D(1.0f, 0.0f), FG::Vector2D(3.0f, 0.0f), float3(1.0f, 1.0f, 1.0f), 0.01f);
+		renderer->RenderLine(FG::Vector2D(3.0f, 3.0f), FG::Vector2D(3.6f, 2.5f), float3(0.8f, 0.0f, 0.3f), 0.01f);
 		//renderer->RenderText({ 0, 0 }, 16, std::string("Hello World! abcdefghjklmnopqrstuvwxyz . - , > < ! \" / # ¤ % & ( ) = + : ;"));
-		auto instance = CollisionSystem::GetInstance();
 		instance->TestCollisions();
-		camera->Update(0.1f, FG::Vector2D(0, 0));
+		camera->Update(0.1f, FG::Vector2D(1.0f, 1.0f));
 		renderer->Clear(float4(0.0f, 0.0f, 0.0f, 1.0f));
 		renderer->Present(camera);
 		entityManager->Render(renderer.get());
@@ -132,6 +111,7 @@ void GameApplication::Run()
 		fps++;
 		profiler.End();
 		time.EndFrame();
+
 	}
 }
 
@@ -150,12 +130,11 @@ void GameApplication::Shutdown()
 		resourceManager = nullptr;
 	}
 
-	//if (camera)
-	//{
-	//	camera->Shutdown();
-	//	delete camera;
-	//	camera = nullptr;
-	//}
+	if (camera)
+	{
+		delete camera;
+		camera = nullptr;
+	}
 
 	if (inputManager)
 	{

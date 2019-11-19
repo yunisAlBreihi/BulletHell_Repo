@@ -64,7 +64,7 @@ struct IntervalSet
 		return retVal;
 	}
 
-	void Use(uint32_t v)
+	void FreeIndex(uint32_t v)
 	{
 		for (int i = 0; i < intervals.size(); i++)
 		{

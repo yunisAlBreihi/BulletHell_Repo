@@ -4,7 +4,7 @@
 #include <Camera.h>
 #include <SDL_render.h>
 #include "CollisionSystem.h"
-#include "BulletManager.h"
+#include "Bullet.h"
 #include "Player.h"
 
 Obstacle::Obstacle(FG::Vector2D position, FG::Sprite sprite)

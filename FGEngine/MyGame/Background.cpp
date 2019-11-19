@@ -7,7 +7,7 @@
 Background::Background(FG::Sprite sprite) : sprite(sprite)
 {
 	position = { 0,-32 };
-	this->sprite.SetScale({ 30 * FG::Window::aspectRatio, 30 * FG::Window::aspectRatio });
+	//this->sprite.size = { 30 * FG::Window::aspectRatio, 30 * FG::Window::aspectRatio };
 }
 
 Background::Background()

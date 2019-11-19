@@ -67,17 +67,51 @@ struct TextVertex
 	TextVertex(float x, float y, float sx, float sy, float id): x(x), y(y), sx(sx), sy(sy), i(id) { }
 	float x = 0, y = 0, sx = 0, sy = 0, i = 0;
 
+	static VAO vao;
 };
 
 struct QuadVertex
 {
-	QuadVertex(float x, float y, float sx, float sy, Color borderColor, Color fillCol) {}
+	QuadVertex(float x, float y, float sx, float sy, Color borderColor, Color fillCol) : x(x), y(y), sx(sx), sy(sy) { QuadVertex(); }
+	float x, y, sx, sy;
+	static VAO vao;
 
+	QuadVertex()
+	{
+		if (vao.vaoStructure.size() == 0)
+		{
+			vao.AddInfo(VAOInfo(0, 4, NULL));
+		}
+	}
 };
+
+VAO QuadVertex::vao = VAO();
+
+
+struct LineVertex
+{
+	LineVertex(const float& ax, const float& ay, const float& bx, const float& by, const float3& color, const float& size) : ax(ax), ay(ay), bx(bx), by(by), color(color), size(size)
+	{
+		if (vao.vaoStructure.size() == 0)
+		{
+			vao.AddInfo(VAOInfo(0, 4, NULL));
+			vao.AddInfo(VAOInfo(1, 4, 4 * sizeof(float)));
+		}
+	}
+
+	float ax, ay, bx, by;
+	float3 color;
+	float size;
+	static VAO vao;
+};
+
+VAO LineVertex::vao = VAO();
 
 struct SpriteVertex
 {
-	SpriteVertex(float x, float y, float sx, float sy, float r, float i) : x(x), y(y), sx(sx), sy(sy), r(r), i(i) {}
+	SpriteVertex(float x, float y, float sx, float sy, float r, float i) : x(x), y(y), sx(sx), sy(sy), r(r), i(i) {
+		SpriteVertex();
+	}
 
 	//8 values
 	//x, y, half scales, theta
@@ -180,7 +214,12 @@ public:
 
 	void RenderQuad(const FG::Vector2D& position, const FG::Vector2D& size, const Color& color, const Color& fillColor)
 	{
-
+		QuadVertex vertex;
+		vertex.x = position.x;
+		vertex.y = position.y;
+		vertex.sx = size.x;
+		vertex.sy = size.y;
+		quadVertices.emplace_back(vertex);
 	}
 
 	void RenderText(const FG::Vector2D& position, const int textSize, const std::string& text)
@@ -207,6 +246,12 @@ public:
 		vertices.emplace_back(vertex);
 	}
 
+	void RenderLine(const FG::Vector2D& a, const FG::Vector2D& b, const float3& color, const float& size)
+	{
+		LineVertex vertex = LineVertex(a.x, a.y, b.x, b.y, color, size);
+		lineVertices.push_back(vertex);
+	}
+
 	void Present(const Camera* const camera)
 	{
 		if (vertices.size() > 0)
@@ -226,6 +271,40 @@ public:
 
 			batch.count = vertices.size();
 			AddBatch(batch);
+		}
+
+		if (quadVertices.size() > 0)
+		{
+			if (!quadVBO.Initialized())
+			{
+				quadVBO.Init(quadVertices.data(), (GLuint)quadVertices.size(), (GLuint)sizeof(QuadVertex), QuadVertex::vao);
+				quadBatch.vao = quadVBO.Vao();
+				quadBatch.vbo = quadVBO.Vbo();
+				quadBatch.shaderHandle = quadShader.handle;
+			}
+			else
+			{
+				quadVBO.BufferData(quadVertices.data(), (GLuint)quadVertices.size());
+			}
+			quadBatch.count = quadVertices.size();
+			AddBatch(quadBatch);
+		}
+
+		if (lineVertices.size() > 0)
+		{
+			if (!lineVBO.Initialized())
+			{
+				lineVBO.Init(lineVertices.data(), (GLuint)lineVertices.size(), (GLuint)sizeof(LineVertex), LineVertex::vao);
+				lineBatch.vao = lineVBO.Vao();
+				lineBatch.vbo = lineVBO.Vbo();
+				lineBatch.shaderHandle = lineShader.handle;
+			}
+			else
+			{
+				lineVBO.BufferData(lineVertices.data(), (GLuint)lineVertices.size());
+			}
+			lineBatch.count = lineVertices.size();
+			AddBatch(lineBatch);
 		}
 
 		for (auto batch : batches)
@@ -252,17 +331,28 @@ public:
 		Swap();
 		vertices.clear();
 		batches.clear();
+		lineVertices.clear();
+		textVertices.clear();
+		quadVertices.clear();
 	}
 
 private:
 	std::vector<SpriteVertex> vertices;
 	std::vector<TextVertex> textVertices;
 	std::vector<QuadVertex> quadVertices;
+	std::vector<LineVertex> lineVertices;
 	std::vector<Batch> batches;
 	SDL_Window* window;
-	RenderImpl::Batch batch;
+	Batch batch;
+	Batch quadBatch;
+	Batch lineBatch;
 	VBO vbo;
+	VBO quadVBO;
+	VBO lineVBO;
+
+	Shader quadShader;
 	Shader shader;
+	Shader lineShader;
 };
 
 RenderImpl::~RenderImpl()
@@ -272,7 +362,7 @@ RenderImpl::~RenderImpl()
 
 RenderImpl::RenderImpl(SDL_Window* window)
 {
-	vbo = VBO();
+
 	this->window = window;
 	SDL_GLContext gContext = SDL_GL_CreateContext(window);
 	if (gContext == NULL)
@@ -287,6 +377,10 @@ RenderImpl::RenderImpl(SDL_Window* window)
 	{
 		printf("Error initializing GLEW! %s\n", glewGetErrorString(glewError));
 	}
+
+	lineVBO = VBO();
+	quadVBO = VBO();
+	vbo = VBO();
 	SDL_GL_SetSwapInterval(0);
 	//glEnable(GL_DEPTH_TEST);
 	//glDepthFunc(GL_LESS);
@@ -294,7 +388,9 @@ RenderImpl::RenderImpl(SDL_Window* window)
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
 
-	shader.LoadShaders("..//Shader//vertexShader.vert", "..//Shader//fragmentShader.frag", "..//Shader//geometryShader.geo");
+	shader.LoadShaders("..//Shader//sprite.vert", "..//Shader//sprite.frag", "..//Shader//sprite.geo");
+	quadShader.LoadShaders("..//Shader//rect.vert", "..//Shader//rect.frag", "..//Shader//rect.geo");
+	lineShader.LoadShaders("..//Shader//line.vert", "..//Shader//line.frag", "..//Shader//line.geo");
 }
 
 Renderer::Renderer(SDL_Window* window)
@@ -330,6 +426,11 @@ void Renderer::RenderQuad(const FG::Vector2D& position, const FG::Vector2D& size
 void Renderer::RenderText(const FG::Vector2D& position, const int textSize, const std::string& text)
 {
 	renderImpl->RenderText(position, textSize, text);
+}
+
+void Renderer::RenderLine(const FG::Vector2D& a, const FG::Vector2D& b, const float3& color, const float& size)
+{
+	renderImpl->RenderLine(a, b, color, size);
 }
 
 void Renderer::Present(const Camera *const camera)

@@ -37,7 +37,7 @@ namespace FG
 		const Uint8* keys = nullptr;
 		bool mouseButtons[SDL_BUTTON_X2] = { false };
 
-		const Uint8* lastKeys = nullptr;
+		Uint8 lastKeys[256];
 		bool lastMouseButtons[SDL_BUTTON_X2] = { false };
 
 		unsigned int keyTimes[SDL_NUM_SCANCODES] = { 0 };

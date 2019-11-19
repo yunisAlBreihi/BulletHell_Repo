@@ -117,6 +117,8 @@ uint16_t Texture2DHandler::LoadTextureIntoArray(const char* filename, const int&
 {
 	if (textureArrayMap.find(filename) != textureArrayMap.end())
 	{
+		
+
 		return textureArrayMap.at(filename);
 	}
 	if (textureArrayPosition >= nTextures)

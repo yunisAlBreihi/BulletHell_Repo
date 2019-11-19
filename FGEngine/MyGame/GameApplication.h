@@ -14,6 +14,7 @@ namespace FG
 
 class Camera;
 class Renderer;
+class Player;
 
 class GameApplication : public FG::Application
 {
@@ -29,7 +30,7 @@ private:
 	FG::ResourceManager* resourceManager = nullptr;
 	std::unique_ptr<Renderer> renderer;
 	FG::Time time;
-
+	Player* player1;
 	Camera* camera;
 
 };

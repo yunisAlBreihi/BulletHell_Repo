@@ -14,14 +14,14 @@ namespace FG
 		Vector2D size;
 
 	public:
-		
+		Sprite();
 		friend class SpriteFactory;
 		void SetScale(const Vector2D& scale) {
 			size.x = textureSize.x * scale.x;
 			size.y = textureSize.y * scale.y;
 		}
 
-		const Vector2D GetScale() const { return size *FG::Window::aspectRatio;};
+		const Vector2D GetScale() const { return size;};
 		uint16_t spriteIndex;							 
 		uint16_t textureIndex;
 
@@ -33,9 +33,17 @@ namespace FG
 	
 	class SpriteFactory
 	{
+	private:
+		void _LoadSprite(const char* filePath, int rows, int columns, Sprite& sprite);
 	public:
+		SpriteFactory();
+
 		Sprite LoadSprite(const char* filePath);
 		Sprite LoadSprite(const char* filePath, int rows, int columns, const int index);
 		Sprite LoadSprite(const char* filePath, int rows, int columns); // uses index 0
+
+		std::unordered_map<std::string, Sprite> sprites;
+
+
 	};
 }

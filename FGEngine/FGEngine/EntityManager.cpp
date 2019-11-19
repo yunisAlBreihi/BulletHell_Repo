@@ -4,34 +4,66 @@
 
 namespace FG
 {
+	EntityManager* EntityManager::instance = new EntityManager();
+
+	EntityManager::EntityManager()
+	{
+	}
+
 	void EntityManager::Shutdown()
 	{
-		for (auto it = entities.begin(); it != entities.end(); it++)
+		for (int i = 0; i < MAX_ENTITY_TYPES; i++)
 		{
-			delete *it;
+			//delete[] entities[i][0];
+			if (entities[i].size() > 0)
+			{
+				if (entities[i][0] != nullptr)
+				{
+					delete[] entities[i][0];
+				}
+			}
+
+			entities[i].clear();
 		}
-		entities.clear();
 	}
 
 	void EntityManager::Update(float deltaTime)
 	{
-		for (auto entity : entities)
+		for (int i = 0; i < MAX_ENTITY_TYPES; i++)
 		{
-			entity->Update(deltaTime);
+			for (int j = 0; j < allocated[i]; j++)
+			{
+				if (entities[i][j]->isActive) //TODO: Remove this, we want to keep contigous arrays so we don't need to call this...
+				{
+					entities[i][j]->Update(deltaTime);
+				}
+			}
 		}
 	}
 
-	void EntityManager::Render(Renderer*const renderer)
+	void EntityManager::Render(Renderer* const renderer)
 	{
-		for (auto entity : entities)
+		for (int i = 0; i < MAX_ENTITY_TYPES; i++)
 		{
-			entity->Render(renderer);
+			for (int j = 0; j < allocated[i]; j++)
+			{
+				if (entities[i][j]->isActive)//TODO: Remove this, we want to keep contigous arrays so we don't need to call this...
+				{
+					entities[i][j]->Render(renderer);
+				}
+			}
+		}
+	}
+
+	void EntityManager::RemoveEntity(Entity* entity)
+	{
+		if (entity->isActive)
+		{
+			entities[entity->layer][entity->index]->Disable();
+			intervals[entity->layer].FreeIndex(entity->index);
+			used[entity->layer]--;
 		}
 	}
 
 
-	void EntityManager::AddEntity(Entity* entity)
-	{
-		entities.push_back(entity);
-	}
 }
