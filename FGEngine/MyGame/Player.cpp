@@ -9,7 +9,7 @@
 #include "Obstacle.h"
 #include "Bullet.h"
 #include "EntityManager.h"
-#include "Enemy01.h"
+#include "BaseEnemy.h"
 
 
 Player::Player(FG::InputManager* inputManager, FG::Sprite sprite ) :
@@ -62,11 +62,11 @@ void Player::Shoot(float deltaTime)
 	{
 		if (playerState == PLAYER_LIGHT_STATE)
 		{
-			SingleLightWeapon::Shoot(position, PLAYER_SHOOT_DIR, EntityLayers::GetEntityMask<Enemy01>());
+			SingleLightWeapon::Shoot(position, PLAYER_SHOOT_DIR, EntityLayers::GetEntityMask<BaseEnemy>());
 		}
 		else if (playerState == PLAYER_DARK_STATE)
 		{
-			SingleDarkWeapon::Shoot(position, PLAYER_SHOOT_DIR, EntityLayers::GetEntityMask<Enemy01>());
+			SingleDarkWeapon::Shoot(position, PLAYER_SHOOT_DIR, EntityLayers::GetEntityMask<BaseEnemy>());
 		}
 		shootTimer.Use();
 	}

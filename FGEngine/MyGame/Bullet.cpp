@@ -4,15 +4,13 @@
 #include <iostream>
 #include "Obstacle.h"
 #include "CollisionSystem.h"
-#include "Enemy.h"
 #include "EntityManager.h"
 #include "Player.h"
-
+#include "BaseEnemy.h"
 BaseBullet::BaseBullet()
 {
 	speed = 0;
-	layer = EntityLayers::GetEntityLayer<BaseBullet>();
-	collidesWith = EntityLayers::GetEntityMask<Obstacle, Enemy, Player>();
+
 	sprite.SetScale(FG::Vector2D(0.5f, 0.5f));	
 	sprite.textureIndex = 0;
 	sprite.spriteIndex = 0;
@@ -43,7 +41,7 @@ void BaseBullet::Render(Renderer* const renderer)
 LightBullet::LightBullet()
 {
 	layer = EntityLayers::GetEntityLayer<LightBullet>();
-	collidesWith = EntityLayers::GetEntityMask<Obstacle, Enemy, Player>();
+	collidesWith = EntityLayers::GetEntityMask<Obstacle, BaseEnemy, Player>();
 }
 
 void LightBullet::Update(float deltaTime)
@@ -78,7 +76,7 @@ void LightBullet::OnCollision(Entity* other)
 DarkBullet::DarkBullet()
 {
 	layer = EntityLayers::GetEntityLayer<DarkBullet>();
-	collidesWith = EntityLayers::GetEntityMask<Obstacle, Enemy, Player>();
+	collidesWith = EntityLayers::GetEntityMask<Obstacle, BaseEnemy, Player>();
 	sprite.textureIndex = 1;
 }
 
