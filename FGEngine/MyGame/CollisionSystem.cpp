@@ -237,9 +237,9 @@ void CollisionSystem::Setup(const int worldX, const int worldY, const float buck
 	impl->Setup(worldX, worldY, bucketSize);
 }
 
-void CollisionSystem::RegisterCollider(const FG::Vector2D& pos, const FG::Vector2D size, FG::Entity* entity, bool dynamic)
+void CollisionSystem::RegisterCollider(const FG::Vector2D& pos, const FG::Vector2D size, FG::Entity* entity, uint64_t layer, bool dynamic)
 {
-	impl->RegisterCollider(pos, size, entity, dynamic, entity->layer, entity->collidesWith);
+	impl->RegisterCollider(pos, size, entity, dynamic, layer, entity->collidesWith);
 }
 
 void CollisionSystem::TestCollisions()

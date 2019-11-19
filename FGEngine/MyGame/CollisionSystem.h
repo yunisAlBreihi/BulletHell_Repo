@@ -27,7 +27,7 @@ public:
 	}
 
 	void Setup(const int worldX, const int worldY, const float bucketSize);
-	void RegisterCollider(const FG::Vector2D& pos, const FG::Vector2D size, FG::Entity* entity, bool dynamic);
+	void RegisterCollider(const FG::Vector2D& pos, const FG::Vector2D size, FG::Entity* entity, uint64_t layer, bool dynamic);
 	void TestCollisions();
 	void Clear();
 

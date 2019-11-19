@@ -17,9 +17,10 @@ namespace FG
 	public:
 		friend class FG::EntityManager;
 
-		void Initialize(const uint64_t index)
+		void Initialize(const uint64_t index, const uint64_t layer)
 		{
 			this->index = index;
+			this->layer = layer;
 			this->isActive = false;
 		}
 		virtual ~Entity() {}

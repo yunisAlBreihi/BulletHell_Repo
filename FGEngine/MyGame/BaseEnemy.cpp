@@ -11,7 +11,8 @@
 BaseEnemy::BaseEnemy(FG::Vector2D position, FG::Sprite sprite, FG::Sprite bulletsSprite, BulletSpreadType bulletSpreadType, MovementType movementType, BulletColor bulletColor)
 	: sprite(sprite), position(position), bs(bulletSpreadType), mt(movementType), bc(bulletColor)
 {
-
+	layer = EntityLayers::GetEntityLayer<BaseEnemy>();
+	collidesWith = EntityLayers::GetEntityMask<DarkBullet, LightBullet, Player>();
 }
 
 void BaseEnemy::Start(FG::Vector2D startPos)
@@ -36,6 +37,10 @@ void BaseEnemy::Update(float deltaTime)
 	Move(deltaTime);
 
 	Shoot(deltaTime);
+
+	auto it = CollisionSystem::GetInstance();
+	it->RegisterCollider(position, sprite.GetScale(), this, EntityLayers::GetEntityLayer<BaseEnemy>(), true);
+
 }
 
 void BaseEnemy::Render(Renderer* const camera)

@@ -69,7 +69,7 @@ bool GameApplication::Initialize()
 	EnemyDoubleWaveSweep* enemy04 = entityManager->CreateEntity<EnemyDoubleWaveSweep>(FG::Vector2D(20.0f, 7.0f));
 
 	auto instance = CollisionSystem::GetInstance();
-	instance->Setup(20, 20, 1);
+	instance->Setup(20, 20, 2);
 
 	return true;
 }

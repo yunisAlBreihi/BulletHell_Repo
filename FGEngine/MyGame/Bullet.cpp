@@ -24,7 +24,7 @@ void BaseBullet::Update(float deltaTime)
 	position.y += dir.y * speed * deltaTime;
 
 	auto instance = CollisionSystem::GetInstance();
-	instance->RegisterCollider(position, sprite.GetScale(), this, true);
+	instance->RegisterCollider(position, sprite.GetScale(), this, layer, true);
 
 	if (position.x > 21.0f || position.x < -1.0f)
 	{
@@ -53,7 +53,7 @@ void LightBullet::Update(float deltaTime)
 		FG::EntityManager::Instance()->RemoveEntity(this);
 	}
 	auto instance = CollisionSystem::GetInstance();
-	instance->RegisterCollider(position, sprite.GetScale(), this, true);
+	instance->RegisterCollider(position, sprite.GetScale(), this, layer, true);
 }
 
 void LightBullet::Start(const FG::Vector2D position, const FG::Vector2D direction, float speed, uint64_t collidesWith)
@@ -89,7 +89,7 @@ void DarkBullet::Update(float deltaTime)
 		FG::EntityManager::Instance()->RemoveEntity(this);
 	}
 	auto instance = CollisionSystem::GetInstance();
-	instance->RegisterCollider(position, sprite.GetScale(), this, true);
+	instance->RegisterCollider(position, sprite.GetScale(), this, layer, true);
 }
 
 void DarkBullet::Start(const FG::Vector2D position, const FG::Vector2D direction, float speed, uint64_t collidesWith)

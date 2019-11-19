@@ -53,7 +53,6 @@ public:
 	void Update(float deltaTime) override;
 	void Render(Renderer* const camera) override;
 	void OnCollision(Entity* other) override; 
-	void RenderBullets(Renderer* const camera);
 
 	bool isColliding = false;
 	SDL_Color notCollidingColor = { 0, 255, 0, 255 };

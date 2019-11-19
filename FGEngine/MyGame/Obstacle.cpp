@@ -33,7 +33,7 @@ void Obstacle::Render(Renderer* const camera)
 void Obstacle::Update(float deltaTime)
 {
 	auto it = CollisionSystem::GetInstance();
-	it->RegisterCollider(position, sprite.GetScale(), this, false);
+	it->RegisterCollider(position, sprite.GetScale(), this, layer, false);
 }
 
 SDL_Rect Obstacle::GetColliderRectangle()

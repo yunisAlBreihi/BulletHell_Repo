@@ -48,7 +48,7 @@ void Player::Update(float deltaTime)
 	}
 
 	auto it = CollisionSystem::GetInstance();
-	it->RegisterCollider(position, sprite.GetScale(), this, true);
+	it->RegisterCollider(position, sprite.GetScale(), this, layer, true);
 }
 
 void Player::Render(Renderer* const camera)
