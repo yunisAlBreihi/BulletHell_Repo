@@ -44,11 +44,6 @@ void BaseEnemy::Render(Renderer* const camera)
 	//bullets.Render(camera);
 }
 
-void BaseEnemy::TestCollision(Entity* other)
-{
-	//bullets.TestCollision(other);
-}
-
 void BaseEnemy::OnCollision(Entity* other)
 {
 	if (isActive)

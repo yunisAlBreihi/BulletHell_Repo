@@ -52,7 +52,6 @@ public:
 	void Start(FG::Vector2D startPos);
 	void Update(float deltaTime) override;
 	void Render(Renderer* const camera) override;
-	virtual void TestCollision(Entity* other) override;
 	void OnCollision(Entity* other) override; 
 	void RenderBullets(Renderer* const camera);
 

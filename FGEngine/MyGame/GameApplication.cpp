@@ -12,7 +12,6 @@
 
 #include "Player.h"
 #include "Obstacle.h"
-#include "Enemy.h"
 #include "BaseEnemy.h"
 #include "EnemyWaveStraight.h"
 #include "EnemyTripleCircular.h"
@@ -55,9 +54,8 @@ bool GameApplication::Initialize()
 
 
 	entityManager = FG::EntityManager::Instance();
-	entityManager->InitializeEntityArray<Player>(4, inputManager, sprite3);
-	entityManager->InitializeEntityArray<Enemy>(150);
-	entityManager->InitializeEntityArray<BaseBullet>(10000);
+	entityManager->InitializeEntityArray<Player>(1, inputManager, sprite3);
+	entityManager->InitializeEntityArray<DarkBullet>(1000);
 	entityManager->InitializeEntityArray<LightBullet>(1000);
 	//Enemy01::Enemy01(FG::Vector2D position, FG::Sprite sprite, FG::Sprite bulletsSprites, BulletSpreadType bulletSpreadType, MovementType movementType)
 	entityManager->InitializeEntityArray<EnemyWaveStraight>(1, FG::Vector2D(0, 0), enemy01Sprite, enemy01BulletSprite, BaseEnemy::ShootWave, BaseEnemy::MoveStraight, BaseEnemy::Dark);
@@ -65,20 +63,10 @@ bool GameApplication::Initialize()
 	entityManager->InitializeEntityArray<EnemyDoubleWaveSweep>(1, FG::Vector2D(0, 0), enemy01Sprite, enemy01BulletSprite, BaseEnemy::ShootDoubleWave, BaseEnemy::MoveSweep, BaseEnemy::Double);
 
 
-	player1 = entityManager->CreateEntity<Player>();
+	player1 = entityManager->CreateEntity<Player>(FG::Vector2D(1,1));
 	EnemyWaveStraight* enemy02 = entityManager->CreateEntity<EnemyWaveStraight>(FG::Vector2D(20.0f, 8.0f));
 	EnemyTripleCircular* enemy03 = entityManager->CreateEntity<EnemyTripleCircular>(FG::Vector2D(20.0f, 5.0f));
 	EnemyDoubleWaveSweep* enemy04 = entityManager->CreateEntity<EnemyDoubleWaveSweep>(FG::Vector2D(20.0f, 7.0f));
-
-	
-	 
-	for (int i = 0; i < 10; i++)
-	{
-		Enemy* enemy1 = entityManager->CreateEntity<Enemy>(FG::Vector2D(0, (i % 10)), sprite2);
-		Enemy* enemy2 = entityManager->CreateEntity<Enemy>(FG::Vector2D(9, (i % 10)), sprite3);
-		Enemy* enemy3 = entityManager->CreateEntity<Enemy>(FG::Vector2D((i % 10), 0), sprite4);
-		Enemy* enemy4 = entityManager->CreateEntity<Enemy>(FG::Vector2D((i % 10), 9), sprite4);
-	}
 
 	auto instance = CollisionSystem::GetInstance();
 	instance->Setup(10, 10, 1);
