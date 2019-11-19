@@ -63,7 +63,7 @@ namespace FG
 		{
 			new(&ptr[i])T(args...);
 			entities[index][i] = static_cast<Entity*>(&ptr[i]);
-			entities[index][i]->Initialize(i, index);
+			entities[index][i]->Initialize(i);
 		}
 		intervals[index] = IntervalSet(0, count);
 		allocated[index] = count;
