@@ -164,7 +164,7 @@ void BaseEnemy::Shoot(float deltaTime)
 			accu += deltaTime;
 			if (accu >= timer)
 			{
-				FG::EntityManager::Instance()->CreateEntity<BaseBullet>(position + bulletSpawnPosition, bulletDirection, bulletSpeed, EntityLayers::GetEntityMask<Player>());
+				FG::EntityManager::Instance()->CreateEntity<DarkBullet>(position + bulletSpawnPosition, bulletDirection, bulletSpeed, EntityLayers::GetEntityMask<Player>());
 				accu = 0;
 			}
 		}
@@ -180,7 +180,7 @@ void BaseEnemy::Shoot(float deltaTime)
 			accu += deltaTime;
 			if (accu >= timer)
 			{
-				FG::EntityManager::Instance()->CreateEntity<BaseBullet>(position + bulletSpawnPosition, bulletDirection, bulletSpeed, EntityLayers::GetEntityMask<Player>());
+				FG::EntityManager::Instance()->CreateEntity<DarkBullet>(position + bulletSpawnPosition, bulletDirection, bulletSpeed, EntityLayers::GetEntityMask<Player>());
 				accu = 0;
 			}
 		}
@@ -196,7 +196,7 @@ void BaseEnemy::Shoot(float deltaTime)
 			timer = .075f;
 			if (accu >= timer)
 			{
-				FG::EntityManager::Instance()->CreateEntity<BaseBullet>(position + bulletSpawnPosition, bulletSpawnPosition, bulletSpeed, EntityLayers::GetEntityMask<Player>());
+				FG::EntityManager::Instance()->CreateEntity<DarkBullet>(position + bulletSpawnPosition, bulletSpawnPosition, bulletSpeed, EntityLayers::GetEntityMask<Player>());
 				accu = 0;
 			}
 		}
@@ -206,9 +206,9 @@ void BaseEnemy::Shoot(float deltaTime)
 			accu += deltaTime;
 			if (accu >= timer)
 			{
-				FG::EntityManager::Instance()->CreateEntity<BaseBullet>(position + bulletSpawnPosition, FG::Vector2D(bulletDirection.x, 0.2f), bulletSpeed, EntityLayers::GetEntityMask<Player>());
-				FG::EntityManager::Instance()->CreateEntity<BaseBullet>(position + bulletSpawnPosition, bulletDirection, bulletSpeed, EntityLayers::GetEntityMask<Player>());
-				FG::EntityManager::Instance()->CreateEntity<BaseBullet>(position + bulletSpawnPosition, FG::Vector2D(bulletDirection.x, -0.2f), bulletSpeed, EntityLayers::GetEntityMask<Player>());
+				FG::EntityManager::Instance()->CreateEntity<DarkBullet>(position + bulletSpawnPosition, FG::Vector2D(bulletDirection.x, 0.2f), bulletSpeed, EntityLayers::GetEntityMask<Player>());
+				FG::EntityManager::Instance()->CreateEntity<DarkBullet>(position + bulletSpawnPosition, bulletDirection, bulletSpeed, EntityLayers::GetEntityMask<Player>());
+				FG::EntityManager::Instance()->CreateEntity<DarkBullet>(position + bulletSpawnPosition, FG::Vector2D(bulletDirection.x, -0.2f), bulletSpeed, EntityLayers::GetEntityMask<Player>());
 
 				accu = 0;
 			}
@@ -219,8 +219,8 @@ void BaseEnemy::Shoot(float deltaTime)
 			accu += deltaTime;
 			if (accu >= timer)
 			{
-				FG::EntityManager::Instance()->CreateEntity<BaseBullet>(position + bulletSpawnPosition, FG::Vector2D(bulletDirection.x, 0.2f), bulletSpeed, EntityLayers::GetEntityMask<Player>());
-				FG::EntityManager::Instance()->CreateEntity<BaseBullet>(position + bulletSpawnPosition, FG::Vector2D(bulletDirection.x, -0.2f), bulletSpeed, EntityLayers::GetEntityMask<Player>());
+				FG::EntityManager::Instance()->CreateEntity<DarkBullet>(position + bulletSpawnPosition, FG::Vector2D(bulletDirection.x, 0.2f), bulletSpeed, EntityLayers::GetEntityMask<Player>());
+				FG::EntityManager::Instance()->CreateEntity<DarkBullet>(position + bulletSpawnPosition, FG::Vector2D(bulletDirection.x, -0.2f), bulletSpeed, EntityLayers::GetEntityMask<Player>());
 				accu = 0;
 			}
 		}
@@ -237,8 +237,8 @@ void BaseEnemy::Shoot(float deltaTime)
 			accu += deltaTime;
 			if (accu >= timer)
 			{
-				FG::EntityManager::Instance()->CreateEntity<BaseBullet>(position + bulletSpawnPosition, FG::Vector2D(bulletDirection.x, bulletDirection.y), bulletSpeed, EntityLayers::GetEntityMask<Player>());
-				FG::EntityManager::Instance()->CreateEntity<BaseBullet>(position + bulletSpawnPosition, FG::Vector2D(bulletDirection.x, -bulletDirection.y), bulletSpeed, EntityLayers::GetEntityMask<Player>());
+				FG::EntityManager::Instance()->CreateEntity<DarkBullet>(position + bulletSpawnPosition, FG::Vector2D(bulletDirection.x, bulletDirection.y), bulletSpeed, EntityLayers::GetEntityMask<Player>());
+				FG::EntityManager::Instance()->CreateEntity<DarkBullet>(position + bulletSpawnPosition, FG::Vector2D(bulletDirection.x, -bulletDirection.y), bulletSpeed, EntityLayers::GetEntityMask<Player>());
 
 				accu = 0;
 			}
@@ -252,8 +252,8 @@ void BaseEnemy::Shoot(float deltaTime)
 			accu += deltaTime;
 			if (accu >= timer)
 			{
-				FG::EntityManager::Instance()->CreateEntity<BaseBullet>(position + bulletSpawnPositionTop, FG::Vector2D(0, -1), bulletSpeed, EntityLayers::GetEntityMask<Player>());
-				FG::EntityManager::Instance()->CreateEntity<BaseBullet>(position + bulletSpawnPositionBot, FG::Vector2D(0, 1), bulletSpeed, EntityLayers::GetEntityMask<Player>());
+				FG::EntityManager::Instance()->CreateEntity<DarkBullet>(position + bulletSpawnPositionTop, FG::Vector2D(0, -1), bulletSpeed, EntityLayers::GetEntityMask<Player>());
+				FG::EntityManager::Instance()->CreateEntity<DarkBullet>(position + bulletSpawnPositionBot, FG::Vector2D(0, 1), bulletSpeed, EntityLayers::GetEntityMask<Player>());
 				accu = 0;
 			}
 		}
@@ -265,9 +265,9 @@ void BaseEnemy::Shoot(float deltaTime)
 			accu += deltaTime;
 			if (accu >= timer)
 			{
-				FG::EntityManager::Instance()->CreateEntity<BaseBullet>(position + bulletSpawnPosition, FG::Vector2D(bulletDirection.x, 0.2f), bulletSpeed, EntityLayers::GetEntityMask<Player>());
+				FG::EntityManager::Instance()->CreateEntity<DarkBullet>(position + bulletSpawnPosition, FG::Vector2D(bulletDirection.x, 0.2f), bulletSpeed, EntityLayers::GetEntityMask<Player>());
 				FG::EntityManager::Instance()->CreateEntity<LightBullet>(position + bulletSpawnPosition, bulletDirection, bulletSpeed, EntityLayers::GetEntityMask<Player>());
-				FG::EntityManager::Instance()->CreateEntity<BaseBullet>(position + bulletSpawnPosition, FG::Vector2D(bulletDirection.x, -0.2f), bulletSpeed, EntityLayers::GetEntityMask<Player>());
+				FG::EntityManager::Instance()->CreateEntity<DarkBullet>(position + bulletSpawnPosition, FG::Vector2D(bulletDirection.x, -0.2f), bulletSpeed, EntityLayers::GetEntityMask<Player>());
 
 				accu = 0;
 			}
@@ -279,7 +279,7 @@ void BaseEnemy::Shoot(float deltaTime)
 			if (accu >= timer)
 			{
 				FG::EntityManager::Instance()->CreateEntity<LightBullet>(position + bulletSpawnPosition, FG::Vector2D(bulletDirection.x, 0.2f), bulletSpeed, EntityLayers::GetEntityMask<Player>());
-				FG::EntityManager::Instance()->CreateEntity<BaseBullet>(position + bulletSpawnPosition, FG::Vector2D(bulletDirection.x, -0.2f), bulletSpeed, EntityLayers::GetEntityMask<Player>());
+				FG::EntityManager::Instance()->CreateEntity<DarkBullet>(position + bulletSpawnPosition, FG::Vector2D(bulletDirection.x, -0.2f), bulletSpeed, EntityLayers::GetEntityMask<Player>());
 				accu = 0;
 			}
 		}
@@ -296,7 +296,7 @@ void BaseEnemy::Shoot(float deltaTime)
 			accu += deltaTime;
 			if (accu >= timer)
 			{
-				FG::EntityManager::Instance()->CreateEntity<BaseBullet>(position + bulletSpawnPosition, FG::Vector2D(bulletDirection.x, bulletDirection.y), bulletSpeed, EntityLayers::GetEntityMask<Player>());
+				FG::EntityManager::Instance()->CreateEntity<DarkBullet>(position + bulletSpawnPosition, FG::Vector2D(bulletDirection.x, bulletDirection.y), bulletSpeed, EntityLayers::GetEntityMask<Player>());
 				FG::EntityManager::Instance()->CreateEntity<LightBullet>(position + bulletSpawnPosition, FG::Vector2D(bulletDirection.x, -bulletDirection.y), bulletSpeed, EntityLayers::GetEntityMask<Player>());
 
 				accu = 0;
@@ -311,7 +311,7 @@ void BaseEnemy::Shoot(float deltaTime)
 			accu += deltaTime;
 			if (accu >= timer)
 			{
-				FG::EntityManager::Instance()->CreateEntity<BaseBullet>(position + bulletSpawnPositionTop, FG::Vector2D(0, -1), bulletSpeed, EntityLayers::GetEntityMask<Player>());
+				FG::EntityManager::Instance()->CreateEntity<DarkBullet>(position + bulletSpawnPositionTop, FG::Vector2D(0, -1), bulletSpeed, EntityLayers::GetEntityMask<Player>());
 				FG::EntityManager::Instance()->CreateEntity<LightBullet>(position + bulletSpawnPositionBot, FG::Vector2D(0, 1), bulletSpeed, EntityLayers::GetEntityMask<Player>());
 				accu = 0;
 			}

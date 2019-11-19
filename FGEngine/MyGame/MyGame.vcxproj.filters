@@ -9,6 +9,7 @@
     <ClCompile Include="StartMenu.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="BaseEnemy.cpp" />
+    <ClCompile Include="PlayerWeapon.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Background.h" />
@@ -22,5 +23,6 @@
     <ClInclude Include="EnemyWaveStraight.h" />
     <ClInclude Include="EnemyTripleCircular.h" />
     <ClInclude Include="EnemyDoubleWaveSweep.h" />
+    <ClInclude Include="PlayerWeapon.h" />
   </ItemGroup>
 </Project>
