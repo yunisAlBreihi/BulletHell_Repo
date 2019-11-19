@@ -16,7 +16,6 @@
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="BaseEnemy.cpp" />
-    <ClCompile Include="EnemyWaveStraight.cpp" />
     <ClCompile Include="GameApplication.cpp" />
     <ClCompile Include="Obstacle.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -29,6 +28,8 @@
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="BaseEnemy.h" />
+    <ClInclude Include="EnemyDoubleWaveSweep.h" />
+    <ClInclude Include="EnemyTripleCircular.h" />
     <ClInclude Include="EnemyWaveStraight.h" />
     <ClInclude Include="GameApplication.h" />
     <ClInclude Include="Obstacle.h" />

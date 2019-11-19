@@ -24,8 +24,16 @@ public:
 		ShootDoubleVertical=6,
 	};
 
+	enum BulletColor
+	{
+		Light,
+		Dark,
+		Double,
+	};
+
 	MovementType mt = MoveSweep;
 	BulletSpreadType bs = ShootForward;
+	BulletColor bc = Light;
 
 	FG::Sprite sprite;
 	FG::Vector2D position;
@@ -38,7 +46,8 @@ public:
 	void CreateSweepAnimation();
 	void CreateCircularAnimation();
 
-	BaseEnemy(FG::Vector2D position, FG::Sprite sprite, FG::Sprite bulletsSprite, BulletSpreadType bulletSpreadType, MovementType movementType);
+	BaseEnemy(FG::Vector2D position, FG::Sprite sprite, FG::Sprite bulletsSprite,
+		BulletSpreadType bulletSpreadType, MovementType movementType, BulletColor bulletColor);
 
 	void Start(FG::Vector2D startPos);
 	void Update(float deltaTime) override;
