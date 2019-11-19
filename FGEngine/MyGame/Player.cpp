@@ -15,7 +15,6 @@
 Player::Player(FG::InputManager* inputManager, FG::Sprite sprite ) :
 	inputManager(inputManager), sprite(sprite)
 {	
-	layer = EntityLayers::GetEntityLayer<Player>();
 	collidesWith = EntityLayers::GetEntityMask<Obstacle, DarkBullet, LightBullet>();
 }
 

@@ -40,7 +40,6 @@ void BaseBullet::Render(Renderer* const renderer)
 
 LightBullet::LightBullet()
 {
-	layer = EntityLayers::GetEntityLayer<LightBullet>();
 	collidesWith = EntityLayers::GetEntityMask<Obstacle, BaseEnemy, Player>();
 }
 
@@ -75,7 +74,6 @@ void LightBullet::OnCollision(Entity* other)
 
 DarkBullet::DarkBullet()
 {
-	layer = EntityLayers::GetEntityLayer<DarkBullet>();
 	collidesWith = EntityLayers::GetEntityMask<Obstacle, BaseEnemy, Player>();
 	sprite.textureIndex = 1;
 }

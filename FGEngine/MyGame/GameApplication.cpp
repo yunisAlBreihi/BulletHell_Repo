@@ -88,9 +88,6 @@ void GameApplication::Run()
 		profiler.Start("frame time: ", false);
 		inputManager->Update(quit);
 		entityManager->Update(time.DeltaTime());
-		renderer->RenderLine(FG::Vector2D(1.0f, 0.0f), FG::Vector2D(3.0f, 0.0f), float3(1.0f, 1.0f, 1.0f), 0.01f);
-		renderer->RenderLine(FG::Vector2D(3.0f, 3.0f), FG::Vector2D(3.6f, 2.5f), float3(0.8f, 0.0f, 0.3f), 0.01f);
-		//renderer->RenderText({ 0, 0 }, 16, std::string("Hello World! abcdefghjklmnopqrstuvwxyz . - , > < ! \" / # ¤ % & ( ) = + : ;"));
 		instance->TestCollisions();
 		camera->Update(0.1f, FG::Vector2D(1.0f, 1.0f));
 		renderer->Clear(float4(0.0f, 0.0f, 0.0f, 1.0f));

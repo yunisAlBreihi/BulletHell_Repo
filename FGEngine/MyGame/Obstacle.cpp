@@ -11,7 +11,6 @@ Obstacle::Obstacle(FG::Vector2D position, FG::Sprite sprite)
 	:position(position), sprite(sprite)
 {
 	this->sprite.SetScale({0.5f, 0.5f }); 
-	layer = EntityLayers::GetEntityLayer<Obstacle>();
 	collidesWith = EntityLayers::GetEntityMask<BaseBullet>();
 }
 

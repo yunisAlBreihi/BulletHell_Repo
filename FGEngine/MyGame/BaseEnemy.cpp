@@ -11,7 +11,6 @@
 BaseEnemy::BaseEnemy(FG::Vector2D position, FG::Sprite sprite, FG::Sprite bulletsSprite, BulletSpreadType bulletSpreadType, MovementType movementType, BulletColor bulletColor)
 	: sprite(sprite), position(position), bs(bulletSpreadType), mt(movementType), bc(bulletColor)
 {
-	layer = EntityLayers::GetEntityLayer<BaseEnemy>();
 	collidesWith = EntityLayers::GetEntityMask<DarkBullet, LightBullet, Player>();
 }
 
