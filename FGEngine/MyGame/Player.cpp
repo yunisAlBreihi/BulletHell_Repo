@@ -10,7 +10,6 @@
 #include "EntityManager.h"
 #include "BaseEnemy.h"
 
-
 Player::Player(FG::InputManager* inputManager, FG::Sprite sprite ) :
 	inputManager(inputManager), sprite(sprite)
 {	
@@ -46,13 +45,15 @@ void Player::Update(float deltaTime)
 	}
 
 	auto it = CollisionSystem::GetInstance();
-	it->RegisterCollider(position, sprite.GetScale(), this, layer, true);
+	it->RegisterCollider(position + (sprite.GetScale() * 0.5f), FG::Vector2D(0.05f, 0.05f), this, layer, true);
 }
 
 void Player::Render(Renderer* const camera)
 {
 	camera->Render(position, sprite);
+	camera->RenderQuad(position + (sprite.GetScale() * 0.5f), FG::Vector2D(0.05f, 0.05f), Color(0), Color(1.0f, 0.0f, 0.5f, 1.0f));
 
+	//health bar
 	camera->RenderQuad(FG::Vector2D(0, 0), FG::Vector2D(PLAYER_HEALTH, 0.5f), Color(0.3f, 0.3f, 0.3f, 1.0f), Color(0.3f, 0.3f, 0.3f, 1.0f));
 	camera->RenderQuad(FG::Vector2D(0, 0), FG::Vector2D(0.3f + (1 * health), 0.5f), Color(1.0f, 0.3f, 0.3f, 1.0f), Color(1.0f, 0.3f, 0.3f, 1.0f));
 }
@@ -130,4 +131,7 @@ void Player::MovePlayer(float deltaTime)
 	}
 
 	position += movement * movementSpeed * deltaTime;
+
+	position.x = std::clamp(position.x, 0.0f, 20.0f - sprite.GetScale().x);
+	position.y = std::clamp(position.y, 0.0f, (20.0f * FG::Window::aspectRatio) - sprite.GetScale().y);
 }

@@ -3,7 +3,9 @@
 #include <Application.h>
 #include <Time.h>
 #include <memory>
-
+#include "BasicTimer.h"
+#include "Spawner.h"
+#include "EnemyDoubleWaveSweep.h"
 namespace FG
 {
 	class Window;
@@ -32,6 +34,9 @@ private:
 	FG::Time time;
 	Player* player;
 
+	BasicTimer spawnTimer;
+	Spawner<EnemyDoubleWaveSweep> spawner;
+	void SpawnWaves(float dt);
 };
 
 FG::Application* FG::CreateApplication()

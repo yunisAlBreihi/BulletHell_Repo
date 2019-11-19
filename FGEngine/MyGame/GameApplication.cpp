@@ -29,7 +29,7 @@ bool GameApplication::Initialize()
 	}
 
 	window = new FG::Window();
-	if (!window->Initialize("My game", 1024, 768))
+	if (!window->Initialize("My game", 1024, 576))
 	{
 		FG::Logger::Log(SDL_GetError(), FG::Logger::RemovePathFromFile(__FILE__), __LINE__);
 		return false;
@@ -54,9 +54,9 @@ bool GameApplication::Initialize()
 	entityManager->InitializeEntityArray<DarkBullet>(1000);
 	entityManager->InitializeEntityArray<LightBullet>(1000);
 	//Enemy01::Enemy01(FG::Vector2D position, FG::Sprite sprite, FG::Sprite bulletsSprites, BulletSpreadType bulletSpreadType, MovementType movementType)
-	entityManager->InitializeEntityArray<EnemyWaveStraight>(1, FG::Vector2D(0, 0), enemy01Sprite, enemy01BulletSprite, BaseEnemy::ShootWave, BaseEnemy::MoveStraight, BaseEnemy::Dark);
-	entityManager->InitializeEntityArray<EnemyTripleCircular>(1, FG::Vector2D(0, 0), enemy01Sprite, enemy01BulletSprite, BaseEnemy::ShootTriple, BaseEnemy::MoveCircular, BaseEnemy::Light);
-	entityManager->InitializeEntityArray<EnemyDoubleWaveSweep>(1, FG::Vector2D(0, 0), enemy01Sprite, enemy01BulletSprite, BaseEnemy::ShootDoubleWave, BaseEnemy::MoveSweep, BaseEnemy::Double);
+	entityManager->InitializeEntityArray<EnemyWaveStraight>(20, FG::Vector2D(0, 0), enemy01Sprite, BaseEnemy::ShootWave, BaseEnemy::MoveStraight, BaseEnemy::Dark);
+	entityManager->InitializeEntityArray<EnemyTripleCircular>(20, FG::Vector2D(0, 0), enemy01Sprite, BaseEnemy::ShootTriple, BaseEnemy::MoveCircular, BaseEnemy::Light);
+	entityManager->InitializeEntityArray<EnemyDoubleWaveSweep>(20, FG::Vector2D(0, 0), enemy01Sprite, BaseEnemy::ShootDoubleWave, BaseEnemy::MoveSweep, BaseEnemy::Double);
 
 
 	player = entityManager->CreateEntity<Player>(FG::Vector2D(1,1));
@@ -66,7 +66,7 @@ bool GameApplication::Initialize()
 
 	auto instance = CollisionSystem::GetInstance();
 	instance->Setup(20, 20, 2);
-
+	spawnTimer = BasicTimer(10.0f);
 	return true;
 }
 
@@ -81,9 +81,11 @@ void GameApplication::Run()
 	auto instance = CollisionSystem::GetInstance();
 	while (!quit)
 	{
+
 		time.StartFrame();
 		profiler.Start("frame time: ", false);
 		inputManager->Update(quit);
+		SpawnWaves(time.DeltaTime());
 		entityManager->Update(time.DeltaTime());
 		instance->TestCollisions();
 		camera.Update(0.1f, FG::Vector2D(1.0f, 1.0f));
@@ -122,13 +124,13 @@ void GameApplication::Shutdown()
 		delete entityManager;
 		entityManager = nullptr;
 	}
+
 	if (resourceManager)
 	{
 		resourceManager->Shutdown();
 		delete resourceManager;
 		resourceManager = nullptr;
 	}
-
 
 	if (inputManager)
 	{
@@ -142,6 +144,15 @@ void GameApplication::Shutdown()
 		delete window;
 		window = nullptr;
 	}
-
 	SDL_Quit();
+}
+
+void GameApplication::SpawnWaves(float dt)
+{
+	spawnTimer.Update(dt);
+	if (spawnTimer.IsReady())
+	{
+		spawner.Execute(FG::Vector2D(25, 0));
+		spawnTimer.Use();
+	}
 }

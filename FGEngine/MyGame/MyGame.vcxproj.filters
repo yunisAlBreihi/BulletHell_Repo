@@ -9,6 +9,7 @@
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="BaseEnemy.cpp" />
     <ClCompile Include="PlayerWeapon.cpp" />
+    <ClCompile Include="Spawner.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Background.h" />
@@ -22,5 +23,6 @@
     <ClInclude Include="EnemyTripleCircular.h" />
     <ClInclude Include="EnemyDoubleWaveSweep.h" />
     <ClInclude Include="PlayerWeapon.h" />
+    <ClInclude Include="Spawner.h" />
   </ItemGroup>
 </Project>

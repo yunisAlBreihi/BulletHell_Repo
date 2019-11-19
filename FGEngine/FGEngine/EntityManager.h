@@ -38,11 +38,13 @@ namespace FG
 		template <typename T, typename... Args>
 		T* CreateEntity(Args&&...args);
 
+		template <typename T, typename... Args>
+		T* CreateEntity(T type, Args&&...args);
+
 		void RemoveEntity(Entity* entity);
 
 	private:
 		std::vector<Entity*> entities[MAX_ENTITY_TYPES];
-		int used[MAX_ENTITY_TYPES] = {};
 		int allocated[MAX_ENTITY_TYPES] = {};
 		IntervalSet intervals[MAX_ENTITY_TYPES];
 	};
@@ -74,13 +76,16 @@ namespace FG
 	{
 		(void)static_cast<Entity*>((T*)0); //Check if the requested type is an entity
 		uint64_t index = EntityLayers::GetEntityLayer<T>(); // get the entity type index
-		assert(used[index] < allocated[index]); // make sure we're not using memory we haven't allocated
 		auto i = intervals[index].GetFirst(); //intervals.GetFirst() consumes the left most index, i.e. the index closest to 0
 		T* ret = dynamic_cast<T*>(entities[index][i]); 	///IF YOU CRASH HERE: There are not enough entities allocated
 			//TODO: deal with out of bounds memory access if we're using too many entities
 		ret->Start(args...); //call start function on created entity
-		used[index]++;
 		return ret;
+	}
+	template<typename T, typename ...Args>
+	inline T* EntityManager::CreateEntity(T type, Args&& ...args)
+	{
+		return NULL;
 	}
 }
 

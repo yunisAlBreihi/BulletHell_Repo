@@ -4,8 +4,8 @@
 
 static float SINGLE_LIGHT_SPEED = 10.0f;
 static float SINGLE_DARK_SPEED = 10.0f;
-static float BURST_LIGHT_SPEED = 10.0f;
-static float BUSRT_DARK_SPEED = 10.0f;
+static float BURST_LIGHT_SPEED = 20.0f;
+static float BURST_DARK_SPEED = 20.0f;
 static float LAZER_LIGHT_SPEED = 10.0f;
 
 struct SingleLightWeapon 
