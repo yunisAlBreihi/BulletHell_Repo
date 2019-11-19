@@ -1,4 +1,4 @@
-#include "Enemy01.h"
+#include "BaseEnemy.h"
 #include "Camera.h"
 #include "Sprite.h"
 #include "Bullet.h"
@@ -6,23 +6,24 @@
 #include "EntityManager.h"
 #include <SDL_render.h>
 #include <cmath>
+#include "CollisionSystem.h"
 
-Enemy01::Enemy01(FG::Vector2D position, FG::Sprite sprite, FG::Sprite bulletsSprites, BulletSpreadType bulletSpreadType, MovementType movementType)
+BaseEnemy::BaseEnemy(FG::Vector2D position, FG::Sprite sprite, FG::Sprite bulletsSprite, BulletSpreadType bulletSpreadType, MovementType movementType)
 	: sprite(sprite), position(position), bs(bulletSpreadType), mt(movementType)
 {
 
 }
 
-void Enemy01::Start(FG::Vector2D startPos)
+void BaseEnemy::Start(FG::Vector2D startPos)
 {
 	position = startPos;
 	centerPos = position;
 
-	if (mt == Sweep)
+	if (mt == MoveSweep)
 	{
 		CreateSweepAnimation();
 	}
-	else if (mt == Circular)
+	else if (mt == MoveCircular)
 	{
 		CreateCircularAnimation();
 	}
@@ -30,27 +31,37 @@ void Enemy01::Start(FG::Vector2D startPos)
 	Entity::Start();
 }
 
-void Enemy01::Update(float deltaTime)
+void BaseEnemy::Update(float deltaTime)
 {
 	Move(deltaTime);
 
 	Shoot(deltaTime);
 }
 
-void Enemy01::Render(Renderer* const camera)
+void BaseEnemy::Render(Renderer* const camera)
 {
 	camera->Render(position, sprite);
 	//bullets.Render(camera);
 }
 
-void Enemy01::TestCollision(Entity* other)
+void BaseEnemy::TestCollision(Entity* other)
 {
 	//bullets.TestCollision(other);
 }
 
-void Enemy01::Shoot(float deltaTime)
+void BaseEnemy::OnCollision(Entity* other)
 {
-	if (bs == Forward)
+	if (isActive)
+	{
+		FG::EntityManager::Instance()->RemoveEntity(this);
+	}
+}
+
+
+
+void BaseEnemy::Shoot(float deltaTime)
+{
+	if (bs == ShootForward)
 	{
 		accu += deltaTime;
 		if (accu >= timer)
@@ -61,7 +72,7 @@ void Enemy01::Shoot(float deltaTime)
 		}
 	}
 
-	if (bs == Wave)
+	if (bs == ShootWave)
 	{
 		bulletDirection.y += deltaTime * bulletInvert;
 
@@ -78,7 +89,7 @@ void Enemy01::Shoot(float deltaTime)
 		}
 	}
 
-	if (bs == Circle)
+	if (bs == ShootCircle)
 	{
 		bulletAngle += bulletRotateSpeed * deltaTime;
 
@@ -95,7 +106,7 @@ void Enemy01::Shoot(float deltaTime)
 		}
 	}
 
-	if (bs == Triple)
+	if (bs == ShootTriple)
 	{
 		accu += deltaTime;
 		if (accu >= timer)
@@ -111,7 +122,7 @@ void Enemy01::Shoot(float deltaTime)
 		}
 	}
 
-	if (bs == Double)
+	if (bs == ShootDouble)
 	{
 		accu += deltaTime;
 		if (accu >= timer)
@@ -124,7 +135,7 @@ void Enemy01::Shoot(float deltaTime)
 		}
 	}
 
-	if (bs == DoubleWave)
+	if (bs == ShootDoubleWave)
 	{
 		bulletDirection.y += 0.5f * deltaTime * bulletInvert;
 
@@ -143,7 +154,7 @@ void Enemy01::Shoot(float deltaTime)
 		}
 	}
 
-	if (bs == DoubleVertical)
+	if (bs == ShootDoubleVertical)
 	{
 		FG::Vector2D bulletSpawnPositionTop = { 0.2f,-0.4f };
 		FG::Vector2D bulletSpawnPositionBot = { 0.2f,0.8f };
@@ -162,9 +173,9 @@ void Enemy01::Shoot(float deltaTime)
 	/*bullets.Update(deltaTime);*/
 }
 
-void Enemy01::Move(float deltaTime)
+void BaseEnemy::Move(float deltaTime)
 {
-	if (mt == Straight)
+	if (mt == MoveStraight)
 	{
 		position.x -= speed * deltaTime;
 	}
@@ -178,7 +189,7 @@ void Enemy01::Move(float deltaTime)
 	}
 }
 
-void Enemy01::CreateSweepAnimation()
+void BaseEnemy::CreateSweepAnimation()
 {
 	int currentPath = 0;
 	FG::BezierPath* path = new FG::BezierPath();
@@ -194,7 +205,7 @@ void Enemy01::CreateSweepAnimation()
 	curveSamples = 330;
 }
 
-void Enemy01::CreateCircularAnimation()
+void BaseEnemy::CreateCircularAnimation()
 {
 	int currentPath = 0;
 	FG::BezierPath* path = new FG::BezierPath();
