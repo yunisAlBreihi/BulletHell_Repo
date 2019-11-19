@@ -121,6 +121,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
+    <ClInclude Include="BasicTimer.h" />
     <ClInclude Include="BezierCurve.h" />
     <ClInclude Include="BezierPath.h" />
     <ClInclude Include="Camera.h" />

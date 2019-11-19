@@ -9,14 +9,14 @@
 Enemy::Enemy()
 {
 	layer = EntityLayers::GetEntityLayer<Enemy>();
-	collidesWith = EntityLayers::GetEntityMask<BaseBullet>();
+	collidesWith = EntityLayers::GetEntityMask<Player, BaseBullet, LightBullet>();
 	this->sprite.SetScale({ 1.0f, 1.0f });
 }
 Enemy::Enemy(FG::Vector2D position, FG::Sprite sprite, FG::Sprite bulletsSprites)
 	: sprite(sprite), position(position)
 {
 	layer = EntityLayers::GetEntityLayer<Enemy>();
-	collidesWith = EntityLayers::GetEntityMask<BaseBullet>();
+	collidesWith = EntityLayers::GetEntityMask<Player, BaseBullet, LightBullet>();
 }
 
 void Enemy::Start()
@@ -37,7 +37,7 @@ void Enemy::Update(float deltaTime)
 	accu += deltaTime;
 	if (accu >= timer)
 	{
-		auto bullet = FG::EntityManager::Instance()->CreateEntity<BaseBullet>(position, FG::Vector2D(-1, 0), 3.0f, EntityLayers::GetEntityLayer<Enemy>());
+		//auto bullet = FG::EntityManager::Instance()->CreateEntity<BaseBullet>(position, FG::Vector2D(-1, 0), 3.0f, EntityLayers::GetEntityMask<Player>());
 		accu = 0;
 	}
 	auto it = CollisionSystem::GetInstance();

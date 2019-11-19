@@ -4,6 +4,8 @@
 #include <Vector2D.h>
 #include "Bullet.h"
 #include "Sprite.h"
+#include "BasicTimer.h"
+#include "PlayerWeapon.h"
 namespace FG
 {
 	class Window;
@@ -11,31 +13,39 @@ namespace FG
 	class Sprite;
 }
 
+const static float PLAYER_SHOOT_TIMER = 0.05f;
+const static int PLAYER_LIGHT_STATE = 0;
+const static int PLAYER_DARK_STATE = 1;
+const static int PLAYER_HEALTH = 3;
+const static int PLAYER_START_STATE = PLAYER_LIGHT_STATE;
+const static float PLAYER_MOVEMENTSPEED = 5.0f;
+const static float PLAYER_BULLET_SPEED = 10.0f;
+const static FG::Vector2D PLAYER_SHOOT_DIR = FG::Vector2D(1, 0);
+
+
 class Player : public FG::Entity
 {
 public:
-	float speed = 5.0f;
-	FG::Sprite sprite;
-	Player();
 	Player(FG::InputManager* inputManager, FG::Sprite sprite);
 	~Player() {}
+	void Init();
+	void Start(FG::Vector2D startPos);
 	void Update(float deltaTime) override;
 	void Render(Renderer* const renderer) override;
 	void Shoot(float deltaTime);
-	SDL_Rect GetColliderRectangle();
 	void OnCollision(FG::Entity* other) override;
-	FG::Vector2D position;
+	
+
 private:
 	FG::InputManager* inputManager = nullptr;
-
-
-	float timer = 0.05f;
-	float accu = 0;
-
-	bool isColliding = false;
-	SDL_Color notCollidingColor = { 0, 255, 0, 255 };
-	SDL_Color CollidingColor = { 255, 0, 0, 255 };
-
-	bool usingLight = false;
+	void SwapMode();
 	void MovePlayer(float deltaTime);
+
+	FG::Sprite sprite;
+	FG::Vector2D position;
+	BasicTimer shootTimer;
+	int health;
+	int playerState;
+	float movementSpeed;
+
 };

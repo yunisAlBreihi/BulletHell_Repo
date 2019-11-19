@@ -128,7 +128,10 @@ public:
 			for (int i = index + 1; i < objectsToTest.size(); i++)
 			{
 				SpatialObject b = objectsToTest[i];
-				if ((objectToTest.collidesWith >> b.mask) & 1U && (b.collidesWith >> objectToTest.mask) & 1U)
+
+				int aCollidesWithB = (objectToTest.collidesWith >> b.mask) & 1U;
+				int bCollidesWithA = (b.collidesWith >> objectToTest.mask) & 1U;
+				if (aCollidesWithB && bCollidesWithA)
 				{
 					if (objectToTest.dynamic || b.dynamic)
 					{

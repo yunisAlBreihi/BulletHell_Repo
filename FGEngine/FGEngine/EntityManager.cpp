@@ -14,7 +14,6 @@ namespace FG
 	{
 		for (int i = 0; i < MAX_ENTITY_TYPES; i++)
 		{
-			//delete[] entities[i][0];
 			if (entities[i].size() > 0)
 			{
 				if (entities[i][0] != nullptr)
@@ -33,7 +32,7 @@ namespace FG
 		{
 			for (int j = 0; j < allocated[i]; j++)
 			{
-				if (entities[i][j]->isActive) //TODO: Remove this, we want to keep contigous arrays so we don't need to call this...
+				if (entities[i][j]->isActive) //TODO: Remove this, we want to keep contigous arrays so we don't need to branch here..
 				{
 					entities[i][j]->Update(deltaTime);
 				}
@@ -47,7 +46,7 @@ namespace FG
 		{
 			for (int j = 0; j < allocated[i]; j++)
 			{
-				if (entities[i][j]->isActive)//TODO: Remove this, we want to keep contigous arrays so we don't need to call this...
+				if (entities[i][j]->isActive)//TODO: Remove this, we want to keep contigous arrays so we don't need to branch here..
 				{
 					entities[i][j]->Render(renderer);
 				}

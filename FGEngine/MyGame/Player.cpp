@@ -9,27 +9,43 @@
 #include "Obstacle.h"
 #include "Bullet.h"
 #include "EntityManager.h"
-#include "Enemy.h"
+#include "Enemy01.h"
 
-Player::Player()
-{
-	this->sprite.spriteIndex = 0;
-	this->sprite.textureIndex = 0;
-	this->sprite.SetScale(FG::Vector2D(1.0f, 1.0f));
-}
 
 Player::Player(FG::InputManager* inputManager, FG::Sprite sprite ) :
 	inputManager(inputManager), sprite(sprite)
-{
-	this->sprite.SetScale({ 1.0f, 1.0f });
-	collidesWith = EntityLayers::GetEntityMask<Obstacle, BaseBullet>();
+{	
 	layer = EntityLayers::GetEntityLayer<Player>();
+	collidesWith = EntityLayers::GetEntityMask<Obstacle, DarkBullet, LightBullet>();
+}
+
+void Player::Init()
+{
+	playerState = PLAYER_START_STATE;
+	health = PLAYER_HEALTH;
+	shootTimer = BasicTimer(PLAYER_SHOOT_TIMER);
+	movementSpeed = PLAYER_MOVEMENTSPEED;
+}
+
+void Player::Start(FG::Vector2D startPos)
+{
+	FG::Entity::Start();
+	Init();
+	position = startPos;
 }
 
 void Player::Update(float deltaTime)
 {
 	MovePlayer(deltaTime);
-	Shoot(deltaTime);
+	if (inputManager->IsKeyPressed(SDL_SCANCODE_Q) || inputManager->IsKeyPressed(SDL_SCANCODE_E))
+	{
+		SwapMode();
+	}
+	shootTimer.Update(deltaTime);
+	if (inputManager->IsKeyDown(SDL_SCANCODE_SPACE))
+	{
+		Shoot(deltaTime);
+	}
 
 	auto it = CollisionSystem::GetInstance();
 	it->RegisterCollider(position, sprite.GetScale(), this, true);
@@ -38,58 +54,54 @@ void Player::Update(float deltaTime)
 void Player::Render(Renderer* const camera)
 {
 	camera->Render(position, sprite);
-	camera->RenderQuad(position, sprite.GetScale(), Color(), Color());
 }
 
 void Player::Shoot(float deltaTime)
 {
-	accu += deltaTime;
-	if (inputManager->IsKeyPressed(SDL_SCANCODE_Q))
+	if (shootTimer.IsReady())
 	{
-		usingLight = false;
-	}
-
-	if (inputManager->IsKeyPressed(SDL_SCANCODE_E))
-	{
-		usingLight = true;
-	}
-
-	if (usingLight)
-	{
-		if (inputManager->IsKeyDown(SDL_SCANCODE_SPACE))
+		if (playerState == PLAYER_LIGHT_STATE)
 		{
-			if (accu >= timer)
-			{
-				FG::EntityManager::Instance()->CreateEntity<LightBullet>(position, FG::Vector2D(1, 0), 10.0f, EntityLayers::GetEntityMask<Enemy>());
-				accu = 0;
-			}
+			SingleLightWeapon::Shoot(position, PLAYER_SHOOT_DIR, EntityLayers::GetEntityMask<Enemy01>());
 		}
-	}
-	else
-	{
-		if (inputManager->IsKeyDown(SDL_SCANCODE_SPACE))
+		else if (playerState == PLAYER_DARK_STATE)
 		{
-			if (accu >= timer)
-			{
-				FG::EntityManager::Instance()->CreateEntity<BaseBullet>(position, FG::Vector2D(1, 0), 10.0f, EntityLayers::GetEntityMask<Enemy>());
-				accu = 0;
-			}
+			SingleDarkWeapon::Shoot(position, PLAYER_SHOOT_DIR, EntityLayers::GetEntityMask<Enemy01>());
 		}
+		shootTimer.Use();
 	}
-}
-
-SDL_Rect Player::GetColliderRectangle()
-{
-	return { 0,0,0,0 };
 }
 
 void Player::OnCollision(FG::Entity* other)
 {
-	auto it = CollisionSystem::GetInstance();
-	if (other->layer == EntityLayers::GetEntityLayer<Obstacle>())
+	if (other->layer == EntityLayers::GetEntityLayer<LightBullet>())
 	{
-		isColliding = true;
-		std::cout << "colliding!" << std::endl;
+		if (playerState == PLAYER_DARK_STATE)
+		{
+			//take Damage
+		}
+		//else, get power
+	}
+	else if (other->layer == EntityLayers::GetEntityLayer<DarkBullet>())
+	{
+		if (playerState == PLAYER_LIGHT_STATE)
+		{
+			//Take damage
+		}
+		//else, get power
+	}
+}
+
+void Player::SwapMode()
+{
+	if (playerState == PLAYER_LIGHT_STATE)
+	{
+		playerState = PLAYER_DARK_STATE;
+	}
+
+	else if(playerState == PLAYER_DARK_STATE)
+	{
+		playerState = PLAYER_LIGHT_STATE;
 	}
 }
 
@@ -116,5 +128,5 @@ void Player::MovePlayer(float deltaTime)
 		movement.y = 1.0f;
 	}
 
-	position += movement * speed * deltaTime;
+	position += movement * movementSpeed * deltaTime;
 }
