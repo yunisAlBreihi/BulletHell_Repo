@@ -4,7 +4,6 @@
     <ClCompile Include="Background.cpp" />
     <ClCompile Include="CollisionSystem.cpp" />
     <ClCompile Include="GameApplication.cpp" />
-    <ClCompile Include="Obstacle.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="StartMenu.cpp" />
     <ClCompile Include="Bullet.cpp" />
@@ -15,7 +14,6 @@
     <ClInclude Include="Background.h" />
     <ClInclude Include="CollisionSystem.h" />
     <ClInclude Include="GameApplication.h" />
-    <ClInclude Include="Obstacle.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="StartMenu.h" />
     <ClInclude Include="Bullet.h" />

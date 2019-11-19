@@ -2,7 +2,6 @@
 #include "Sprite.h"
 #include "Camera.h"
 #include <iostream>
-#include "Obstacle.h"
 #include "CollisionSystem.h"
 #include "EntityManager.h"
 #include "Player.h"
@@ -40,7 +39,7 @@ void BaseBullet::Render(Renderer* const renderer)
 
 LightBullet::LightBullet()
 {
-	collidesWith = EntityLayers::GetEntityMask<Obstacle, BaseEnemy, Player>();
+	collidesWith = EntityLayers::GetEntityMask<BaseEnemy, Player>();
 }
 
 void LightBullet::Update(float deltaTime)
@@ -74,7 +73,7 @@ void LightBullet::OnCollision(Entity* other)
 
 DarkBullet::DarkBullet()
 {
-	collidesWith = EntityLayers::GetEntityMask<Obstacle, BaseEnemy, Player>();
+	collidesWith = EntityLayers::GetEntityMask<BaseEnemy, Player>();
 	sprite.textureIndex = 1;
 }
 

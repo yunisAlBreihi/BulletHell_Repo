@@ -6,7 +6,6 @@
 #include <SDL_render.h>
 #include "CollisionSystem.h"
 #include "Window.h"
-#include "Obstacle.h"
 #include "Bullet.h"
 #include "EntityManager.h"
 #include "BaseEnemy.h"
@@ -15,7 +14,7 @@
 Player::Player(FG::InputManager* inputManager, FG::Sprite sprite ) :
 	inputManager(inputManager), sprite(sprite)
 {	
-	collidesWith = EntityLayers::GetEntityMask<Obstacle, DarkBullet, LightBullet>();
+	collidesWith = EntityLayers::GetEntityMask<DarkBullet, LightBullet>();
 }
 
 void Player::Init()

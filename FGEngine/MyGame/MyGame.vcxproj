@@ -16,7 +16,6 @@
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="BaseEnemy.cpp" />
     <ClCompile Include="GameApplication.cpp" />
-    <ClCompile Include="Obstacle.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerWeapon.cpp" />
     <ClCompile Include="StartMenu.cpp" />
@@ -30,7 +29,6 @@
     <ClInclude Include="EnemyTripleCircular.h" />
     <ClInclude Include="EnemyWaveStraight.h" />
     <ClInclude Include="GameApplication.h" />
-    <ClInclude Include="Obstacle.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerWeapon.h" />
     <ClInclude Include="StartMenu.h" />

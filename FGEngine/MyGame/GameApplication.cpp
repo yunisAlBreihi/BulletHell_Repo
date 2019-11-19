@@ -11,7 +11,6 @@
 #include <SDL.h>
 
 #include "Player.h"
-#include "Obstacle.h"
 #include "BaseEnemy.h"
 #include "EnemyWaveStraight.h"
 #include "EnemyTripleCircular.h"
