@@ -8,7 +8,7 @@
 #include <cmath>
 #include "CollisionSystem.h"
 
-BaseEnemy::BaseEnemy(FG::Vector2D position, FG::Sprite sprite, FG::Sprite bulletsSprite, BulletSpreadType bulletSpreadType, MovementType movementType, BulletColor bulletColor)
+BaseEnemy::BaseEnemy(FG::Vector2D position, FG::Sprite sprite, BulletSpreadType bulletSpreadType, MovementType movementType, BulletColor bulletColor)
 	: sprite(sprite), position(position), bs(bulletSpreadType), mt(movementType), bc(bulletColor)
 {
 	collidesWith = EntityLayers::GetEntityMask<DarkBullet, LightBullet, Player>();
@@ -26,6 +26,14 @@ void BaseEnemy::Start(FG::Vector2D startPos)
 	else if (mt == MoveCircular)
 	{
 		CreateCircularAnimation();
+	}
+	else if (mt == MoveWave)
+	{
+		CreateWaveAnimation();
+	}
+	else if (mt==MoveDoubleWave)
+	{
+		CreateDoubleWaveAnimation();
 	}
 
 	Entity::Start();
@@ -367,11 +375,41 @@ void BaseEnemy::CreateCircularAnimation()
 	path->AddCurve({ FG::Vector2D(position.x - 9.0f, position.y - 3.0f),FG::Vector2D(position.x - 9.0f,position.y - 1.5f),FG::Vector2D(position.x - 10.5f, position.y), FG::Vector2D(position.x - 12.0f, position.y) }, 43);
 	path->AddCurve({ FG::Vector2D(position.x - 12.0f, position.y),FG::Vector2D(position.x - 16.0f,position.y),FG::Vector2D(position.x - 20.0f, position.y), FG::Vector2D(position.x - 24.0f, position.y) }, 100);
 
-
 	animPath.push_back(std::vector<FG::Vector2D>());
 	path->Sample(&animPath[currentPath]);
 	delete path;
 
 	//This needs to be the same as the sum of samples on the AddCurve functions
 	curveSamples = 372;
+}
+
+void BaseEnemy::CreateWaveAnimation()
+{
+	int currentPath = 0;
+	FG::BezierPath* path = new FG::BezierPath();
+
+	path->AddCurve({ FG::Vector2D(position.x,position.y),FG::Vector2D(position.x - 12.0f,position.y-10.0f),FG::Vector2D(position.x - 12.0f, position.y+10.0f), FG::Vector2D(position.x - 24.0f, position.y ) }, 200);
+
+	animPath.push_back(std::vector<FG::Vector2D>());
+	path->Sample(&animPath[currentPath]);
+	delete path;
+
+	//This needs to be the same as the sum of samples on the AddCurve functions
+	curveSamples = 200;
+}
+
+void BaseEnemy::CreateDoubleWaveAnimation()
+{
+	int currentPath = 0;
+	FG::BezierPath* path = new FG::BezierPath();
+
+	path->AddCurve({ FG::Vector2D(position.x,position.y),FG::Vector2D(position.x - 6.0f,position.y - 10.0f),FG::Vector2D(position.x - 6.0f, position.y + 10.0f), FG::Vector2D(position.x - 12.0f, position.y) }, 200);
+	path->AddCurve({ FG::Vector2D(position.x-12.0f,position.y),FG::Vector2D(position.x - 18.0f,position.y - 10.0f),FG::Vector2D(position.x - 18.0f, position.y + 10.0f), FG::Vector2D(position.x - 24.0f, position.y) }, 200);
+
+	animPath.push_back(std::vector<FG::Vector2D>());
+	path->Sample(&animPath[currentPath]);
+	delete path;
+
+	//This needs to be the same as the sum of samples on the AddCurve functions
+	curveSamples = 400;
 }
