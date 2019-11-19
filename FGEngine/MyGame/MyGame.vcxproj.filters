@@ -4,24 +4,26 @@
     <ClCompile Include="Background.cpp" />
     <ClCompile Include="CollisionSystem.cpp" />
     <ClCompile Include="Enemy.cpp" />
-    <ClCompile Include="Enemy01.cpp" />
     <ClCompile Include="GameApplication.cpp" />
     <ClCompile Include="Obstacle.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="StartMenu.cpp" />
     <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="BaseEnemy.cpp" />
+    <ClCompile Include="EnemyWaveStraight.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Background.h" />
     <ClInclude Include="CollisionSystem.h" />
     <ClInclude Include="Enemy.h" />
-    <ClInclude Include="Enemy01.h" />
     <ClInclude Include="GameApplication.h" />
     <ClInclude Include="Obstacle.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Projectile.h" />
     <ClInclude Include="StartMenu.h" />
     <ClInclude Include="Bullet.h" />
+    <ClInclude Include="BaseEnemy.h" />
+    <ClInclude Include="EnemyWaveStraight.h" />
   </ItemGroup>
 </Project>

@@ -17,14 +17,14 @@ void StartMenu::Render(Renderer* const camera)
 
 void StartMenu::ChangeMode(int change)
 {
-	if (mouseInput-> IsMouseButtonPressed(0))
-	{
-		std::cout << "mouse 0 pressed";
-		if ((mouseInput->mousePosition.x -= position) && (x < box.x + box.w) && (y > box.y) && (y < box.y + box.h))
-		{
+	//if (mouseInput-> IsMouseButtonPressed(0))
+	//{
+	//	std::cout << "mouse 0 pressed";
+	//	if ((mouseInput->mousePosition.x < position.x || mouseInput->mousePosition.y < position.y) && (x < box.x + box.w) && (y > box.y) && (y < box.y + box.h))
+	//	{
 
-		}
-	}
+	//	}
+	//}
 }
 
 void StartMenu::Update(float deltaTime)

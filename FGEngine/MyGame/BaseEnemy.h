@@ -3,29 +3,29 @@
 #include "Vector2D.h"
 #include "BezierPath.h"
 
-class Enemy01 : public FG::Entity
+class BaseEnemy : public FG::Entity
 {
 public:
 	enum MovementType
 	{
-		Straight=0,
-		Circular=1,
-		Sweep=2,
+		MoveStraight=0,
+		MoveCircular=1,
+		MoveSweep=2,
 	};
 
 	enum BulletSpreadType
 	{
-		Forward=0,
-		Wave=1,
-		Circle=2,
-		Triple=3,
-		Double=4,
-		DoubleWave=5,
-		DoubleVertical=6,
+		ShootForward=0,
+		ShootWave=1,
+		ShootCircle=2,
+		ShootTriple=3,
+		ShootDouble=4,
+		ShootDoubleWave=5,
+		ShootDoubleVertical=6,
 	};
 
-	MovementType mt = Sweep;
-	BulletSpreadType bs = Forward;
+	MovementType mt = MoveSweep;
+	BulletSpreadType bs = ShootForward;
 
 	FG::Sprite sprite;
 	FG::Vector2D position;
@@ -38,14 +38,13 @@ public:
 	void CreateSweepAnimation();
 	void CreateCircularAnimation();
 
-	Enemy01(FG::Vector2D position, FG::Sprite sprite, FG::Sprite bulletsSprites, BulletSpreadType bulletSpreadType, MovementType movementType);
+	BaseEnemy(FG::Vector2D position, FG::Sprite sprite, FG::Sprite bulletsSprite, BulletSpreadType bulletSpreadType, MovementType movementType);
 
 	void Start(FG::Vector2D startPos);
 	void Update(float deltaTime) override;
 	void Render(Renderer* const camera) override;
 	virtual void TestCollision(Entity* other) override;
-	void DrawBoundingBox();
-	SDL_Rect GetColliderRectangle();
+	void OnCollision(Entity* other) override; 
 	void RenderBullets(Renderer* const camera);
 
 	bool isColliding = false;

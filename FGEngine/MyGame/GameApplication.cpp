@@ -13,7 +13,8 @@
 #include "Player.h"
 #include "Obstacle.h"
 #include "Enemy.h"
-#include "Enemy01.h"
+#include "BaseEnemy.h"
+#include "EnemyWaveStraight.h"
 #include "CollisionSystem.h"
 #include "Renderer.h"
 #include "SDL_syswm.h"
@@ -57,10 +58,12 @@ bool GameApplication::Initialize()
 	entityManager->InitializeEntityArray<BaseBullet>(10000);
 	entityManager->InitializeEntityArray<LightBullet>(1000);
 	//Enemy01::Enemy01(FG::Vector2D position, FG::Sprite sprite, FG::Sprite bulletsSprites, BulletSpreadType bulletSpreadType, MovementType movementType)
-	entityManager->InitializeEntityArray<Enemy01>(1, FG::Vector2D(0,0), enemy01Sprite, enemy01BulletSprite, Enemy01::Circle, Enemy01::Circular);
+	entityManager->InitializeEntityArray<BaseEnemy>(1, FG::Vector2D(0,0), enemy01Sprite, enemy01BulletSprite, BaseEnemy::ShootCircle, BaseEnemy::MoveCircular);
+	entityManager->InitializeEntityArray<EnemyWaveStraight>(1, FG::Vector2D(0, 0), enemy01Sprite, enemy01BulletSprite, EnemyWaveStraight::ShootWave, EnemyWaveStraight::MoveStraight);
 
 	player1 = entityManager->CreateEntity<Player>();
-	Enemy01* enemy01 = entityManager->CreateEntity<Enemy01>(FG::Vector2D(20.0f,6.0f));
+	BaseEnemy* enemy01 = entityManager->CreateEntity<BaseEnemy>(FG::Vector2D(20.0f,6.0f));
+	EnemyWaveStraight* enemy02 = entityManager->CreateEntity<EnemyWaveStraight>(FG::Vector2D(30.0f, 8.0f));
 
 	
 	 
