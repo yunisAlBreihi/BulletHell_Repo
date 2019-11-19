@@ -57,10 +57,12 @@ bool GameApplication::Initialize()
 	entityManager->InitializeEntityArray<BaseBullet>(10000);
 	entityManager->InitializeEntityArray<LightBullet>(1000);
 	//Enemy01::Enemy01(FG::Vector2D position, FG::Sprite sprite, FG::Sprite bulletsSprites, BulletSpreadType bulletSpreadType, MovementType movementType)
-	entityManager->InitializeEntityArray<Enemy01>(1, FG::Vector2D(0,0), enemy01Sprite, enemy01BulletSprite, Enemy01::DoubleWave, Enemy01::Circular);
+	entityManager->InitializeEntityArray<Enemy01>(1, FG::Vector2D(0,0), enemy01Sprite, enemy01BulletSprite, Enemy01::Circle, Enemy01::Circular);
 
 	player1 = entityManager->CreateEntity<Player>();
 	Enemy01* enemy01 = entityManager->CreateEntity<Enemy01>(FG::Vector2D(20.0f,6.0f));
+
+	
 	 
 	for (int i = 0; i < 10; i++)
 	{

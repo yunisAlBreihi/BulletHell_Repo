@@ -48,21 +48,6 @@ void Enemy01::TestCollision(Entity* other)
 	//bullets.TestCollision(other);
 }
 
-void Enemy01::DrawBoundingBox()
-{
-}
-
-void Enemy01::RenderBullets(Renderer* const renderer)
-{
-	//	bullets.Render(renderer);
-
-}
-
-SDL_Rect Enemy01::GetColliderRectangle()
-{
-	return { 0,0,0,0 };
-}
-
 void Enemy01::Shoot(float deltaTime)
 {
 	if (bs == Forward)
