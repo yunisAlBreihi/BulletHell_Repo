@@ -34,12 +34,21 @@ private:
 	FG::Time time;
 	Player* player;
 
-	BasicTimer spawnTimer;
-	Spawner<EnemyDoubleWaveSweep> spawner;
-	void SpawnWaves(float dt);
+	//For Enemy spawners
+	BasicTimer DoubleWaveSweepTimer;
+	Spawner<EnemyDoubleWaveSweep> DoubleWaveSweepSpawner;
+	float DoubleWaveSweepMaxTime = 0.3f;
+
+	template<typename T>
+	void SpawnWaves(float dt, Spawner<T>* spawner, BasicTimer* timer,FG::Vector2D spawnPosition);
+
+	void SpawnXTimes(float& spawnTimer, float minSpawnTime, float spawnerMaxTime, int spawnCount, FG::Vector2D spawnPosition);
+	void SpawnXTimesRandom(float& spawnTimer, float spawnerMaxTime, int spawnCount, FG::Vector2D spawnPosition);
 };
 
 FG::Application* FG::CreateApplication()
 {
 	return new GameApplication();
 }
+
+

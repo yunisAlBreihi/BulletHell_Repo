@@ -58,6 +58,7 @@ public:
 	void Update(float deltaTime) override;
 	void Render(Renderer* const camera) override;
 	void OnCollision(Entity* other) override;
+	void Disable() override;
 
 	bool isColliding = false;
 	SDL_Color notCollidingColor = { 0, 255, 0, 255 };
@@ -69,7 +70,6 @@ private:
 	float angle = 1.0f;
 	float timer = 0.2f;
 	float accu = 0.0f;
-	float speed = 2.0f;
 
 
 	//For Brush bullet pattern

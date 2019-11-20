@@ -38,59 +38,67 @@ bool GameApplication::Initialize()
 	inputManager = new FG::InputManager();
 	inputManager->Initialize();
 
-	renderer = std::make_unique<Renderer>(window->GetInternalWindow()); 
-	FG::SpriteFactory factory;	
+	renderer = std::make_unique<Renderer>(window->GetInternalWindow());
+	FG::SpriteFactory factory;
 	FG::Sprite sprite = factory.LoadSprite("..//assets//images//bg.jpg", 1, 1);
 	FG::Sprite sprite2 = factory.LoadSprite("..//assets//images//test.png", 8, 8);
-	FG::Sprite sprite3 = factory.LoadSprite("..//assets//images//DarkSprites01.png", 8, 8, 1);
-	FG::Sprite sprite4 = factory.LoadSprite("..//assets//images//DarkSprites01.png", 8, 8,5);
+	FG::Sprite PlayerSpriteLight = factory.LoadSprite("..//assets//images//LightSprites01.png", 8, 8, 1);
+	FG::Sprite PlayerSpriteDark = factory.LoadSprite("..//assets//images//DarkSprites01.png", 8, 8, 1);
+	FG::Sprite sprite4 = factory.LoadSprite("..//assets//images//DarkSprites01.png", 8, 8, 5);
 	FG::Sprite enemy01Sprite = factory.LoadSprite("..//assets//images//LightSprites01.png", 8, 8, 1);
 	FG::Sprite enemy01BulletSprite = enemy01Sprite;
 	enemy01BulletSprite.SetIndex(6);
 
 
 	entityManager = FG::EntityManager::Instance();
-	entityManager->InitializeEntityArray<Player>(1, inputManager, sprite3);
+	entityManager->InitializeEntityArray<Player>(1, inputManager,PlayerSpriteLight, PlayerSpriteDark);
 	entityManager->InitializeEntityArray<DarkBullet>(1000);
 	entityManager->InitializeEntityArray<LightBullet>(1000);
 	//Enemy01::Enemy01(FG::Vector2D position, FG::Sprite sprite, FG::Sprite bulletsSprites, BulletSpreadType bulletSpreadType, MovementType movementType)
-	entityManager->InitializeEntityArray<EnemyWaveStraight>(20, FG::Vector2D(0, 0), enemy01Sprite, BaseEnemy::ShootWave, BaseEnemy::MoveStraight, BaseEnemy::Dark);
+	entityManager->InitializeEntityArray<EnemyWaveStraight>(20, FG::Vector2D(0, 0), enemy01Sprite, BaseEnemy::ShootCircle, BaseEnemy::MoveStraight, BaseEnemy::Dark);
 	entityManager->InitializeEntityArray<EnemyTripleCircular>(20, FG::Vector2D(0, 0), enemy01Sprite, BaseEnemy::ShootTriple, BaseEnemy::MoveCircular, BaseEnemy::Light);
 	entityManager->InitializeEntityArray<EnemyDoubleWaveSweep>(20, FG::Vector2D(0, 0), enemy01Sprite, BaseEnemy::ShootDoubleWave, BaseEnemy::MoveSweep, BaseEnemy::Double);
 
+	player = entityManager->CreateEntity<Player>(FG::Vector2D(1, 1));
 
-	player = entityManager->CreateEntity<Player>(FG::Vector2D(1,1));
+	//EnemyTripleCircular* enemy03 = entityManager->CreateEntity<EnemyTripleCircular>(FG::Vector2D(20.0f, 5.0f));
+	//EnemyDoubleWaveSweep* enemy04 = entityManager->CreateEntity<EnemyDoubleWaveSweep>(FG::Vector2D(20.0f, 7.0f));
+
 	EnemyWaveStraight* enemy02 = entityManager->CreateEntity<EnemyWaveStraight>(FG::Vector2D(20.0f, 8.0f));
-	EnemyTripleCircular* enemy03 = entityManager->CreateEntity<EnemyTripleCircular>(FG::Vector2D(20.0f, 5.0f));
-	EnemyDoubleWaveSweep* enemy04 = entityManager->CreateEntity<EnemyDoubleWaveSweep>(FG::Vector2D(20.0f, 7.0f));
 
 	auto instance = CollisionSystem::GetInstance();
 	instance->Setup(20, 20, 2);
-	spawnTimer = BasicTimer(10.0f);
+	DoubleWaveSweepTimer = BasicTimer(DoubleWaveSweepMaxTime);
 	return true;
 }
 
 void GameApplication::Run()
 {
+	float spawnTimer = 0;
+
 	Camera camera = Camera({ 0, 0, -1 }, 45, -1, 100);
 	Profiler profiler;
 	bool quit = false;
-	int fps = 0;  
+	int fps = 0;
 	float deltaTimeAccu = 0;
 
 	auto instance = CollisionSystem::GetInstance();
 	while (!quit)
 	{
-
 		time.StartFrame();
 		profiler.Start("frame time: ", false);
 		inputManager->Update(quit);
-		SpawnWaves(time.DeltaTime());
+
+		spawnTimer += time.DeltaTime();
+		SpawnXTimes(spawnTimer, 2.0f, DoubleWaveSweepMaxTime, 5, FG::Vector2D(25.0f, 5.0f));
+
 		entityManager->Update(time.DeltaTime());
 		instance->TestCollisions();
 		camera.Update(0.1f, FG::Vector2D(1.0f, 1.0f));
 		renderer->Clear(float4(0.0f, 0.0f, 0.0f, 1.0f));
 		renderer->Present(&camera);
+
+
 		entityManager->Render(renderer.get());
 
 		deltaTimeAccu += profiler.End();
@@ -101,19 +109,19 @@ void GameApplication::Run()
 			fps = 0;
 		}
 		fps++;
-		
+
 #ifndef _DEBUG
 		if (player->IsDead())
 		{
 			break;
-		}
+	}
 #endif // _DEBUG
 
 
 		profiler.End();
 		time.EndFrame();
 
-	}
+}
 }
 
 void GameApplication::Shutdown()
@@ -147,12 +155,40 @@ void GameApplication::Shutdown()
 	SDL_Quit();
 }
 
-void GameApplication::SpawnWaves(float dt)
+template<typename T>
+inline void GameApplication::SpawnWaves(float dt, Spawner<T>* spawner, BasicTimer* timer, FG::Vector2D spawnPosition)
 {
-	spawnTimer.Update(dt);
-	if (spawnTimer.IsReady())
+	timer->Update(dt);
+	if (timer->IsReady())
 	{
-		spawner.Execute(FG::Vector2D(25, 0));
-		spawnTimer.Use();
+		spawner->Execute(spawnPosition);
+		timer->Use();
+	}
+}
+
+void GameApplication::SpawnXTimes(float& spawnTimer, float minSpawnTime, float spawnerMaxTime, int spawnCount, FG::Vector2D spawnPosition)
+{
+	float maxSpawnTime = minSpawnTime + 0.02f + (spawnerMaxTime * spawnCount);
+	if (spawnTimer > minSpawnTime&& spawnTimer < maxSpawnTime)
+	{
+		SpawnWaves(time.DeltaTime(), &DoubleWaveSweepSpawner, &DoubleWaveSweepTimer, spawnPosition);
+	}
+	if (spawnTimer > maxSpawnTime)
+	{
+		spawnTimer = 0;
+	}
+}
+
+void GameApplication::SpawnXTimesRandom(float& spawnTimer, float spawnerMaxTime, int spawnCount, FG::Vector2D spawnPosition)
+{
+	float minSpawnTime = rand() % 10 + 2;
+	float maxSpawnTime = minSpawnTime + 0.02f + (spawnerMaxTime * spawnCount);
+	if (spawnTimer > minSpawnTime&& spawnTimer < maxSpawnTime)
+	{
+		SpawnWaves(time.DeltaTime(), &DoubleWaveSweepSpawner, &DoubleWaveSweepTimer, spawnPosition);
+	}
+	if (spawnTimer > maxSpawnTime)
+	{
+		spawnTimer = 0;
 	}
 }

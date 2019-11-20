@@ -56,15 +56,28 @@ void BaseEnemy::Render(Renderer* const camera)
 	//bullets.Render(camera);
 }
 
+void BaseEnemy::Disable()
+{
+	isActive = false;
+	animPath.clear();
+}
+
 void BaseEnemy::OnCollision(Entity* other)
 {
-	if (isActive)
+	if (isActive && other->layer==EntityLayers::GetEntityLayer<DarkBullet>() && bc==Light)
+	{
+		FG::EntityManager::Instance()->RemoveEntity(this);
+	}
+	else if (isActive && other->layer == EntityLayers::GetEntityLayer<LightBullet>() && bc == Dark)
+	{
+		FG::EntityManager::Instance()->RemoveEntity(this);
+	}
+	else if (isActive && (other->layer == EntityLayers::GetEntityLayer<LightBullet>() ||
+		other->layer == EntityLayers::GetEntityLayer<DarkBullet>()) && bc == Double)
 	{
 		FG::EntityManager::Instance()->RemoveEntity(this);
 	}
 }
-
-
 
 void BaseEnemy::Shoot(float deltaTime)
 {
@@ -335,7 +348,7 @@ void BaseEnemy::Move(float deltaTime)
 {
 	if (mt == MoveStraight)
 	{
-		position.x -= speed * deltaTime;
+		position.x -= animSpeed * deltaTime;
 	}
 	else
 	{
@@ -351,9 +364,9 @@ void BaseEnemy::CreateSweepAnimation()
 {
 	int currentPath = 0;
 	FG::BezierPath* path = new FG::BezierPath();
-	path->AddCurve({ FG::Vector2D(position.x,position.y - 4.0f),FG::Vector2D(position.x - 4.0f,position.y - 4.0f),FG::Vector2D(position.x - 8.0f, position.y - 4.0f), FG::Vector2D(position.x - 12.0f,position.y - 4.0f) }, 100);
-	path->AddCurve({ FG::Vector2D(position.x - 12.0f,position.y - 4.0f),FG::Vector2D(position.x - 18.0f,position.y - 4.0f),FG::Vector2D(position.x - 18.0f, position.y + 4.0f), FG::Vector2D(position.x - 12.0f,position.y + 4.0f) }, 130);
-	path->AddCurve({ FG::Vector2D(position.x - 12.0f,position.y + 4.0f),FG::Vector2D(position.x - 8.0f,position.y + 4.0f),FG::Vector2D(position.x - 4.0f, position.y + 4.0f), FG::Vector2D(position.x,position.y + 4.0f) }, 100);
+	path->AddCurve({ FG::Vector2D(position.x,position.y - 2.0f),FG::Vector2D(position.x - 4.0f,position.y - 2.0f),FG::Vector2D(position.x - 8.0f, position.y - 2.0f), FG::Vector2D(position.x - 12.0f,position.y - 2.0f) }, 100);
+	path->AddCurve({ FG::Vector2D(position.x - 12.0f,position.y - 2.0f),FG::Vector2D(position.x - 18.0f,position.y - 2.0f),FG::Vector2D(position.x - 18.0f, position.y + 2.0f), FG::Vector2D(position.x - 12.0f,position.y + 2.0f) }, 130);
+	path->AddCurve({ FG::Vector2D(position.x - 12.0f,position.y + 2.0f),FG::Vector2D(position.x - 8.0f,position.y + 2.0f),FG::Vector2D(position.x - 4.0f, position.y + 2.0f), FG::Vector2D(position.x,position.y + 2.0f) }, 100);
 
 	animPath.push_back(std::vector<FG::Vector2D>());
 	path->Sample(&animPath[currentPath]);
