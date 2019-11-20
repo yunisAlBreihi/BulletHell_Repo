@@ -18,6 +18,7 @@ void BaseEnemy::Start(FG::Vector2D startPos)
 {
 	position = startPos;
 	centerPos = position;
+	curvePosition = 0;
 
 	if (mt == MoveSweep)
 	{
@@ -31,7 +32,7 @@ void BaseEnemy::Start(FG::Vector2D startPos)
 	{
 		CreateWaveAnimation();
 	}
-	else if (mt==MoveDoubleWave)
+	else if (mt == MoveDoubleWave)
 	{
 		CreateDoubleWaveAnimation();
 	}
@@ -42,12 +43,11 @@ void BaseEnemy::Start(FG::Vector2D startPos)
 void BaseEnemy::Update(float deltaTime)
 {
 	Move(deltaTime);
-
+	
 	Shoot(deltaTime);
 
 	auto it = CollisionSystem::GetInstance();
 	it->RegisterCollider(position, sprite.GetScale(), this, EntityLayers::GetEntityLayer<BaseEnemy>(), true);
-
 }
 
 void BaseEnemy::Render(Renderer* const camera)
@@ -64,7 +64,7 @@ void BaseEnemy::Disable()
 
 void BaseEnemy::OnCollision(Entity* other)
 {
-	if (isActive && other->layer==EntityLayers::GetEntityLayer<DarkBullet>() && bc==Light)
+	if (isActive && other->layer == EntityLayers::GetEntityLayer<DarkBullet>() && bc == Light)
 	{
 		FG::EntityManager::Instance()->RemoveEntity(this);
 	}
@@ -354,9 +354,18 @@ void BaseEnemy::Move(float deltaTime)
 	{
 		if (curvePosition <= curveSamples)
 		{
-			position.x = animPath[0][curvePosition += animSpeed * deltaTime].x;
-			position.y = animPath[0][curvePosition += animSpeed * deltaTime].y;
+			curvePosition += animSpeed * deltaTime;
+			position.x = animPath[0][curvePosition].x;
+			position.y = animPath[0][curvePosition].y;
 		}
+		else if ((curvePosition>=curveSamples))
+		{
+			position.x += animSpeed*deltaTime*curveDirection;
+		}
+	}
+	if (position.x<0.0f || position.x>30.0f)
+	{
+		FG::EntityManager::Instance()->RemoveEntity(this);
 	}
 }
 
@@ -372,6 +381,8 @@ void BaseEnemy::CreateSweepAnimation()
 	path->Sample(&animPath[currentPath]);
 	delete path;
 
+	//Sets which direction the enemy is moving after its done following the curve
+	curveDirection = 1;
 	//This needs to be the same as the sum of samples on the AddCurve functions
 	curveSamples = 330;
 }
@@ -392,6 +403,8 @@ void BaseEnemy::CreateCircularAnimation()
 	path->Sample(&animPath[currentPath]);
 	delete path;
 
+	//Sets which direction the enemy is moving after its done following the curve
+	curveDirection = -1;
 	//This needs to be the same as the sum of samples on the AddCurve functions
 	curveSamples = 372;
 }
@@ -401,12 +414,14 @@ void BaseEnemy::CreateWaveAnimation()
 	int currentPath = 0;
 	FG::BezierPath* path = new FG::BezierPath();
 
-	path->AddCurve({ FG::Vector2D(position.x,position.y),FG::Vector2D(position.x - 12.0f,position.y-10.0f),FG::Vector2D(position.x - 12.0f, position.y+10.0f), FG::Vector2D(position.x - 24.0f, position.y ) }, 200);
+	path->AddCurve({ FG::Vector2D(position.x,position.y),FG::Vector2D(position.x - 12.0f,position.y - 10.0f),FG::Vector2D(position.x - 12.0f, position.y + 10.0f), FG::Vector2D(position.x - 24.0f, position.y) }, 200);
 
 	animPath.push_back(std::vector<FG::Vector2D>());
 	path->Sample(&animPath[currentPath]);
 	delete path;
 
+	//Sets which direction the enemy is moving after its done following the curve
+	curveDirection = -1;
 	//This needs to be the same as the sum of samples on the AddCurve functions
 	curveSamples = 200;
 }
@@ -417,12 +432,14 @@ void BaseEnemy::CreateDoubleWaveAnimation()
 	FG::BezierPath* path = new FG::BezierPath();
 
 	path->AddCurve({ FG::Vector2D(position.x,position.y),FG::Vector2D(position.x - 6.0f,position.y - 10.0f),FG::Vector2D(position.x - 6.0f, position.y + 10.0f), FG::Vector2D(position.x - 12.0f, position.y) }, 200);
-	path->AddCurve({ FG::Vector2D(position.x-12.0f,position.y),FG::Vector2D(position.x - 18.0f,position.y - 10.0f),FG::Vector2D(position.x - 18.0f, position.y + 10.0f), FG::Vector2D(position.x - 24.0f, position.y) }, 200);
+	path->AddCurve({ FG::Vector2D(position.x - 12.0f,position.y),FG::Vector2D(position.x - 18.0f,position.y - 10.0f),FG::Vector2D(position.x - 18.0f, position.y + 10.0f), FG::Vector2D(position.x - 24.0f, position.y) }, 200);
 
 	animPath.push_back(std::vector<FG::Vector2D>());
 	path->Sample(&animPath[currentPath]);
 	delete path;
 
+	//Sets which direction the enemy is moving after its done following the curve
+	curveDirection = -1;
 	//This needs to be the same as the sum of samples on the AddCurve functions
 	curveSamples = 400;
 }

@@ -6,6 +6,7 @@
 #include <EntityManager.h>
 #include <ResourceManager.h>
 #include <Sprite.h>
+#include <stdlib.h>
 
 #include <Logger.h>
 #include <SDL.h>
@@ -90,7 +91,8 @@ void GameApplication::Run()
 		inputManager->Update(quit);
 
 		spawnTimer += time.DeltaTime();
-		SpawnXTimes(spawnTimer, 2.0f, DoubleWaveSweepMaxTime, 5, FG::Vector2D(25.0f, 5.0f));
+		
+		SpawnXTimes(spawnTimer, 4, DoubleWaveSweepMaxTime, 5, FG::Vector2D(25.0f, 5.0f));
 
 		entityManager->Update(time.DeltaTime());
 		instance->TestCollisions();
@@ -168,21 +170,7 @@ inline void GameApplication::SpawnWaves(float dt, Spawner<T>* spawner, BasicTime
 
 void GameApplication::SpawnXTimes(float& spawnTimer, float minSpawnTime, float spawnerMaxTime, int spawnCount, FG::Vector2D spawnPosition)
 {
-	float maxSpawnTime = minSpawnTime + 0.02f + (spawnerMaxTime * spawnCount);
-	if (spawnTimer > minSpawnTime&& spawnTimer < maxSpawnTime)
-	{
-		SpawnWaves(time.DeltaTime(), &DoubleWaveSweepSpawner, &DoubleWaveSweepTimer, spawnPosition);
-	}
-	if (spawnTimer > maxSpawnTime)
-	{
-		spawnTimer = 0;
-	}
-}
-
-void GameApplication::SpawnXTimesRandom(float& spawnTimer, float spawnerMaxTime, int spawnCount, FG::Vector2D spawnPosition)
-{
-	float minSpawnTime = rand() % 10 + 2;
-	float maxSpawnTime = minSpawnTime + 0.02f + (spawnerMaxTime * spawnCount);
+	float maxSpawnTime = minSpawnTime + (spawnerMaxTime * spawnCount);
 	if (spawnTimer > minSpawnTime&& spawnTimer < maxSpawnTime)
 	{
 		SpawnWaves(time.DeltaTime(), &DoubleWaveSweepSpawner, &DoubleWaveSweepTimer, spawnPosition);
