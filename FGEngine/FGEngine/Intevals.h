@@ -72,13 +72,13 @@ struct IntervalSet
 			{
 				return;
 			}
-			if (intervals[i].start - 1 == v)
+			if (intervals[i].start == v)
 			{
 				intervals[i].start--;
 				for (int y = 0; y < intervals.size(); y++)
 				{
 					if (y == i) continue;
-					if (intervals[y].end+1 == intervals[i].start)
+					if (intervals[y].end == intervals[i].start)
 					{
 						intervals[i].start = intervals[y].start;
 						intervals[y].start = UINT32_MAX;
@@ -87,13 +87,13 @@ struct IntervalSet
 				FixIntervals();
 				return;
 			}
-			else if (intervals[i].end == v - 1)
+			else if (intervals[i].end == v)
 			{
 				intervals[i].end++;
 				for (int y = 0; y < intervals.size(); y++)
 				{
 					if (y == i) continue;
-					if (intervals[y].start-1 == intervals[i].end)
+					if (intervals[y].start == intervals[i].end)
 					{
 						intervals[i].end = intervals[y].end;
 						intervals[y].start = UINT32_MAX;
@@ -103,7 +103,7 @@ struct IntervalSet
 				return;
 			}
 		}
-		intervals.push_back(Interval(v, v));
+		intervals.push_back(Interval(v, v+1));
 	}
 };
 
