@@ -60,6 +60,7 @@ namespace FG
 		{
 			entities[entity->layer][entity->index]->Disable();
 			intervals[entity->layer].FreeIndex(entity->index);
+			used[entity->layer]--;
 		}
 	}
 

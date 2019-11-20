@@ -41,11 +41,15 @@ namespace FG
 		template <typename T, typename... Args>
 		T* CreateEntity(T type, Args&&...args);
 
+		template <typename T>
+		int GetUsedCount();
+
 		void RemoveEntity(Entity* entity);
 
 	private:
 		std::vector<Entity*> entities[MAX_ENTITY_TYPES];
 		int allocated[MAX_ENTITY_TYPES] = {};
+		int used[MAX_ENTITY_TYPES] = {};
 		IntervalSet intervals[MAX_ENTITY_TYPES];
 	};
 
@@ -69,6 +73,7 @@ namespace FG
 		}
 		intervals[index] = IntervalSet(0, count);
 		allocated[index] = count;
+		used[index] = 0;
 	}
 
 	template<typename T, typename... Args>
@@ -76,16 +81,29 @@ namespace FG
 	{
 		(void)static_cast<Entity*>((T*)0); //Check if the requested type is an entity
 		uint64_t index = EntityLayers::GetEntityLayer<T>(); // get the entity type index
-		auto i = intervals[index].GetFirst(); //intervals.GetFirst() consumes the left most index, i.e. the index closest to 0
-		T* ret = dynamic_cast<T*>(entities[index][i]); 	///IF YOU CRASH HERE: There are not enough entities allocated
-			//TODO: deal with out of bounds memory access if we're using too many entities
-		ret->Start(args...); //call start function on created entity
-		return ret;
+		if (used[index] < allocated[index])
+		{
+			auto i = intervals[index].GetFirst(); //intervals.GetFirst() consumes the left most index, i.e. the index closest to 0
+			T* ret = dynamic_cast<T*>(entities[index][i]); 	///IF YOU CRASH HERE: There are not enough entities allocated
+				//TODO: deal with out of bounds memory access if we're using too many entities
+			used[index]++;
+			ret->Start(args...); //call start function on created entity
+			return ret;
+		}
+		return nullptr;
 	}
+
 	template<typename T, typename ...Args>
 	inline T* EntityManager::CreateEntity(T type, Args&& ...args)
 	{
 		return NULL;
+	}
+	template<typename T>
+	inline int EntityManager::GetUsedCount()
+	{
+		(void)static_cast<Entity*>((T*)0); //Check if the requested type is an entity
+		uint64_t index = EntityLayers::GetEntityLayer<T>(); // get the entity type index
+		return used[index];
 	}
 }
 

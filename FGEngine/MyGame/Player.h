@@ -26,7 +26,7 @@ const static FG::Vector2D PLAYER_SHOOT_DIR = FG::Vector2D(1, 0);
 class Player : public FG::Entity
 {
 public:
-	Player(FG::InputManager* inputManager, FG::Sprite sprite);
+	Player(FG::InputManager* inputManager, FG::Sprite lightSprite, FG::Sprite darkSprite);
 	~Player() {}
 	void Init();
 	void Start(FG::Vector2D startPos);
@@ -45,7 +45,7 @@ private:
 	void SwapMode();
 	void MovePlayer(float deltaTime);
 
-	FG::Sprite sprite;
+	FG::Sprite lightSprite, darkSprite;
 	FG::Vector2D position;
 	BasicTimer shootTimer;
 	int health;
