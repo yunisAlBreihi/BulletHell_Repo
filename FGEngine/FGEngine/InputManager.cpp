@@ -4,13 +4,28 @@
 #include <SDL_timer.h>
 #include "Window.h"
 #include "glew.h"
+#include <stdint.h>
+
 namespace FG
 {
+#pragma region STATIC_INIT
+	Vector2D InputManager::mousePosition;
+	Vector2D InputManager::mouseMovement;
+	const Uint8* InputManager::keys = nullptr;
+	Uint8 InputManager::lastKeys[256] = { 0 };
+
+	bool InputManager::mouseButtons[SDL_BUTTON_X2] = { false };
+	bool InputManager::lastMouseButtons[SDL_BUTTON_X2] = { false };
+
+	unsigned int InputManager::keyTimes[SDL_NUM_SCANCODES] = { 0 };
+	unsigned int InputManager::mouseButtonTimes[SDL_BUTTON_X2] = { 0 };
+#pragma endregion
+
+
 	void InputManager::Initialize()
 	{
 		keys = SDL_GetKeyboardState(nullptr);
 		std::copy(keys, keys + 256, lastKeys);
-		//lastKeys = keys;
 	}
 
 	void InputManager::Update(bool& shouldQuit)
@@ -55,7 +70,7 @@ namespace FG
 		}
 	}
 
-	bool InputManager::IsKeyPressed(SDL_Scancode key) const
+	bool InputManager::IsKeyPressed(SDL_Scancode key)
 	{
 		if (keys[key])
 		{ 
@@ -67,7 +82,7 @@ namespace FG
 		return false;
 	}
 
-	bool InputManager::IsKeyReleased(SDL_Scancode key) const
+	bool InputManager::IsKeyReleased(SDL_Scancode key)
 	{
 		if (lastKeys[key] && !keys[key])
 		{ 
@@ -76,26 +91,26 @@ namespace FG
 		return false;
 	}
 
-	float InputManager::ElapsedKeyTime(SDL_Scancode key) const
+	float InputManager::ElapsedKeyTime(SDL_Scancode key)
 	{
 		return (SDL_GetTicks() - keyTimes[key] * 0.001f);
 	}
 
-	bool InputManager::IsMouseButtonPressed(unsigned int mouseButton) const
+	bool InputManager::IsMouseButtonPressed(unsigned int mouseButton)
 	{
 		if (!lastMouseButtons[mouseButton] && mouseButtons[mouseButton])
 		{ return true; }
 		return false;
 	}
 
-	bool InputManager::IsMouseButtonReleased(unsigned int mouseButton) const
+	bool InputManager::IsMouseButtonReleased(unsigned int mouseButton)
 	{
 		if (lastMouseButtons[mouseButton] && !mouseButtons[mouseButton])
 		{ return true; }
 		return false;
 	}
 
-	float InputManager::ElapsedMouseButtonTime(unsigned int mousebutton) const
+	float InputManager::ElapsedMouseButtonTime(unsigned int mousebutton)
 	{
 		return (SDL_GetTicks() - mouseButtonTimes[mousebutton] * 0.001f);
 	}

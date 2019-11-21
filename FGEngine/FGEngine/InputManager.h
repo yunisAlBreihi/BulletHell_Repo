@@ -11,37 +11,35 @@
 
 namespace FG
 {
-	class InputManager
+	static class InputManager
 	{
 	public:
-		Vector2D mousePosition;
+		static Vector2D mousePosition;
 		// Delta movement since last update.
-		Vector2D mouseMovement;
+		static Vector2D mouseMovement;
 
-		void Initialize();
-		void Update(bool& shouldQuit);
+		static void Initialize();
+		static void Update(bool& shouldQuit);
 
-		bool IsKeyDown(SDL_Scancode key) const { return keys[key]; }
-		bool IsKeyPressed(SDL_Scancode key) const;
-		bool IsKeyReleased(SDL_Scancode key) const;
+		static bool IsKeyDown(SDL_Scancode key) { return keys[key]; }
+		static bool IsKeyPressed(SDL_Scancode key);
+		static bool IsKeyReleased(SDL_Scancode key);
 
-		float ElapsedKeyTime(SDL_Scancode key) const;
-
-		bool IsMouseButtonDown(unsigned int mouseButton) const { return mouseButtons[mouseButton]; }
-		bool IsMouseButtonPressed(unsigned int mouseButton) const;
-		bool IsMouseButtonReleased(unsigned int mouseButton) const;
-
-		float ElapsedMouseButtonTime(unsigned int mouseButton) const;
+		static float ElapsedKeyTime(SDL_Scancode key);
+		static bool IsMouseButtonDown(unsigned int mouseButton) { return mouseButtons[mouseButton]; }
+		static bool IsMouseButtonPressed(unsigned int mouseButton);
+		static bool IsMouseButtonReleased(unsigned int mouseButton);
+		static float ElapsedMouseButtonTime(unsigned int mouseButton);
 
 	private:
-		const Uint8* keys = nullptr;
-		bool mouseButtons[SDL_BUTTON_X2] = { false };
+		static const Uint8* keys;
+		static bool mouseButtons[SDL_BUTTON_X2];
 
-		Uint8 lastKeys[256];
-		bool lastMouseButtons[SDL_BUTTON_X2] = { false };
+		static Uint8 lastKeys[256];
+		static bool lastMouseButtons[SDL_BUTTON_X2];
 
-		unsigned int keyTimes[SDL_NUM_SCANCODES] = { 0 };
-		unsigned int mouseButtonTimes[SDL_BUTTON_X2] = { 0 };
+		static unsigned int keyTimes[SDL_NUM_SCANCODES];
+		static unsigned int mouseButtonTimes[SDL_BUTTON_X2];
 	};
 }
 #pragma warning( pop )

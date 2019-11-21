@@ -4,22 +4,19 @@
 #include <InputManager.h>
 #include <Camera.h>
 #include <EntityManager.h>
-#include <ResourceManager.h>
-#include <Sprite.h>
-#include <stdlib.h>
 
+#include <stdlib.h>
 #include <Logger.h>
 #include <SDL.h>
 
-#include "Player.h"
-#include "BaseEnemy.h"
-#include "EnemyWaveStraight.h"
-#include "EnemyTripleCircular.h"
-#include "EnemyDoubleWaveSweep.h"
-#include "CollisionSystem.h"
+#include "GameState.h"
+#include "StateMachine.h"
+#include "InputManager.h"
+
 #include "Renderer.h"
 #include "SDL_syswm.h"
 #include "Profiler.h"
+
 
 bool GameApplication::Initialize()
 {
@@ -35,118 +32,39 @@ bool GameApplication::Initialize()
 		FG::Logger::Log(SDL_GetError(), FG::Logger::RemovePathFromFile(__FILE__), __LINE__);
 		return false;
 	}
-
-	inputManager = new FG::InputManager();
-	inputManager->Initialize();
-
+	FG::InputManager::Initialize();
 	renderer = std::make_unique<Renderer>(window->GetInternalWindow());
-	FG::SpriteFactory factory;
-	FG::Sprite playerSpriteLight = factory.LoadSprite("..//assets//images//lightning-blue.png", 1, 4, 0);
-	FG::Sprite playerSpriteDark = factory.LoadSprite("..//assets//images//lightning-purple.png", 1, 4, 0);
-	FG::Sprite lightBulletSprite = factory.LoadSprite("..//assets//images//projectile-blue.png", 1, 1, 0);
-	FG::Sprite darkBulletSprite = factory.LoadSprite("..//assets//images//projectile-purple.png", 1, 1, 0);
 
-	lightBulletSprite.SetScale(0.5f, 0.5f);
-	darkBulletSprite.SetScale(0.5f, 0.5f);
-
-	FG::Sprite sprite4 = factory.LoadSprite("..//assets//images//DarkSprites01.png", 8, 8, 5);
-	FG::Sprite enemy01Sprite = factory.LoadSprite("..//assets//images//LightSprites01.png", 8, 8, 1);
-	FG::Sprite enemy01BulletSprite = factory.LoadSprite("..//assets//images//LightSprites01.png", 8, 8, 6);
-
-	entityManager = FG::EntityManager::Instance();
-	entityManager->InitializeEntityArray<Player>(1, inputManager, playerSpriteLight, playerSpriteDark);
-	entityManager->InitializeEntityArray<DarkBullet>(1000, darkBulletSprite);
-	entityManager->InitializeEntityArray<LightBullet>(1000, lightBulletSprite);
-	//Enemy01::Enemy01(FG::Vector2D position, FG::Sprite sprite, FG::Sprite bulletsSprites, BulletSpreadType bulletSpreadType, MovementType movementType)
-	entityManager->InitializeEntityArray<EnemyWaveStraight>(20, FG::Vector2D(0, 0), enemy01Sprite, BaseEnemy::ShootCircle, BaseEnemy::MoveStraight, BaseEnemy::Dark);
-	entityManager->InitializeEntityArray<EnemyTripleCircular>(20, FG::Vector2D(0, 0), enemy01Sprite, BaseEnemy::ShootTriple, BaseEnemy::MoveCircular, BaseEnemy::Light);
-	entityManager->InitializeEntityArray<EnemyDoubleWaveSweep>(20, FG::Vector2D(0, 0), enemy01Sprite, BaseEnemy::ShootDoubleWave, BaseEnemy::MoveSweep, BaseEnemy::Double);
-
-	player = entityManager->CreateEntity<Player>(FG::Vector2D(1, 1));
-
-	//EnemyTripleCircular* enemy03 = entityManager->CreateEntity<EnemyTripleCircular>(FG::Vector2D(20.0f, 5.0f));
-	//EnemyDoubleWaveSweep* enemy04 = entityManager->CreateEntity<EnemyDoubleWaveSweep>(FG::Vector2D(20.0f, 7.0f));
-
-	EnemyWaveStraight* enemy02 = entityManager->CreateEntity<EnemyWaveStraight>(FG::Vector2D(20.0f, 8.0f));
-
-	auto instance = CollisionSystem::GetInstance();
-	instance->Setup(20, 20, 2);
-	DoubleWaveSweepTimer = BasicTimer(DoubleWaveSweepMaxTime);
+	sceneStateMachine = new SceneStateMachine(new GameState());
 	return true;
 }
 
 void GameApplication::Run()
 {
-	float spawnTimer = 0;
-
 	Camera camera = Camera({ 0, 0, -1 }, 45, -1, 100);
-	Profiler profiler;
 	bool quit = false;
-	int fps = 0;
-	float deltaTimeAccu = 0;
 
-	auto instance = CollisionSystem::GetInstance();
 	while (!quit)
 	{
 		time.StartFrame();
-		profiler.Start("frame time: ", false);
-		inputManager->Update(quit);
 
-		spawnTimer += time.DeltaTime();
-		
-		SpawnXTimes(spawnTimer, 4, DoubleWaveSweepMaxTime, 5, FG::Vector2D(25.0f, 5.0f));
-
-		entityManager->Update(time.DeltaTime());
-		instance->TestCollisions();
-		camera.Update(0.1f, FG::Vector2D(1.0f, 1.0f));
+		FG::InputManager::Update(quit);
+		if (!sceneStateMachine->Update(time.DeltaTime())) break; //if there is no scene to update, the application should quit
+		sceneStateMachine->Render(renderer.get());
+		camera.Update(time.DeltaTime(), FG::Vector2D(1.0f, 1.0f));
 		renderer->Clear(float4(0.0f, 0.0f, 0.0f, 1.0f));
 		renderer->Present(&camera);
 
-		entityManager->Render(renderer.get());
-
-		deltaTimeAccu += profiler.End();
-		if (deltaTimeAccu >= 1.0f)
-		{
-			std::cout << "FPS: " << fps << '\n';
-			deltaTimeAccu = 0;
-			fps = 0;
-		}
-		fps++;
-
-#ifndef _DEBUG
-		if (player->IsDead())
-		{
-			break;
-	}
-#endif // _DEBUG
-
-
-		profiler.End();
 		time.EndFrame();
-
-}
+	}
 }
 
 void GameApplication::Shutdown()
 {
-	if (entityManager)
+	if (sceneStateMachine)
 	{
-		entityManager->Shutdown();
-		delete entityManager;
-		entityManager = nullptr;
-	}
-
-	if (resourceManager)
-	{
-		resourceManager->Shutdown();
-		delete resourceManager;
-		resourceManager = nullptr;
-	}
-
-	if (inputManager)
-	{
-		delete inputManager;
-		inputManager = nullptr;
+		delete sceneStateMachine;
+		sceneStateMachine = nullptr;
 	}
 
 	if (window)
@@ -158,26 +76,3 @@ void GameApplication::Shutdown()
 	SDL_Quit();
 }
 
-template<typename T>
-inline void GameApplication::SpawnWaves(float dt, Spawner<T>* spawner, BasicTimer* timer, FG::Vector2D spawnPosition)
-{
-	timer->Update(dt);
-	if (timer->IsReady())
-	{
-		spawner->Execute(spawnPosition);
-		timer->Use();
-	}
-}
-
-void GameApplication::SpawnXTimes(float& spawnTimer, float minSpawnTime, float spawnerMaxTime, int spawnCount, FG::Vector2D spawnPosition)
-{
-	float maxSpawnTime = minSpawnTime + (spawnerMaxTime * spawnCount);
-	if (spawnTimer > minSpawnTime&& spawnTimer < maxSpawnTime)
-	{
-		SpawnWaves(time.DeltaTime(), &DoubleWaveSweepSpawner, &DoubleWaveSweepTimer, spawnPosition);
-	}
-	if (spawnTimer > maxSpawnTime)
-	{
-		spawnTimer = 0;
-	}
-}

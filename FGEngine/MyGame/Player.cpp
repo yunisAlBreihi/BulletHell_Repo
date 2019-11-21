@@ -10,7 +10,7 @@
 #include "EntityManager.h"
 #include "BaseEnemy.h"
 
-Player::Player(FG::InputManager* inputManager, FG::Sprite lightSprite, FG::Sprite darkSprite ) :
+Player::Player(FG::Sprite lightSprite, FG::Sprite darkSprite) :
 	inputManager(inputManager), lightSprite(lightSprite), darkSprite(darkSprite)
 {	
 	animationTimer = BasicTimer(0.15f);

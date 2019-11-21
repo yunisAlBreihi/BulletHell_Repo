@@ -1,17 +1,19 @@
 #pragma once
 
-namespace FG
-{
-	class Renderer;
-}
+class Renderer;
 
 class IState
 {
-	friend class StateMachine;
-private:
+public:
+	virtual ~IState() = default;
 	virtual IState* NextState() { return nullptr; }
 	virtual bool Update(float deltaTime) { return false; }
-	virtual void Render(FG::Renderer* renderer){}
 	virtual void OnExit(){}
 	virtual void OnEnter(){}
+};
+
+class ISceneState : public IState
+{
+public:
+	virtual void Render(Renderer* renderer) {}
 };

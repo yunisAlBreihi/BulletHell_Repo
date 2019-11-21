@@ -1,6 +1,17 @@
 #include "StateMachine.h"
 
-bool StateMachine::Update(float deltaTime)
+SceneStateMachine::SceneStateMachine(ISceneState* startState)
+{
+	currentState = startState;
+	currentState->OnEnter();
+}
+
+void SceneStateMachine::Render(Renderer* renderer)
+{
+	currentState->Render(renderer);
+}
+
+bool SceneStateMachine::Update(float deltaTime)
 {
 	if (!currentState->Update(deltaTime))
 	{
@@ -9,15 +20,15 @@ bool StateMachine::Update(float deltaTime)
 	return true;
 }
 
-void StateMachine::Draw()
+bool SceneStateMachine::SetState(IState* nextState)
 {
-}
-
-bool StateMachine::SetState(IState* nextState)
-{
+	if (nextState == nullptr)
+	{
+		return false;
+	}
 	currentState->OnExit();
 	delete currentState;
 	currentState = nullptr;
-
-
+	nextState->OnEnter();
+	return true;
 }

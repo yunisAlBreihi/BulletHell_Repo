@@ -6,6 +6,7 @@
 #include "Sprite.h"
 #include "BasicTimer.h"
 #include "PlayerWeapon.h"
+#include "Renderer.h"
 namespace FG
 {
 	class Window;
@@ -26,7 +27,7 @@ const static FG::Vector2D PLAYER_SHOOT_DIR = FG::Vector2D(1, 0);
 class Player : public FG::Entity
 {
 public:
-	Player(FG::InputManager* inputManager, FG::Sprite lightSprite, FG::Sprite darkSprite);
+	Player(FG::Sprite lightSprite, FG::Sprite darkSprite);
 	~Player() {}
 	void Init();
 	void Start(FG::Vector2D startPos);

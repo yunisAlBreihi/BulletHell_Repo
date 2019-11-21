@@ -1,28 +1,96 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="Background.cpp" />
-    <ClCompile Include="CollisionSystem.cpp" />
-    <ClCompile Include="GameApplication.cpp" />
-    <ClCompile Include="Player.cpp" />
-    <ClCompile Include="StartMenu.cpp" />
-    <ClCompile Include="Bullet.cpp" />
-    <ClCompile Include="BaseEnemy.cpp" />
-    <ClCompile Include="PlayerWeapon.cpp" />
-    <ClCompile Include="Spawner.cpp" />
+    <ClCompile Include="Bullet.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseEnemy.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Background.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionSystem.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerWeapon.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Spawner.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="StartMenu.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="StartMenuState.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="GameState.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="GameApplication.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Background.h" />
-    <ClInclude Include="CollisionSystem.h" />
-    <ClInclude Include="GameApplication.h" />
-    <ClInclude Include="Player.h" />
-    <ClInclude Include="StartMenu.h" />
-    <ClInclude Include="Bullet.h" />
-    <ClInclude Include="BaseEnemy.h" />
-    <ClInclude Include="EnemyWaveStraight.h" />
-    <ClInclude Include="EnemyTripleCircular.h" />
-    <ClInclude Include="EnemyDoubleWaveSweep.h" />
-    <ClInclude Include="PlayerWeapon.h" />
-    <ClInclude Include="Spawner.h" />
+    <ClInclude Include="Background.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionSystem.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyDoubleWaveSweep.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Spawner.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="StartMenu.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="StartMenuState.h">
+      <Filter>Include\Boilerplate</Filter>
+    </ClInclude>
+    <ClInclude Include="GameState.h">
+      <Filter>Include\Boilerplate</Filter>
+    </ClInclude>
+    <ClInclude Include="GameApplication.h">
+      <Filter>Include\Boilerplate</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseEnemy.h">
+      <Filter>Include\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>Include\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyWaveStraight.h">
+      <Filter>Include\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Include\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyTripleCircular.h">
+      <Filter>Include\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerWeapon.h">
+      <Filter>Include\Entities</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Include">
+      <UniqueIdentifier>{8c7aa907-acc5-45e7-8d0a-990ac8c2400e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source">
+      <UniqueIdentifier>{48921a65-e510-48e4-8069-5352e4080c04}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include\Entities">
+      <UniqueIdentifier>{fe21bd78-fd50-4523-abce-d987c6fea051}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include\Boilerplate">
+      <UniqueIdentifier>{906fcf71-7c0b-4211-a50a-2dcb2f3ccb19}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

@@ -16,10 +16,12 @@
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="BaseEnemy.cpp" />
     <ClCompile Include="GameApplication.cpp" />
+    <ClCompile Include="GameState.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerWeapon.cpp" />
     <ClCompile Include="Spawner.cpp" />
     <ClCompile Include="StartMenu.cpp" />
+    <ClCompile Include="StartMenuState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Background.h" />
@@ -30,10 +32,12 @@
     <ClInclude Include="EnemyTripleCircular.h" />
     <ClInclude Include="EnemyWaveStraight.h" />
     <ClInclude Include="GameApplication.h" />
+    <ClInclude Include="GameState.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerWeapon.h" />
     <ClInclude Include="Spawner.h" />
     <ClInclude Include="StartMenu.h" />
+    <ClInclude Include="StartMenuState.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FGEngine\FGEngine.vcxproj">
