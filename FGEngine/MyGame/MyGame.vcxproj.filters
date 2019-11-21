@@ -34,13 +34,15 @@
     <ClCompile Include="GameApplication.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="MyTestScene.cpp" />
+    <ClCompile Include="Destroyer.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="MyTestScene.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Background.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="CollisionSystem.h">
       <Filter>Include</Filter>
     </ClInclude>
     <ClInclude Include="EnemyDoubleWaveSweep.h">
@@ -79,7 +81,15 @@
     <ClInclude Include="PlayerWeapon.h">
       <Filter>Include\Entities</Filter>
     </ClInclude>
-    <ClInclude Include="MyTestScene.h" />
+    <ClInclude Include="Destroyer.h">
+      <Filter>Include\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="MyTestScene.h">
+      <Filter>Include\Boilerplate</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionSystem.h">
+      <Filter>Include\Boilerplate</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Include">

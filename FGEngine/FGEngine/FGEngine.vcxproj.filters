@@ -25,6 +25,9 @@
     <Filter Include="Source Files\System">
       <UniqueIdentifier>{b2c6568a-91bb-4fee-8aa2-2ee0aa3d4556}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Utils">
+      <UniqueIdentifier>{ae5db5c4-48d6-4ab9-869e-a306ba46d081}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -158,20 +161,20 @@
     <ClInclude Include="DrawCurve.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BasicTimer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="StateMachine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="IState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BasicRandom.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Intevals.h">
       <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicRandom.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicTimer.h">
+      <Filter>Header Files\Utils</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
