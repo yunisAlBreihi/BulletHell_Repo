@@ -37,5 +37,9 @@ private:
 	float direction;
 	float spawnAccu = 0;
 	float projectileCount = 5;
+	const static int MAX_HEALTH = 2000;
+	int health;
 
+	float healthBarWidth;
+	float healthBarStepWidth;
 };
