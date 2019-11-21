@@ -12,8 +12,7 @@ GameState::~GameState()
 {
 	if (entityManager)
 	{
-		delete entityManager;
-		entityManager = nullptr;
+		entityManager->Shutdown();
 	}
 
 
