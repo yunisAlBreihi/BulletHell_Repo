@@ -13,6 +13,8 @@
 Player::Player(FG::InputManager* inputManager, FG::Sprite lightSprite, FG::Sprite darkSprite ) :
 	inputManager(inputManager), lightSprite(lightSprite), darkSprite(darkSprite)
 {	
+	animationTimer = BasicTimer(0.15f);
+	currentSprite = lightSprite;
 	collidesWith = EntityLayers::GetEntityMask<DarkBullet, LightBullet>();
 }
 
@@ -34,6 +36,17 @@ void Player::Start(FG::Vector2D startPos)
 void Player::Update(float deltaTime)
 {
 	MovePlayer(deltaTime);
+	animationTimer.Update(deltaTime);
+
+	if (animationTimer.IsReady())
+	{
+		currentSprite.SetIndex(++currentSprite.spriteIndex);
+		if (currentSprite.spriteIndex > 3)
+		{
+			currentSprite.spriteIndex = 0;
+		}
+		animationTimer.Use();
+	}
 	if (inputManager->IsKeyPressed(SDL_SCANCODE_Q) || inputManager->IsKeyPressed(SDL_SCANCODE_E))
 	{
 		SwapMode();
@@ -50,15 +63,7 @@ void Player::Update(float deltaTime)
 
 void Player::Render(Renderer* const camera)
 {
-	if (playerState == PLAYER_LIGHT_STATE)
-	{
-		camera->Render(position, lightSprite);
-	}
-	else
-	{
-		camera->Render(position, darkSprite);
-	}
-
+	camera->Render(position, currentSprite);
 	camera->RenderQuad(position + (darkSprite.GetScale() * 0.5f), FG::Vector2D(0.05f, 0.05f), Color(0), Color(1.0f, 0.0f, 0.5f, 1.0f));
 
 	//health bar
@@ -107,11 +112,13 @@ void Player::SwapMode()
 	if (playerState == PLAYER_LIGHT_STATE)
 	{
 		playerState = PLAYER_DARK_STATE;
+		currentSprite.textureIndex = darkSprite.textureIndex;
 	}
 
 	else if(playerState == PLAYER_DARK_STATE)
 	{
 		playerState = PLAYER_LIGHT_STATE;
+		currentSprite.textureIndex = lightSprite.textureIndex;
 	}
 }
 

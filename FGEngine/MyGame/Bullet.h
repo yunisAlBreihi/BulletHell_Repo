@@ -31,7 +31,7 @@ public:
 class LightBullet : public BaseBullet
 {
 public:
-	LightBullet();
+	LightBullet(FG::Sprite sprite);
 	void Update(float deltaTime) override;
 	void Start(const FG::Vector2D position, const FG::Vector2D direction, float speed, uint64_t collidesWith);
 
@@ -41,7 +41,7 @@ public:
 class DarkBullet : public BaseBullet
 {
 public:
-	DarkBullet();
+	DarkBullet(FG::Sprite sprite);
 	void Update(float deltaTime);
 	void Start(const FG::Vector2D position, const FG::Vector2D direction, float speed, uint64_t collidesWith);
 

@@ -45,8 +45,11 @@ private:
 	void SwapMode();
 	void MovePlayer(float deltaTime);
 
-	FG::Sprite lightSprite, darkSprite;
+	FG::Sprite lightSprite, darkSprite, currentSprite;
 	FG::Vector2D position;
+
+
+	BasicTimer animationTimer;
 	BasicTimer shootTimer;
 	int health;
 	int playerState;

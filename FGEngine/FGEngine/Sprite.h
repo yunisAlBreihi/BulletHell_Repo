@@ -17,9 +17,14 @@ namespace FG
 		Sprite();
 		friend class SpriteFactory;
 		void SetScale(const Vector2D& scale) {
-			size.x = textureSize.x * scale.x;
-			size.y = textureSize.y * scale.y;
+			SetScale(scale.x, scale.y);
 		}
+
+		void SetScale(const float x, const float y) {
+			size.x = textureSize.x * x;
+			size.y = textureSize.y * y;
+		}
+
 
 		const Vector2D GetScale() const { return size;};
 		uint16_t spriteIndex;							 

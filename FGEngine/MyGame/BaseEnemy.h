@@ -3,6 +3,8 @@
 #include "Vector2D.h"
 #include "BezierPath.h"
 
+const float healthBarHeight = 0.15f;
+
 class BaseEnemy : public FG::Entity
 {
 public:
@@ -71,7 +73,11 @@ private:
 	float angle = 1.0f;
 	float timer = 0.2f;
 	float accu = 0.0f;
+	float healthBarStepWidth;
 
+	float healthBarWidth;
+	const static int MAX_HEALTH = 50;
+	int health;
 
 	//For Brush bullet pattern
 	int bulletInvert = 1.0f;
@@ -79,7 +85,7 @@ private:
 	//For Circle bullet pattern
 	FG::Vector2D bulletDirection = { -1.0f,0.0f };
 	FG::Vector2D bulletSpawnPosition = { -0.6f, 0.15f };
-	float bulletSpeed = 10.0f;
+	float bulletSpeed = 5.0f;
 	float bulletAngle = 0;
 	float bulletRotateSpeed = 3.0f;
 

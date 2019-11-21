@@ -34,11 +34,12 @@ void BaseBullet::Update(float deltaTime)
 void BaseBullet::Render(Renderer* const renderer)
 {
 	renderer->Render(position, sprite);
-	renderer->RenderQuad(position, sprite.GetScale(), Color(1.0f, 1.0f, 1.0f, 1.0f), Color());
+	//renderer->RenderQuad(position, sprite.GetScale(), Color(1.0f, 1.0f, 1.0f, 1.0f), Color());
 }
 
-LightBullet::LightBullet()
+LightBullet::LightBullet(FG::Sprite sprite)
 {
+	this->sprite = sprite;
 	collidesWith = EntityLayers::GetEntityMask<BaseEnemy, Player>();
 }
 
@@ -71,10 +72,10 @@ void LightBullet::OnCollision(Entity* other)
 	}
 }
 
-DarkBullet::DarkBullet()
+DarkBullet::DarkBullet(FG::Sprite sprite)
 {
+	this->sprite = sprite;
 	collidesWith = EntityLayers::GetEntityMask<BaseEnemy, Player>();
-	sprite.textureIndex = 1;
 }
 
 void DarkBullet::Update(float deltaTime)

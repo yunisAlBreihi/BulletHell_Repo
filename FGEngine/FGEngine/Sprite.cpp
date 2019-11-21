@@ -29,9 +29,8 @@ namespace FG
 		float aspectRatio = 0;
 
 		sprite.textureIndex = Texture2DHandler::LoadTextureIntoArray(filePath, rows, columns, width, height, aspectRatio);
-
-		sprite.textureSize = FG::Vector2D(aspectRatio, 1.0f);
-		sprite.SetScale(FG::Vector2D(1.0f, 1.0f));
+		sprite.textureSize = FG::Vector2D(1.0f, 1.0f);
+		sprite.SetScale(1.0f, 1.0f);
 
 		sprites.emplace(filePath, sprite);
 	}

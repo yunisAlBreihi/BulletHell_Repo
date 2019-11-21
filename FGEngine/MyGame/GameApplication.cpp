@@ -41,20 +41,22 @@ bool GameApplication::Initialize()
 
 	renderer = std::make_unique<Renderer>(window->GetInternalWindow());
 	FG::SpriteFactory factory;
-	FG::Sprite sprite = factory.LoadSprite("..//assets//images//bg.jpg", 1, 1);
-	FG::Sprite sprite2 = factory.LoadSprite("..//assets//images//test.png", 8, 8);
-	FG::Sprite PlayerSpriteLight = factory.LoadSprite("..//assets//images//LightSprites01.png", 8, 8, 1);
-	FG::Sprite PlayerSpriteDark = factory.LoadSprite("..//assets//images//DarkSprites01.png", 8, 8, 1);
+	FG::Sprite playerSpriteLight = factory.LoadSprite("..//assets//images//lightning-blue.png", 1, 4, 0);
+	FG::Sprite playerSpriteDark = factory.LoadSprite("..//assets//images//lightning-purple.png", 1, 4, 0);
+	FG::Sprite lightBulletSprite = factory.LoadSprite("..//assets//images//projectile-blue.png", 1, 1, 0);
+	FG::Sprite darkBulletSprite = factory.LoadSprite("..//assets//images//projectile-purple.png", 1, 1, 0);
+
+	lightBulletSprite.SetScale(0.5f, 0.5f);
+	darkBulletSprite.SetScale(0.5f, 0.5f);
+
 	FG::Sprite sprite4 = factory.LoadSprite("..//assets//images//DarkSprites01.png", 8, 8, 5);
 	FG::Sprite enemy01Sprite = factory.LoadSprite("..//assets//images//LightSprites01.png", 8, 8, 1);
-	FG::Sprite enemy01BulletSprite = enemy01Sprite;
-	enemy01BulletSprite.SetIndex(6);
-
+	FG::Sprite enemy01BulletSprite = factory.LoadSprite("..//assets//images//LightSprites01.png", 8, 8, 6);
 
 	entityManager = FG::EntityManager::Instance();
-	entityManager->InitializeEntityArray<Player>(1, inputManager,PlayerSpriteLight, PlayerSpriteDark);
-	entityManager->InitializeEntityArray<DarkBullet>(1000);
-	entityManager->InitializeEntityArray<LightBullet>(1000);
+	entityManager->InitializeEntityArray<Player>(1, inputManager, playerSpriteLight, playerSpriteDark);
+	entityManager->InitializeEntityArray<DarkBullet>(1000, darkBulletSprite);
+	entityManager->InitializeEntityArray<LightBullet>(1000, lightBulletSprite);
 	//Enemy01::Enemy01(FG::Vector2D position, FG::Sprite sprite, FG::Sprite bulletsSprites, BulletSpreadType bulletSpreadType, MovementType movementType)
 	entityManager->InitializeEntityArray<EnemyWaveStraight>(20, FG::Vector2D(0, 0), enemy01Sprite, BaseEnemy::ShootCircle, BaseEnemy::MoveStraight, BaseEnemy::Dark);
 	entityManager->InitializeEntityArray<EnemyTripleCircular>(20, FG::Vector2D(0, 0), enemy01Sprite, BaseEnemy::ShootTriple, BaseEnemy::MoveCircular, BaseEnemy::Light);
@@ -99,7 +101,6 @@ void GameApplication::Run()
 		camera.Update(0.1f, FG::Vector2D(1.0f, 1.0f));
 		renderer->Clear(float4(0.0f, 0.0f, 0.0f, 1.0f));
 		renderer->Present(&camera);
-
 
 		entityManager->Render(renderer.get());
 

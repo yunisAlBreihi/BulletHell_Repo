@@ -12,10 +12,13 @@ BaseEnemy::BaseEnemy(FG::Vector2D position, FG::Sprite sprite, BulletSpreadType 
 	: sprite(sprite), position(position), bs(bulletSpreadType), mt(movementType), bc(bulletColor)
 {
 	collidesWith = EntityLayers::GetEntityMask<DarkBullet, LightBullet, Player>();
+	healthBarStepWidth = (sprite.GetScale().x / (MAX_HEALTH + 1)) ;
+	healthBarWidth = sprite.GetScale().x;
 }
 
 void BaseEnemy::Start(FG::Vector2D startPos)
 {
+	health = MAX_HEALTH;
 	position = startPos;
 	centerPos = position;
 	curvePosition = 0;
@@ -42,10 +45,13 @@ void BaseEnemy::Start(FG::Vector2D startPos)
 
 void BaseEnemy::Update(float deltaTime)
 {
+	if (health <= 0)
+	{
+		FG::EntityManager::Instance()->RemoveEntity(this);
+		return;
+	}
 	Move(deltaTime);
-	
 	Shoot(deltaTime);
-
 	auto it = CollisionSystem::GetInstance();
 	it->RegisterCollider(position, sprite.GetScale(), this, EntityLayers::GetEntityLayer<BaseEnemy>(), true);
 }
@@ -53,7 +59,14 @@ void BaseEnemy::Update(float deltaTime)
 void BaseEnemy::Render(Renderer* const camera)
 {
 	camera->Render(position, sprite);
-	//bullets.Render(camera);
+
+	//health bar
+
+
+
+	//TODO: Error handle xScale == 0
+	camera->RenderQuad(position, FG::Vector2D(healthBarWidth, healthBarHeight), Color(0.3f, 0.3f, 0.3f, 1.0f), Color(0.3f, 0.3f, 0.3f, 1.0f));
+	camera->RenderQuad(position, FG::Vector2D(healthBarStepWidth * health, healthBarHeight), Color(1.0f, 0.3f, 0.3f, 1.0f), Color(1.0f, 0.3f, 0.3f, 1.0f));
 }
 
 void BaseEnemy::Disable()
@@ -66,16 +79,16 @@ void BaseEnemy::OnCollision(Entity* other)
 {
 	if (isActive && other->layer == EntityLayers::GetEntityLayer<DarkBullet>() && bc == Light)
 	{
-		FG::EntityManager::Instance()->RemoveEntity(this);
+		health--;
 	}
 	else if (isActive && other->layer == EntityLayers::GetEntityLayer<LightBullet>() && bc == Dark)
 	{
-		FG::EntityManager::Instance()->RemoveEntity(this);
+		health--;
 	}
 	else if (isActive && (other->layer == EntityLayers::GetEntityLayer<LightBullet>() ||
 		other->layer == EntityLayers::GetEntityLayer<DarkBullet>()) && bc == Double)
 	{
-		FG::EntityManager::Instance()->RemoveEntity(this);
+		health--;
 	}
 }
 
