@@ -10,6 +10,10 @@ namespace FG
 	{
 	}
 
+	EntityManager::~EntityManager()
+	{
+	}
+
 	void EntityManager::Shutdown()
 	{
 		for (int i = 0; i < MAX_ENTITY_TYPES; i++)
@@ -19,9 +23,10 @@ namespace FG
 				if (entities[i][0] != nullptr)
 				{
 					delete[] entities[i][0];
+					used[i] = 0;
+					allocated[i] = 0;
 				}
 			}
-
 			entities[i].clear();
 		}
 	}

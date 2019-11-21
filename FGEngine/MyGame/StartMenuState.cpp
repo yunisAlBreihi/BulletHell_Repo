@@ -1,8 +1,8 @@
 #include "StartMenuState.h"
-
+#include "MyTestScene.h"
 IState* StartMenuState::NextState()
 {
-	return nullptr;
+	return new MyTestScene();
 }
 
 bool StartMenuState::Update(float deltaTime)

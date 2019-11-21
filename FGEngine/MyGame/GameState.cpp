@@ -107,8 +107,6 @@ void GameState::OnExit()
 	if (entityManager)
 	{
 		entityManager->Shutdown();
-		delete entityManager;
-		entityManager = nullptr;
 	}
 
 }

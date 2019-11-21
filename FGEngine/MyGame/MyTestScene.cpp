@@ -12,11 +12,7 @@
 
 MyTestScene::~MyTestScene()
 {
-	if (entityManager)
-	{
-		delete entityManager;
-		entityManager = nullptr;
-	}
+	entityManager->Shutdown();
 }
 
 void MyTestScene::OnEnter()

@@ -26,6 +26,8 @@ namespace FG
 			return instance;
 		}
 		
+		~EntityManager();
+
 
 		void Shutdown();
 
