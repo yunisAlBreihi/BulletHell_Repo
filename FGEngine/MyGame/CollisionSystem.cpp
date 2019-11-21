@@ -61,6 +61,7 @@ void CollisionSystem::GetBucketIdSSE(const float* px, const float* py, const __m
 
 CollisionSystem::CollisionSystem():  c(_mm_set_ps(0, 0, 0, 0)), w(_mm_set_ps(0, 0, 0, 0))
 {
+	collisionPairs.reserve(100);
 }
 
 void CollisionSystem::Setup(const int worldX, const int worldY, const float bucketSize)
@@ -117,7 +118,6 @@ void CollisionSystem::RegisterCollider(const FG::Vector2D& pos, const FG::Vector
 
 void CollisionSystem::TestCollisions()
 {
-	collisionPairs.reserve(buckets.size() * 10);
 	BoxTest boxTest;
 	parallel_for(Range(0, buckets.size()), [&boxTest, this](const Range& r)
 		{
@@ -156,4 +156,3 @@ void CollisionSystem::Clear()
 		buckets[i].clear();
 	}
 }
-

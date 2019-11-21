@@ -8,6 +8,21 @@ static float BURST_LIGHT_SPEED = 20.0f;
 static float BURST_DARK_SPEED = 20.0f;
 static float LAZER_LIGHT_SPEED = 10.0f;
 
+struct CircleLightWeapon
+{
+	static void Shoot();
+};
+
+struct CircleDarkWeapon
+{
+	static void Shoot();
+};
+
+struct CircleBothWeapon
+{
+	static void Shoot();
+};
+
 struct SingleLightWeapon 
 {
 	static void Shoot(const FG::Vector2D& startPos, const FG::Vector2D& dir, const uint64_t collidesWith);

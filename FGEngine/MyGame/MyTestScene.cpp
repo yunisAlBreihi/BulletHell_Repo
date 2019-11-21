@@ -7,6 +7,7 @@
 #include "EnemyTripleCircular.h"
 #include "EnemyDoubleWaveSweep.h"
 #include "CollisionSystem.h"
+#include "Destroyer.h"
 
 #include "MyTestScene.h"
 
@@ -38,13 +39,16 @@ void MyTestScene::OnEnter()
 	entityManager->InitializeEntityArray<EnemyWaveStraight>(20, FG::Vector2D(0, 0), enemy01Sprite, BaseEnemy::ShootCircle, BaseEnemy::MoveStraight, BaseEnemy::Dark);
 	entityManager->InitializeEntityArray<EnemyTripleCircular>(20, FG::Vector2D(0, 0), enemy01Sprite, BaseEnemy::ShootTriple, BaseEnemy::MoveCircular, BaseEnemy::Light);
 	entityManager->InitializeEntityArray<EnemyDoubleWaveSweep>(20, FG::Vector2D(0, 0), enemy01Sprite, BaseEnemy::ShootDoubleWave, BaseEnemy::MoveSweep, BaseEnemy::Double);
-
+	playerSpriteLight.SetScale(2, 2);
+	entityManager->InitializeEntityArray<Destroyer>(1, playerSpriteLight);
 	player = entityManager->CreateEntity<Player>(FG::Vector2D(1, 1));
 
 	//EnemyTripleCircular* enemy03 = entityManager->CreateEntity<EnemyTripleCircular>(FG::Vector2D(20.0f, 5.0f));
 	//EnemyDoubleWaveSweep* enemy04 = entityManager->CreateEntity<EnemyDoubleWaveSweep>(FG::Vector2D(20.0f, 7.0f));
 
 	EnemyWaveStraight* enemy02 = entityManager->CreateEntity<EnemyWaveStraight>(FG::Vector2D(20.0f, 8.0f));
+
+	entityManager->CreateEntity<Destroyer>(FG::Vector2D(10, 5));
 
 	auto instance = CollisionSystem::GetInstance();
 	instance->Setup(20, 20, 2);
@@ -77,7 +81,7 @@ inline void MyTestScene::SpawnWaves(float dt, Spawner<T>* spawner, BasicTimer* t
 	timer->Update(dt);
 	if (timer->IsReady())
 	{
-		spawner->Execute(spawnPosition);
+	//	spawner->Execute(spawnPosition);
 		timer->Use();
 	}
 
