@@ -26,9 +26,10 @@ bool SceneStateMachine::SetState(IState* nextState)
 	{
 		return false;
 	}
+
 	currentState->OnExit();
 	delete currentState;
-	currentState = nullptr;
+	currentState = (ISceneState*)nextState;
 	nextState->OnEnter();
 	return true;
 }

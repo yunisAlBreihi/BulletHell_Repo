@@ -17,3 +17,7 @@ void StartMenuState::OnExit()
 void StartMenuState::OnEnter()
 {
 }
+
+void StartMenuState::Render(Renderer* renderer)
+{
+}

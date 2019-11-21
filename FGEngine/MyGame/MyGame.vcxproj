@@ -17,6 +17,7 @@
     <ClCompile Include="BaseEnemy.cpp" />
     <ClCompile Include="GameApplication.cpp" />
     <ClCompile Include="GameState.cpp" />
+    <ClCompile Include="MyTestScene.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerWeapon.cpp" />
     <ClCompile Include="Spawner.cpp" />
@@ -33,6 +34,7 @@
     <ClInclude Include="EnemyWaveStraight.h" />
     <ClInclude Include="GameApplication.h" />
     <ClInclude Include="GameState.h" />
+    <ClInclude Include="MyTestScene.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerWeapon.h" />
     <ClInclude Include="Spawner.h" />
