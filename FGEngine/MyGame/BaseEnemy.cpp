@@ -11,6 +11,7 @@
 BaseEnemy::BaseEnemy(FG::Vector2D position, FG::Sprite sprite, BulletSpreadType bulletSpreadType, MovementType movementType, BulletColor bulletColor)
 	: sprite(sprite), position(position), bs(bulletSpreadType), mt(movementType), bc(bulletColor)
 {
+	health = 0;
 	collidesWith = EntityLayers::GetEntityMask<DarkBullet, LightBullet, Player>();
 	healthBarStepWidth = (sprite.GetScale().x / (MAX_HEALTH + 1)) ;
 	healthBarWidth = sprite.GetScale().x;
