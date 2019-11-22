@@ -4,7 +4,6 @@
 #include "Renderer.h"
 #include "EntityType.h"
 #include <cassert>
-#include "Intevals.h"
 #include "Entity.h"
 #include <deque>
 namespace FG

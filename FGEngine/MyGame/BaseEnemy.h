@@ -32,7 +32,7 @@ public:
 	{
 		Light = 0,
 		Dark = 1,
-		Double = 2,
+		Both = 2,
 	};
 
 	MovementType mt = MoveSweep;

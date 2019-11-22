@@ -41,12 +41,15 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="WeaponPickup.cpp" />
+    <ClCompile Include="EnemySpawnParameters.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemySpawnManager.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Background.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="EnemyDoubleWaveSweep.h">
       <Filter>Include</Filter>
     </ClInclude>
     <ClInclude Include="Spawner.h">
@@ -70,13 +73,7 @@
     <ClInclude Include="Bullet.h">
       <Filter>Include\Entities</Filter>
     </ClInclude>
-    <ClInclude Include="EnemyWaveStraight.h">
-      <Filter>Include\Entities</Filter>
-    </ClInclude>
     <ClInclude Include="Player.h">
-      <Filter>Include\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="EnemyTripleCircular.h">
       <Filter>Include\Entities</Filter>
     </ClInclude>
     <ClInclude Include="PlayerWeapon.h">
@@ -93,6 +90,15 @@
     </ClInclude>
     <ClInclude Include="WeaponPickup.h">
       <Filter>Include\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyTypes.h">
+      <Filter>Include\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemySpawnParameters.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemySpawnManager.h">
+      <Filter>Include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

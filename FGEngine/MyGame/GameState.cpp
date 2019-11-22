@@ -3,9 +3,8 @@
 #include <Sprite.h>
 #include "Player.h"
 #include "BaseEnemy.h"
-#include "EnemyWaveStraight.h"
-#include "EnemyTripleCircular.h"
-#include "EnemyDoubleWaveSweep.h"
+#include "EnemyTypes.h"
+#include "EnemySpawnManager.h"
 #include "CollisionSystem.h"
 
 GameState::~GameState()
@@ -30,36 +29,58 @@ void GameState::OnEnter()
 	darkBulletSprite.SetScale(0.5f, 0.5f);
 
 	FG::Sprite sprite4 = factory.LoadSprite("..//assets//images//DarkSprites01.png", 8, 8, 5);
-	FG::Sprite enemy01Sprite = factory.LoadSprite("..//assets//images//LightSprites01.png", 8, 8, 1);
-	FG::Sprite enemy01BulletSprite = factory.LoadSprite("..//assets//images//LightSprites01.png", 8, 8, 6);
+	FG::Sprite enemy01SpriteL = factory.LoadSprite("..//assets//images//LightSprites02.png", 3, 3, 1);
+	FG::Sprite enemy01SpriteD = factory.LoadSprite("..//assets//images//DarkSprites02.png", 3, 3, 1);
+	FG::Sprite enemy02SpriteL = factory.LoadSprite("..//assets//images//LightSprites02.png", 3, 3, 2);
+	FG::Sprite enemy02SpriteD = factory.LoadSprite("..//assets//images//DarkSprites02.png", 3, 3, 2);
+	FG::Sprite enemy03SpriteL = factory.LoadSprite("..//assets//images//LightSprites02.png", 3, 3, 3);
+	FG::Sprite enemy03SpriteD = factory.LoadSprite("..//assets//images//DarkSprites02.png", 3, 3, 3);
+	FG::Sprite enemy04SpriteL = factory.LoadSprite("..//assets//images//LightSprites02.png", 3, 3, 4);
+	FG::Sprite enemy04SpriteD = factory.LoadSprite("..//assets//images//DarkSprites02.png", 3, 3, 4);
+	FG::Sprite enemy05SpriteL = factory.LoadSprite("..//assets//images//LightSprites02.png", 3, 3, 5);
+	FG::Sprite enemy05SpriteD = factory.LoadSprite("..//assets//images//DarkSprites02.png", 3, 3, 5);
+	FG::Sprite enemy06SpriteL = factory.LoadSprite("..//assets//images//LightSprites02.png", 3, 3, 6);
+	FG::Sprite enemy06SpriteD = factory.LoadSprite("..//assets//images//DarkSprites02.png", 3, 3, 6);
 
 	entityManager = FG::EntityManager::Instance();
 	entityManager->InitializeEntityArray<Player>(1, playerSpriteLight, playerSpriteDark);
 	entityManager->InitializeEntityArray<DarkBullet>(1000, darkBulletSprite);
 	entityManager->InitializeEntityArray<LightBullet>(1000, lightBulletSprite);
-	//Enemy01::Enemy01(FG::Vector2D position, FG::Sprite sprite, FG::Sprite bulletsSprites, BulletSpreadType bulletSpreadType, MovementType movementType)
-	entityManager->InitializeEntityArray<EnemyWaveStraight>(20, FG::Vector2D(0, 0), enemy01Sprite, BaseEnemy::ShootCircle, BaseEnemy::MoveStraight, BaseEnemy::Dark);
-	entityManager->InitializeEntityArray<EnemyTripleCircular>(20, FG::Vector2D(0, 0), enemy01Sprite, BaseEnemy::ShootTriple, BaseEnemy::MoveCircular, BaseEnemy::Light);
-	entityManager->InitializeEntityArray<EnemyDoubleWaveSweep>(20, FG::Vector2D(0, 0), enemy01Sprite, BaseEnemy::ShootDoubleWave, BaseEnemy::MoveSweep, BaseEnemy::Double);
+
+	entityManager->InitializeEntityArray<EnemyForwardDWaveL>(20, FG::Vector2D(0, 0), enemy01SpriteL, BaseEnemy::ShootForward, BaseEnemy::MoveDoubleWave, BaseEnemy::Light);
+	entityManager->InitializeEntityArray<EnemyForwardDWaveD>(20, FG::Vector2D(0, 0), enemy01SpriteD, BaseEnemy::ShootForward, BaseEnemy::MoveDoubleWave, BaseEnemy::Dark);
+
+	entityManager->InitializeEntityArray<EnemyTripleCircularL>(20, FG::Vector2D(0, 0), enemy02SpriteL, BaseEnemy::ShootTriple, BaseEnemy::MoveCircular, BaseEnemy::Light);
+	entityManager->InitializeEntityArray<EnemyTripleCircularD>(20, FG::Vector2D(0, 0), enemy02SpriteD, BaseEnemy::ShootTriple, BaseEnemy::MoveCircular, BaseEnemy::Dark);
+	entityManager->InitializeEntityArray<EnemyTripleCircularB>(20, FG::Vector2D(0, 0), enemy02SpriteL, BaseEnemy::ShootTriple, BaseEnemy::MoveCircular, BaseEnemy::Both);
+
+	entityManager->InitializeEntityArray<EnemyDWaveSweepL>(20, FG::Vector2D(0, 0), enemy03SpriteL, BaseEnemy::ShootDoubleWave, BaseEnemy::MoveSweep, BaseEnemy::Light);
+	entityManager->InitializeEntityArray<EnemyDWaveSweepD>(20, FG::Vector2D(0, 0), enemy03SpriteD, BaseEnemy::ShootDoubleWave, BaseEnemy::MoveSweep, BaseEnemy::Dark);
+	entityManager->InitializeEntityArray<EnemyDWaveSweepB>(20, FG::Vector2D(0, 0), enemy03SpriteD, BaseEnemy::ShootDoubleWave, BaseEnemy::MoveSweep, BaseEnemy::Both);
+
+	entityManager->InitializeEntityArray<EnemyDVerticalWaveL>(20, FG::Vector2D(0, 0), enemy04SpriteL, BaseEnemy::ShootDoubleVertical, BaseEnemy::MoveWave, BaseEnemy::Light);
+	entityManager->InitializeEntityArray<EnemyDVerticalWaveD>(20, FG::Vector2D(0, 0), enemy04SpriteD, BaseEnemy::ShootDoubleVertical, BaseEnemy::MoveWave, BaseEnemy::Dark);
+	entityManager->InitializeEntityArray<EnemyDVerticalWaveB>(20, FG::Vector2D(0, 0), enemy04SpriteL, BaseEnemy::ShootDoubleVertical, BaseEnemy::MoveWave, BaseEnemy::Both);
+
+	entityManager->InitializeEntityArray<EnemyCircleStraightL>(20, FG::Vector2D(0, 0), enemy05SpriteL, BaseEnemy::ShootCircle, BaseEnemy::MoveStraight, BaseEnemy::Light);
+	entityManager->InitializeEntityArray<EnemyCircleStraightD>(20, FG::Vector2D(0, 0), enemy05SpriteD, BaseEnemy::ShootCircle, BaseEnemy::MoveStraight, BaseEnemy::Dark);
+
+	entityManager->InitializeEntityArray<EnemyWaveStraightL>(20, FG::Vector2D(0, 0), enemy06SpriteL, BaseEnemy::ShootWave, BaseEnemy::MoveStraight, BaseEnemy::Light);
+	entityManager->InitializeEntityArray<EnemyWaveStraightD>(20, FG::Vector2D(0, 0), enemy06SpriteD, BaseEnemy::ShootWave, BaseEnemy::MoveStraight, BaseEnemy::Dark);
 
 	player = entityManager->CreateEntity<Player>(FG::Vector2D(1, 1));
 
-	//EnemyTripleCircular* enemy03 = entityManager->CreateEntity<EnemyTripleCircular>(FG::Vector2D(20.0f, 5.0f));
-	//EnemyDoubleWaveSweep* enemy04 = entityManager->CreateEntity<EnemyDoubleWaveSweep>(FG::Vector2D(20.0f, 7.0f));
-
-	EnemyWaveStraight* enemy02 = entityManager->CreateEntity<EnemyWaveStraight>(FG::Vector2D(20.0f, 8.0f));
+	enemySpawnManager = new EnemySpawnManager();
 
 	auto instance = CollisionSystem::GetInstance();
 	instance->Setup(20, 20, 2);
-	DoubleWaveSweepTimer = BasicTimer(DoubleWaveSweepMaxTime);
 	collisionSystemInstance = CollisionSystem::GetInstance();
 }
 
 bool GameState::Update(float deltaTime)
 {
-	spawnTimer += deltaTime;
-	SpawnXTimes(deltaTime, spawnTimer, 4, DoubleWaveSweepMaxTime, 5, FG::Vector2D(25.0f, 5.0f));
 	entityManager->Update(deltaTime);
+	enemySpawnManager->Update(deltaTime);
 	collisionSystemInstance->TestCollisions();
 #ifndef _DEBUG
 	if (player->IsDead())
@@ -75,31 +96,6 @@ void GameState::Render(Renderer* renderer)
 {
 	entityManager->Render(renderer);
 }
-
-template<typename T>
-inline void GameState::SpawnWaves(float dt, Spawner<T>* spawner, BasicTimer* timer, FG::Vector2D spawnPosition)
-{
-	timer->Update(dt);
-	if (timer->IsReady())
-	{
-		spawner->Execute(spawnPosition);
-		timer->Use();
-	}
-
-}
-void GameState::SpawnXTimes(float deltaTime, float& spawnTimer, float minSpawnTime, float spawnerMaxTime, int spawnCount, FG::Vector2D spawnPosition)
-{
-	float maxSpawnTime = minSpawnTime + (spawnerMaxTime * spawnCount);
-	if (spawnTimer > minSpawnTime&& spawnTimer < maxSpawnTime)
-	{
-		SpawnWaves(deltaTime, &DoubleWaveSweepSpawner, &DoubleWaveSweepTimer, spawnPosition);
-	}
-	if (spawnTimer > maxSpawnTime)
-	{
-		spawnTimer = 0;
-	}
-}
-
 
 void GameState::OnExit()
 {

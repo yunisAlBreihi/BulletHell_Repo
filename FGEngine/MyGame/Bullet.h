@@ -2,7 +2,6 @@
 #include <vector>
 #include "Vector2D.h"
 #include "Entity.h"
-#include "Intevals.h"
 #include "Sprite.h"
 #include "Camera.h"
 #include <iostream>

@@ -16,6 +16,8 @@
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="BaseEnemy.cpp" />
     <ClCompile Include="Destroyer.cpp" />
+    <ClCompile Include="EnemySpawnManager.cpp" />
+    <ClCompile Include="EnemySpawnParameters.cpp" />
     <ClCompile Include="GameApplication.cpp" />
     <ClCompile Include="GameState.cpp" />
     <ClCompile Include="MyTestScene.cpp" />
@@ -32,9 +34,9 @@
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="BaseEnemy.h" />
     <ClInclude Include="Destroyer.h" />
-    <ClInclude Include="EnemyDoubleWaveSweep.h" />
-    <ClInclude Include="EnemyTripleCircular.h" />
-    <ClInclude Include="EnemyWaveStraight.h" />
+    <ClInclude Include="EnemySpawnManager.h" />
+    <ClInclude Include="EnemySpawnParameters.h" />
+    <ClInclude Include="EnemyTypes.h" />
     <ClInclude Include="GameApplication.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="MyTestScene.h" />
