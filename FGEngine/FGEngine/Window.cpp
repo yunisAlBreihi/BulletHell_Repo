@@ -18,6 +18,7 @@ namespace FG
 			return false;
 		}
 
+	
 		aspectRatio = (float)height / (float)width;
 
 		return true;
@@ -40,7 +41,22 @@ namespace FG
 	void Window::SetSize(int width, int height)
 	{
 		aspectRatio = (float)width / (float)height;
-
 		SDL_SetWindowSize(window, width, height);
+	}
+
+	void Window::Maximize()
+	{
+		isMaximized = true;
+		SDL_MaximizeWindow(window);
+	}
+
+	void Window::Restore()
+	{
+		isMaximized = false;
+		SDL_RestoreWindow(window);
+	}
+	bool Window::IsMaximized()
+	{
+		return isMaximized;
 	}
 }

@@ -1,16 +1,15 @@
 #pragma once
 #include "Entity.h"
-#include "StateMachine.h"
 #include "BasicTimer.h"
 #include "Vector2D.h"
 #include "Sprite.h"
+#include "EntityManager.h"
 class Renderer;
 
 class Destroyer : public FG::Entity {
 
 public:
-	Destroyer(FG::Sprite sprite);
-
+	Destroyer(FG::Sprite lightSprite, FG::Sprite darkSprite);
 	~Destroyer() {}
 
 	void Start(FG::Vector2D position);
@@ -20,25 +19,31 @@ public:
 	void Render(Renderer* const renderer)override;
 	void OnCollision(FG::Entity* other)override;
 
+	void Shoot(FG::EntityManager* entityManager, FG::Vector2D startPos, float baseAngle, float angleOffset);
 
 private:
 	FG::Vector2D position;
-	FG::Sprite sprite;
+	FG::Sprite currentSprite;
+	FG::Sprite lightSprite;
+	FG::Sprite darkSprite;
+	bool usingLight;
 
 	float spinRadius = 10;
-	float spawnRate = 0.15f;
+	float spawnRate = 0.4f;
 	float angleOffset = 0.0f;
 	float spinSpeed = 1.15f;
-	float projectileSpeed = 8.0f;
+	float projectileSpeed = 4.0f;
 	
 	bool reverse;
 
 	float reverseAccu = 0;
 	float direction;
 	float spawnAccu = 0;
-	float projectileCount = 5;
+	float projectileCount = 25;
 	const static int MAX_HEALTH = 2000;
 	int health;
+
+	BasicTimer animationTimer;
 
 	float healthBarWidth;
 	float healthBarStepWidth;

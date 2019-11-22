@@ -18,6 +18,10 @@ namespace FG
 		void SetTitle(const std::string& title);
 		void SetSize(int width, int height);
 
+		void Maximize();
+		void Restore();
+		bool IsMaximized();
+
 		SDL_Window* GetInternalWindow() const { return window; }
 
 		static float aspectRatio;
@@ -27,6 +31,8 @@ namespace FG
 		}
 
 	protected:
+		bool isMaximized = false;
+
 		SDL_Window* window = nullptr;
 	};
 }

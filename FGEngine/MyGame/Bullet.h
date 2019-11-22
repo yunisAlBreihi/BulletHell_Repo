@@ -54,7 +54,10 @@ public:
 	void Start(const FG::Vector2D position, const FG::Vector2D direction, float speed, uint64_t collidesWith, float rotation , float rotationRate);
 	virtual void OnCollision(FG::Entity* other) override;
 
+
 	float rotation;
+	float startRotation;
+
 	float rotationRate;
 	bool rotatedOneTime;
 	bool rotatingBullet;

@@ -46,19 +46,6 @@ LightBullet::LightBullet(FG::Sprite sprite)
 
 void LightBullet::Update(float deltaTime)
 {
-	if (rotatingBullet)
-	{
-		startRotation -= deltaTime * rotationRate;
-		rotation += deltaTime * rotationRate;
-
-		if (startRotation < 0)
-		{
-			rotatingBullet = false;
-		}
-
-		dir.x = std::clamp(std::cos(rotation), -1.0f, 1.0f);
-		dir.y = std::clamp(std::sin(rotation), -1.0f, 1.0f);
-	}
 	position.x += dir.x * speed * deltaTime;
 	position.y += dir.y * speed * deltaTime;
 	if (position.x > 21 || position.x < -1 || position.y > 21 || position.y < -1)
@@ -114,12 +101,7 @@ DarkBullet::DarkBullet(FG::Sprite sprite)
 
 void DarkBullet::Update(float deltaTime)
 {
-	if (rotatingBullet)
-	{
-		rotation += deltaTime * rotationRate;
-		dir.x = std::clamp(std::cos(rotation), -1.0f, 1.0f);
-		dir.y = std::clamp(std::sin(rotation), -1.0f, 1.0f);
-	}
+
 	position.x += dir.x * speed * deltaTime;
 	position.y += dir.y * speed * deltaTime;
 	if (position.x > 21 || position.x < -1 || position.y > 21 || position.y < -1)
@@ -132,25 +114,27 @@ void DarkBullet::Update(float deltaTime)
 
 void DarkBullet::Start(const FG::Vector2D position, const FG::Vector2D direction, float speed, uint64_t collidesWith)
 {
-	rotatingBullet = false;
-	rotatedOneTime = false;
 	Entity::Start();
+	rotatedOneTime = false;
 	this->dir = direction;
 	this->position = position;
 	this->speed = speed;
 	this->collidesWith = collidesWith;
+
+	rotatingBullet = false;
 }
 
 void DarkBullet::Start(const FG::Vector2D position, const FG::Vector2D direction, float speed, uint64_t collidesWith, float rotation, float rotationRate)
 {
 	Entity::Start();
 	rotatedOneTime = false;
+	startRotation = M_PI;
 	this->dir = direction;
 	this->position = position;
 	this->collidesWith = collidesWith;
+	this->speed = speed;
 	this->rotation = rotation;
 	this->rotationRate = rotationRate;
-	this->speed = speed;
 
 	rotatingBullet = true;
 }

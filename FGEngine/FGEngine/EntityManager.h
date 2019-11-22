@@ -6,6 +6,7 @@
 #include <cassert>
 #include "Intevals.h"
 #include "Entity.h"
+#include <deque>
 namespace FG
 {
 #define MAX_ENTITY_TYPES 64 
@@ -52,7 +53,7 @@ namespace FG
 		std::vector<Entity*> entities[MAX_ENTITY_TYPES];
 		int allocated[MAX_ENTITY_TYPES] = {};
 		int used[MAX_ENTITY_TYPES] = {};
-		IntervalSet intervals[MAX_ENTITY_TYPES];
+		std::deque<uint32_t> freeIndices[MAX_ENTITY_TYPES];
 	};
 
 
@@ -72,8 +73,8 @@ namespace FG
 			new(&ptr[i])T(args...);
 			entities[index][i] = static_cast<Entity*>(&ptr[i]);
 			entities[index][i]->Initialize(i, index);
+			freeIndices[index].push_back(i);
 		}
-		intervals[index] = IntervalSet(0, count);
 		allocated[index] = count;
 		used[index] = 0;
 	}
@@ -85,7 +86,8 @@ namespace FG
 		uint64_t index = EntityLayers::GetEntityLayer<T>(); // get the entity type index
 		if (used[index] < allocated[index])
 		{
-			auto i = intervals[index].GetFirst(); //intervals.GetFirst() consumes the left most index, i.e. the index closest to 0
+			uint32_t i = freeIndices[index].front();
+			freeIndices[index].pop_front();
 			T* ret = dynamic_cast<T*>(entities[index][i]); 	///IF YOU CRASH HERE: There are not enough entities allocated
 				//TODO: deal with out of bounds memory access if we're using too many entities
 			used[index]++;

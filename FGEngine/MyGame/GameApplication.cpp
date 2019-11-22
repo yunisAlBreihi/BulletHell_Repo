@@ -16,6 +16,7 @@
 #include "Renderer.h"
 #include "SDL_syswm.h"
 #include "Profiler.h"
+#include "MyTestScene.h"
 
 
 bool GameApplication::Initialize()
@@ -35,7 +36,7 @@ bool GameApplication::Initialize()
 	FG::InputManager::Initialize();
 	renderer = std::make_unique<Renderer>(window->GetInternalWindow());
 
-	sceneStateMachine = new SceneStateMachine(new GameState());
+	sceneStateMachine = new SceneStateMachine(new MyTestScene());
 	return true;
 }
 
@@ -43,18 +44,39 @@ void GameApplication::Run()
 {
 	Camera camera = Camera({ 0, 0, -1 }, 45, -1, 100);
 	bool quit = false;
-
+	Profiler frameTime = Profiler();
+	float fpsAccu = 0;
+	int fpsCounter =0;
 	while (!quit)
 	{
 		time.StartFrame();
-
+		frameTime.Start("frameTime", false);
 		FG::InputManager::Update(quit);
+		if (FG::InputManager::IsKeyPressed(SDL_SCANCODE_RETURN) && FG::InputManager::IsKeyDown(SDL_SCANCODE_LALT))
+		{
+			if (window->IsMaximized())
+			{
+				window->Restore();
+			}
+			else
+			{
+				window->Maximize();
+			}
+		}
+
 		if (!sceneStateMachine->Update(time.DeltaTime())) break; //if there is no scene to update, the application should quit
 		sceneStateMachine->Render(renderer.get());
 		camera.Update(time.DeltaTime(), FG::Vector2D(1.0f, 1.0f));
 		renderer->Clear(float4(0.0f, 0.0f, 0.0f, 1.0f));
 		renderer->Present(&camera);
-
+		fpsAccu += frameTime.End();
+		fpsCounter++;
+		if (fpsAccu >= 1.0f)
+		{
+			std::cout << "FPS: " << fpsCounter << std::endl;
+			fpsAccu = 0;
+			fpsCounter = 0;
+		}
 		time.EndFrame();
 	}
 }

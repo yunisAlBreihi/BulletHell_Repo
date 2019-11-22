@@ -28,6 +28,7 @@ namespace FG
 				}
 			}
 			entities[i].clear();
+			freeIndices[i].clear();
 		}
 	}
 
@@ -64,7 +65,7 @@ namespace FG
 		if (entity->isActive)
 		{
 			entities[entity->layer][entity->index]->Disable();
-			intervals[entity->layer].FreeIndex(entity->index);
+			freeIndices[entity->layer].push_back(entity->index);
 			used[entity->layer]--;
 		}
 	}

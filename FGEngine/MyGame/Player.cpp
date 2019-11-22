@@ -77,11 +77,11 @@ void Player::Shoot(float deltaTime)
 	{
 		if (playerState == PLAYER_LIGHT_STATE)
 		{
-			BurstLightWeapon::Shoot(position, PLAYER_SHOOT_DIR, EntityLayers::GetEntityMask<BaseEnemy>());
+			BurstLightWeapon::Shoot(position + FG::Vector2D(currentSprite.GetScale().x, currentSprite.GetScale().y * 0.25f), PLAYER_SHOOT_DIR, EntityLayers::GetEntityMask<BaseEnemy>());
 		}
 		else if (playerState == PLAYER_DARK_STATE)
 		{
-			BurstDarkWeapon::Shoot(position, PLAYER_SHOOT_DIR, EntityLayers::GetEntityMask<BaseEnemy>());
+			BurstDarkWeapon::Shoot(position + FG::Vector2D(currentSprite.GetScale().x, currentSprite.GetScale().y * 0.25f), PLAYER_SHOOT_DIR, EntityLayers::GetEntityMask<BaseEnemy>());
 		}
 		shootTimer.Use();
 	}
@@ -95,7 +95,6 @@ void Player::OnCollision(FG::Entity* other)
 		{
 			health--;
 		}
-		//else, get power
 	}
 	else if (other->layer == EntityLayers::GetEntityLayer<DarkBullet>())
 	{
@@ -103,7 +102,6 @@ void Player::OnCollision(FG::Entity* other)
 		{
 			health--;
 		}
-		//else, get power
 	}
 }
 
