@@ -31,6 +31,7 @@ void Player::Start(FG::Vector2D startPos)
 	FG::Entity::Start();
 	Init();
 	position = startPos;
+	accumulateCharge = 0;
 }
 
 void Player::Update(float deltaTime)
@@ -95,12 +96,28 @@ void Player::OnCollision(FG::Entity* other)
 		{
 			health--;
 		}
+		else
+		{
+			accumulateCharge++;
+			if (accumulateCharge > PLAYER_MAX_BULLET_ACCUMULATION)
+			{
+				accumulateCharge = PLAYER_MAX_BULLET_ACCUMULATION;
+			}
+		}
 	}
 	else if (other->layer == EntityLayers::GetEntityLayer<DarkBullet>())
 	{
 		if (playerState == PLAYER_LIGHT_STATE)
 		{
 			health--;
+		}
+		else
+		{
+			accumulateCharge++;
+			if (accumulateCharge > PLAYER_MAX_BULLET_ACCUMULATION)
+			{
+				accumulateCharge = PLAYER_MAX_BULLET_ACCUMULATION;
+			}
 		}
 	}
 }
@@ -111,12 +128,36 @@ void Player::SwapMode()
 	{
 		playerState = PLAYER_DARK_STATE;
 		currentSprite.textureIndex = darkSprite.textureIndex;
+
+		float baseAngle = 0;
+		for (int i = 0; i < accumulateCharge; i++)
+		{
+			float angleOffset = 2.0f * M_PI * (((float)i) / accumulateCharge);
+			FG::EntityManager::Instance()->CreateEntity<LightBullet>(position,
+				FG::Vector2D(
+					std::clamp(std::cos(angleOffset + baseAngle), -1.0f, 1.0f),
+					std::clamp(std::sin(angleOffset + baseAngle), -1.0f, 1.0f)),
+				PLAYER_BULLET_SPEED, EntityLayers::GetEntityMask<BaseEnemy>(), baseAngle + angleOffset, 1.0f);
+		}
+		accumulateCharge = 0;
 	}
 
 	else if(playerState == PLAYER_DARK_STATE)
 	{
 		playerState = PLAYER_LIGHT_STATE;
 		currentSprite.textureIndex = lightSprite.textureIndex;
+
+		float baseAngle = 0;
+		for (int i = 0; i < accumulateCharge; i++)
+		{
+			float angleOffset = 2.0f * M_PI * (((float)i) / accumulateCharge);
+			FG::EntityManager::Instance()->CreateEntity<DarkBullet>(position,
+				FG::Vector2D(
+					std::clamp(std::cos(angleOffset + baseAngle), -1.0f, 1.0f),
+					std::clamp(std::sin(angleOffset + baseAngle), -1.0f, 1.0f)),
+				PLAYER_BULLET_SPEED, EntityLayers::GetEntityMask<BaseEnemy>(), baseAngle + angleOffset, 1.0f);
+		}
+		accumulateCharge = 0;
 	}
 }
 

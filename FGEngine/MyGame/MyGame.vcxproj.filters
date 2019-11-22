@@ -40,6 +40,7 @@
     <ClCompile Include="MyTestScene.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="WeaponPickup.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Background.h">
@@ -89,6 +90,9 @@
     </ClInclude>
     <ClInclude Include="CollisionSystem.h">
       <Filter>Include\Boilerplate</Filter>
+    </ClInclude>
+    <ClInclude Include="WeaponPickup.h">
+      <Filter>Include\Entities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

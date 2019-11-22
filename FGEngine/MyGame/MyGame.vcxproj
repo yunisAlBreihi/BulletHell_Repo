@@ -24,6 +24,7 @@
     <ClCompile Include="Spawner.cpp" />
     <ClCompile Include="StartMenu.cpp" />
     <ClCompile Include="StartMenuState.cpp" />
+    <ClCompile Include="WeaponPickup.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Background.h" />
@@ -42,6 +43,7 @@
     <ClInclude Include="Spawner.h" />
     <ClInclude Include="StartMenu.h" />
     <ClInclude Include="StartMenuState.h" />
+    <ClInclude Include="WeaponPickup.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FGEngine\FGEngine.vcxproj">

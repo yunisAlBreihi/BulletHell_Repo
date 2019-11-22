@@ -22,7 +22,7 @@ const static int PLAYER_START_STATE = PLAYER_LIGHT_STATE;
 const static float PLAYER_MOVEMENTSPEED = 5.0f;
 const static float PLAYER_BULLET_SPEED = 10.0f;
 const static FG::Vector2D PLAYER_SHOOT_DIR = FG::Vector2D(1, 0);
-
+const static int PLAYER_MAX_BULLET_ACCUMULATION = 10;
 
 class Player : public FG::Entity
 {
@@ -48,6 +48,8 @@ private:
 
 	FG::Sprite lightSprite, darkSprite, currentSprite;
 	FG::Vector2D position;
+
+	int accumulateCharge;
 
 
 	BasicTimer animationTimer;
