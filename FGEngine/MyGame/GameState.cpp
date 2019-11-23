@@ -68,7 +68,7 @@ void GameState::OnEnter()
 	entityManager->InitializeEntityArray<EnemyWaveStraightL>(20, FG::Vector2D(0, 0), enemy06SpriteL, BaseEnemy::ShootWave, BaseEnemy::MoveStraight, BaseEnemy::Light);
 	entityManager->InitializeEntityArray<EnemyWaveStraightD>(20, FG::Vector2D(0, 0), enemy06SpriteD, BaseEnemy::ShootWave, BaseEnemy::MoveStraight, BaseEnemy::Dark);
 
-	player = entityManager->CreateEntity<Player>(FG::Vector2D(1, 1));
+	player = entityManager->CreateEntity<Player>(FG::Vector2D(1, 1), 0);
 
 	enemySpawnManager = new EnemySpawnManager();
 

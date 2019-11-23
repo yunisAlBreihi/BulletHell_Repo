@@ -36,7 +36,7 @@ void MyTestScene::OnEnter()
 	FG::Sprite enemy01BulletSprite = factory.LoadSprite("..//assets//images//LightSprites01.png", 8, 8, 6);
 
 	entityManager = FG::EntityManager::Instance();
-	entityManager->InitializeEntityArray<Player>(1, playerSpriteLight, playerSpriteDark);
+	entityManager->InitializeEntityArray<Player>(2, playerSpriteLight, playerSpriteDark);
 	entityManager->InitializeEntityArray<DarkBullet>(7500, darkBulletSprite);
 	entityManager->InitializeEntityArray<LightBullet>(7500, lightBulletSprite);
 	//Enemy01::Enemy01(FG::Vector2D position, FG::Sprite sprite, FG::Sprite bulletsSprites, BulletSpreadType bulletSpreadType, MovementType movementType)
@@ -44,7 +44,9 @@ void MyTestScene::OnEnter()
 	entityManager->InitializeEntityArray<EnemyTripleCircular>(20, FG::Vector2D(0, 0), enemy01Sprite, BaseEnemy::ShootTriple, BaseEnemy::MoveCircular, BaseEnemy::Light);
 	entityManager->InitializeEntityArray<EnemyDoubleWaveSweep>(20, FG::Vector2D(0, 0), enemy01Sprite, BaseEnemy::ShootDoubleWave, BaseEnemy::MoveSweep, BaseEnemy::Both);
 	entityManager->InitializeEntityArray<Destroyer>(4, destroyerSpriteLight, destroyerSpriteDark);
-	player = entityManager->CreateEntity<Player>(FG::Vector2D(1, 1));
+	player = entityManager->CreateEntity<Player>(FG::Vector2D(2, 1), 0);
+
+	entityManager->CreateEntity<Player>(FG::Vector2D(5, 1), 1);
 
 	//EnemyTripleCircular* enemy03 = entityManager->CreateEntity<EnemyTripleCircular>(FG::Vector2D(20.0f, 5.0f));
 	//EnemyDoubleWaveSweep* enemy04 = entityManager->CreateEntity<EnemyDoubleWaveSweep>(FG::Vector2D(20.0f, 7.0f));

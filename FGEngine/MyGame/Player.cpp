@@ -11,7 +11,7 @@
 #include "BaseEnemy.h"
 
 Player::Player(FG::Sprite lightSprite, FG::Sprite darkSprite) :
-	inputManager(inputManager), lightSprite(lightSprite), darkSprite(darkSprite)
+	lightSprite(lightSprite), darkSprite(darkSprite)
 {	
 	animationTimer = BasicTimer(0.15f);
 	currentSprite = lightSprite;
@@ -26,8 +26,9 @@ void Player::Init()
 	movementSpeed = PLAYER_MOVEMENTSPEED;
 }
 
-void Player::Start(FG::Vector2D startPos)
+void Player::Start(FG::Vector2D startPos, int index)
 {
+	this->index = index;
 	FG::Entity::Start();
 	Init();
 	position = startPos;
@@ -48,12 +49,12 @@ void Player::Update(float deltaTime)
 		}
 		animationTimer.Use();
 	}
-	if (inputManager->IsKeyPressed(SDL_SCANCODE_Q) || inputManager->IsKeyPressed(SDL_SCANCODE_E))
+	if (FG::InputManager::IsKeyPressed(SDL_SCANCODE_Q) || FG::InputManager::IsKeyPressed(SDL_SCANCODE_E) || FG::InputManager::GetButtonDown(index, SDL_CONTROLLER_BUTTON_Y))
 	{
 		SwapMode();
 	}
 	shootTimer.Update(deltaTime);
-	if (inputManager->IsKeyDown(SDL_SCANCODE_SPACE))
+	if (FG::InputManager::IsKeyDown(SDL_SCANCODE_SPACE) || FG::InputManager::GetButton(index, SDL_CONTROLLER_BUTTON_A))
 	{
 		Shoot(deltaTime);
 	}
@@ -163,23 +164,40 @@ void Player::SwapMode()
 
 void Player::MovePlayer(float deltaTime)
 {
+	float xAxis = FG::InputManager::GetGamepadAxis(index, SDL_CONTROLLER_AXIS_LEFTX);
+	float yAxis = FG::InputManager::GetGamepadAxis(index, SDL_CONTROLLER_AXIS_LEFTY);
+
 	FG::Vector2D movement;
-	if (inputManager->IsKeyDown(SDL_SCANCODE_A))
+
+	float deadZone = 5000;
+
+	if (xAxis < deadZone && xAxis > -deadZone)
+	{
+		xAxis = 0;
+	}
+	if (yAxis < deadZone && yAxis > -deadZone)
+	{
+		yAxis = 0;
+	}
+	movement.x = xAxis * 0.000030517578125f;
+	movement.y = yAxis * 0.000030517578125f;
+
+	if (FG::InputManager::IsKeyDown(SDL_SCANCODE_A))
 	{
 		movement.x = -1.0f;
 	}
 
-	if (inputManager->IsKeyDown(SDL_SCANCODE_D))
+	if (FG::InputManager::IsKeyDown(SDL_SCANCODE_D))
 	{
 		movement.x = 1.0f;
 	}
 
-	if (inputManager->IsKeyDown(SDL_SCANCODE_W))
+	if (FG::InputManager::IsKeyDown(SDL_SCANCODE_W))
 	{
 		movement.y = -1.0f;
 	}
 
-	if (inputManager->IsKeyDown(SDL_SCANCODE_S))
+	if (FG::InputManager::IsKeyDown(SDL_SCANCODE_S))
 	{
 		movement.y = 1.0f;
 	}

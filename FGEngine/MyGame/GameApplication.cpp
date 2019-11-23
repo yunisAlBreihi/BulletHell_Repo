@@ -21,7 +21,7 @@
 
 bool GameApplication::Initialize()
 {
-	if (SDL_Init(SDL_INIT_VIDEO) < 0)
+	if (SDL_Init(SDL_INIT_VIDEO |SDL_INIT_GAMECONTROLLER) < 0)
 	{
 		FG::Logger::Log(SDL_GetError(), FG::Logger::RemovePathFromFile(__FILE__), __LINE__);
 		return false;

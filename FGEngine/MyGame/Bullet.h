@@ -25,6 +25,7 @@ public:
 	FG::Vector2D dir;
 	float speed;
 	FG::Sprite sprite;
+	FG::Vector2D colliderScale;
 };
 
 class LightBullet : public BaseBullet

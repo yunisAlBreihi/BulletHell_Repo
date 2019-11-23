@@ -8,9 +8,20 @@
 #include <SDL_mouse.h>
 #include <SDL_keycode.h>
 #include <SDL_scancode.h>
-
+#include <SDL_gamecontroller.h>
+#include <vector>
 namespace FG
 {
+	static const int NUM_KEYS = 256;
+	static const int MAX_NUM_GAMEPADS = 8;
+	static const int NUM_GAMEPAD_AXES = 6;
+	static const int NUM_GAMEPAD_BUTTONS = 16;
+
+	struct GamepadAxes
+	{
+		int axis[NUM_GAMEPAD_AXES];
+	};
+
 	static class InputManager
 	{
 	public:
@@ -25,6 +36,11 @@ namespace FG
 		static bool IsKeyPressed(SDL_Scancode key);
 		static bool IsKeyReleased(SDL_Scancode key);
 
+		static bool GetButtonDown(uint8_t gamePadIndex, SDL_GameControllerButton button);
+		static bool GetButtonUp(uint8_t gamePadIndex, SDL_GameControllerButton button);
+		static bool GetButton(uint8_t gamePadIndex, SDL_GameControllerButton button);
+		static float GetGamepadAxis(uint8_t gamepadIndex, SDL_GameControllerAxis axis);
+		
 		static float ElapsedKeyTime(SDL_Scancode key);
 		static bool IsMouseButtonDown(unsigned int mouseButton) { return mouseButtons[mouseButton]; }
 		static bool IsMouseButtonPressed(unsigned int mouseButton);
@@ -35,11 +51,19 @@ namespace FG
 		static const Uint8* keys;
 		static bool mouseButtons[SDL_BUTTON_X2];
 
-		static Uint8 lastKeys[256];
+		static Uint8 lastKeys[NUM_KEYS];
 		static bool lastMouseButtons[SDL_BUTTON_X2];
 
 		static unsigned int keyTimes[SDL_NUM_SCANCODES];
 		static unsigned int mouseButtonTimes[SDL_BUTTON_X2];
+		static Sint32 gameControllers[MAX_NUM_GAMEPADS];
+
+		static Uint8 gamePadButtons[MAX_NUM_GAMEPADS][NUM_GAMEPAD_BUTTONS];
+		static Uint8 lastGamePadButtons[MAX_NUM_GAMEPADS][NUM_GAMEPAD_BUTTONS];
+		static GamepadAxes gamepadAxes[MAX_NUM_GAMEPADS];
+
+		static SDL_GameController* gameControllerPointers[MAX_NUM_GAMEPADS];
+
 	};
 }
 #pragma warning( pop )

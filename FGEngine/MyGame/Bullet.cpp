@@ -13,6 +13,8 @@ BaseBullet::BaseBullet()
 	sprite.SetScale(FG::Vector2D(0.5f, 0.5f));	
 	sprite.textureIndex = 0;
 	sprite.spriteIndex = 0;
+	colliderScale = sprite.GetScale() * 0.35f;
+
 }
 
 
@@ -34,7 +36,7 @@ void BaseBullet::Update(float deltaTime)
 void BaseBullet::Render(Renderer* const renderer)
 {
 	renderer->Render(position, sprite);
-	//renderer->RenderQuad(position, sprite.GetScale(), Color(1.0f, 1.0f, 1.0f, 1.0f), Color());
+	renderer->RenderQuad(position + colliderScale, colliderScale, Color(1.0f, 1.0f, 1.0f, 1.0f), Color());
 }
 
 LightBullet::LightBullet(FG::Sprite sprite)
@@ -42,6 +44,7 @@ LightBullet::LightBullet(FG::Sprite sprite)
 	rotatingBullet = false;
 	this->sprite = sprite;
 	collidesWith = EntityLayers::GetEntityMask<BaseEnemy, Player>();
+	colliderScale = this->sprite.GetScale() * 0.35f;
 }
 
 void LightBullet::Update(float deltaTime)
@@ -53,7 +56,7 @@ void LightBullet::Update(float deltaTime)
 		FG::EntityManager::Instance()->RemoveEntity(this);
 	}
 	auto instance = CollisionSystem::GetInstance();
-	instance->RegisterCollider(position, sprite.GetScale(), this, layer, true);
+	instance->RegisterCollider(position + colliderScale * 0.5f, colliderScale, this, layer, true);
 }
 
 void LightBullet::Start(const FG::Vector2D position, const FG::Vector2D direction, float speed, uint64_t collidesWith)
@@ -97,6 +100,7 @@ DarkBullet::DarkBullet(FG::Sprite sprite)
 
 	this->sprite = sprite;
 	collidesWith = EntityLayers::GetEntityMask<BaseEnemy, Player>();
+	colliderScale = this->sprite.GetScale() * 0.35f;
 }
 
 void DarkBullet::Update(float deltaTime)
@@ -109,7 +113,7 @@ void DarkBullet::Update(float deltaTime)
 		FG::EntityManager::Instance()->RemoveEntity(this);
 	}
 	auto instance = CollisionSystem::GetInstance();
-	instance->RegisterCollider(position, sprite.GetScale(), this, layer, true);
+	instance->RegisterCollider(position + colliderScale * 0.5f, colliderScale, this, layer, true);
 }
 
 void DarkBullet::Start(const FG::Vector2D position, const FG::Vector2D direction, float speed, uint64_t collidesWith)

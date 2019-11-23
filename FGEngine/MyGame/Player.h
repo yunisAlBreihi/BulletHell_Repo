@@ -30,7 +30,7 @@ public:
 	Player(FG::Sprite lightSprite, FG::Sprite darkSprite);
 	~Player() {}
 	void Init();
-	void Start(FG::Vector2D startPos);
+	void Start(FG::Vector2D startPos, int index);
 	void Update(float deltaTime) override;
 	void Render(Renderer* const renderer) override;
 	void Shoot(float deltaTime);
@@ -42,13 +42,12 @@ public:
 	}
 
 private:
-	FG::InputManager* inputManager = nullptr;
 	void SwapMode();
 	void MovePlayer(float deltaTime);
 
 	FG::Sprite lightSprite, darkSprite, currentSprite;
 	FG::Vector2D position;
-
+	int index;
 	int accumulateCharge;
 
 
