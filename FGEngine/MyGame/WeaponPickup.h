@@ -4,6 +4,7 @@
 
 class WeaponPickup : public FG::Entity
 {
+public:
 	WeaponPickup(FG::Sprite sprite);
 	~WeaponPickup() {}
 
@@ -11,7 +12,8 @@ class WeaponPickup : public FG::Entity
 	void Update(float deltaTime) override;
 	void Render(Renderer* const renderer) override;
 	void OnCollision(Entity* other) override;
-
+private:
 	FG::Sprite sprite;
 	FG::Vector2D position;
+	float timeToLive;
 };
