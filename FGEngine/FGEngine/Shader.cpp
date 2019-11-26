@@ -181,7 +181,7 @@ void Shader::LoadShaders(const char* vsFilename, const char* fsFilename, const c
 	CheckCompileErrors(fs, FRAGMENT);
 
 	glCompileShader(gs);
-	CheckCompileErrors(fs, ShaderType::TESS);
+	CheckCompileErrors(gs, GEOMETRY);
 
 
 	handle = glCreateProgram();

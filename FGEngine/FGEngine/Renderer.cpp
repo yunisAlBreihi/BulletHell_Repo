@@ -64,11 +64,25 @@ public:
 
 struct TextVertex
 {
-	TextVertex(float x, float y, float sx, float sy, float id): x(x), y(y), sx(sx), sy(sy), i(id) { }
-	float x = 0, y = 0, sx = 0, sy = 0, i = 0;
+	TextVertex(float x, float y, float fontSize, float font): x(x), y(y), fontSize(fontSize), font(font) { }
+	float x = 0;
+	float y = 0;
+	float fontSize = 0;
+	float font = 0;
 
 	static VAO vao;
+
+	TextVertex()
+	{
+		if (vao.vaoStructure.size() == 0)
+		{
+			vao.AddInfo(VAOInfo(0, 4, NULL));
+		}
+	}
+
 };
+
+VAO TextVertex::vao = VAO();
 
 struct QuadVertex
 {
@@ -227,15 +241,20 @@ public:
 		quadVertices.emplace_back(vertex);
 	}
 
-	void RenderText(const FG::Vector2D& position, const int textSize, const std::string& text)
+	static int counter;
+
+	void RenderText(const FG::Vector2D& position, const uint32_t font, const std::string& text)
 	{
-		//for each character get character information
 		for (int i = 0; i < text.size(); i++)
 		{
-			int index = 0;
-			float characterYPos = 0;
-			float characterXPos = 0;
-			textVertices.push_back(TextVertex(position.x + i + characterYPos, position.y + characterYPos, textSize, textSize, index));
+			TextVertex vertex;
+			vertex.x = position.x + i;
+			vertex.y = position.y;
+			vertex.font = (int)text[i];
+
+			vertex.fontSize = 1;
+
+			textVertices.push_back(vertex);
 		}
 	}
 
@@ -312,19 +331,48 @@ public:
 			AddBatch(lineBatch);
 		}
 
+		if (textVertices.size() > 0)
+		{
+			if (!textVBO.Initialized())
+			{
+				textVBO.Init(textVertices.data(), (GLuint)textVertices.size(), (GLuint)sizeof(TextVertex), TextVertex::vao);
+				textBatch.vao = textVBO.Vao();
+				textBatch.vbo = textVBO.Vbo();
+				textBatch.shaderHandle = textShader.handle;
+			}
+			else
+			{
+				textVBO.BufferData(textVertices.data(), (GLuint)textVertices.size());
+			}
+			textBatch.count = textVertices.size();
+			AddBatch(textBatch);
+		}
+
 		for (auto batch : batches)
 		{
 			glUseProgram(batch.shaderHandle);
-			unsigned int loc = glGetUniformLocation(batch.shaderHandle, "vp");
+			auto loc = glGetUniformLocation(batch.shaderHandle, "vp");
 			glUniformMatrix4fv(loc, 1, GL_FALSE, camera->GetVP().c);
 
-			glActiveTexture(GL_TEXTURE0);
-			glBindTexture(GL_TEXTURE_2D_ARRAY, 1);
+
+			loc = glGetUniformLocation(batch.shaderHandle, "texArray");
+			if (loc != -1)
+			{
+				glActiveTexture(GL_TEXTURE0);
+				glBindTexture(GL_TEXTURE_2D_ARRAY, 2);
+				glUniform1i(loc, 0);
+			}
+
 			loc = glGetUniformLocation(batch.shaderHandle, "textureArray");
-			glUniform1i(loc, 0);
+			if (loc != -1)
+			{
+				glActiveTexture(GL_TEXTURE0+1);
+				glBindTexture(GL_TEXTURE_2D_ARRAY, 1);
+				glUniform1i(loc, 1);
+			}
 
 			loc = glGetUniformLocation(batch.shaderHandle, "tilemapDataArray");
-			if (loc != 0)
+			if (loc != -1)
 			{
 				int count = 0;
 				float* data = Texture2DHandler::getTextureArrayData(count);
@@ -351,14 +399,19 @@ private:
 	Batch batch;
 	Batch quadBatch;
 	Batch lineBatch;
+	Batch textBatch;
 	VBO vbo;
 	VBO quadVBO;
 	VBO lineVBO;
+	VBO textVBO;
 
 	Shader quadShader;
 	Shader shader;
 	Shader lineShader;
+	Shader textShader;
 };
+
+int RenderImpl::counter = 0;
 
 RenderImpl::~RenderImpl()
 {
@@ -385,6 +438,7 @@ RenderImpl::RenderImpl(SDL_Window* window)
 
 	lineVBO = VBO();
 	quadVBO = VBO();
+	textVBO = VBO();
 	vbo = VBO();
 	SDL_GL_SetSwapInterval(0);
 	//glEnable(GL_DEPTH_TEST);
@@ -396,6 +450,7 @@ RenderImpl::RenderImpl(SDL_Window* window)
 	shader.LoadShaders("..//Shader//sprite.vert", "..//Shader//sprite.frag", "..//Shader//sprite.geo");
 	quadShader.LoadShaders("..//Shader//rect.vert", "..//Shader//rect.frag", "..//Shader//rect.geo");
 	lineShader.LoadShaders("..//Shader//line.vert", "..//Shader//line.frag", "..//Shader//line.geo");
+	textShader.LoadShaders("..//Shader//text.vert", "..//Shader//text.frag", "..//Shader//text.geo");
 }
 
 Renderer::Renderer(SDL_Window* window)
@@ -428,9 +483,9 @@ void Renderer::RenderQuad(const FG::Vector2D& position, const FG::Vector2D& size
 	renderImpl->RenderQuad(position, size, fillColor, borderColor);
 }
 
-void Renderer::RenderText(const FG::Vector2D& position, const int textSize, const std::string& text)
+void Renderer::RenderText(const FG::Vector2D& position, const uint32_t font, const std::string& text)
 {
-	renderImpl->RenderText(position, textSize, text);
+	renderImpl->RenderText(position, font, text);
 }
 
 void Renderer::RenderLine(const FG::Vector2D& a, const FG::Vector2D& b, const float3& color, const float& size)

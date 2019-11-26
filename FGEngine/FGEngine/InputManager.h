@@ -22,7 +22,7 @@ namespace FG
 		int axis[NUM_GAMEPAD_AXES];
 	};
 
-	static class InputManager
+	class InputManager
 	{
 	public:
 		static Vector2D mousePosition;

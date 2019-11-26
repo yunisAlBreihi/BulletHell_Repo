@@ -68,8 +68,7 @@ void Player::Render(Renderer* const camera)
 {
 	camera->Render(position, currentSprite);
 	camera->RenderQuad(position + (darkSprite.GetScale() * 0.5f), FG::Vector2D(0.05f, 0.05f), Color(0), Color(1.0f, 0.0f, 0.5f, 1.0f));
-
-	//health bar
+	camera->RenderText(FG::Vector2D(2, 2), 0, std::string("HP: ") + std::to_string(health));
 	camera->RenderQuad(FG::Vector2D(0, 0), FG::Vector2D(PLAYER_HEALTH, 0.5f), Color(0.3f, 0.3f, 0.3f, 1.0f), Color(0.3f, 0.3f, 0.3f, 1.0f));
 	camera->RenderQuad(FG::Vector2D(0, 0), FG::Vector2D(0.3f + (1 * health), 0.5f), Color(1.0f, 0.3f, 0.3f, 1.0f), Color(1.0f, 0.3f, 0.3f, 1.0f));
 }

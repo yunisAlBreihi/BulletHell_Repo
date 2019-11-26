@@ -8,7 +8,7 @@
 #include "EnemyDoubleWaveSweep.h"
 #include "Player.h"
 #include "CollisionSystem.h"
-
+#include "FontLoader.h"
 class MyTestScene : public ISceneState
 {
 public:
@@ -27,8 +27,9 @@ private:
 	float DoubleWaveSweepMaxTime = 0.3f;
 	Player* player;
 	float spawnTimer = 0;
+	GLuint font;
 	CollisionSystem* collisionSystemInstance;
-
+	FontLoader loader;
 	template<typename T>
 	void SpawnWaves(float dt, Spawner<T>* spawner, BasicTimer* timer, FG::Vector2D spawnPosition);
 
