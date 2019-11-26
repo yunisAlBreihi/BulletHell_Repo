@@ -359,7 +359,7 @@ public:
 			if (loc != -1)
 			{
 				glActiveTexture(GL_TEXTURE0);
-				glBindTexture(GL_TEXTURE_2D_ARRAY, 2);
+				glBindTexture(GL_TEXTURE_2D_ARRAY, 1);
 				glUniform1i(loc, 0);
 			}
 
@@ -367,7 +367,7 @@ public:
 			if (loc != -1)
 			{
 				glActiveTexture(GL_TEXTURE0+1);
-				glBindTexture(GL_TEXTURE_2D_ARRAY, 1);
+				glBindTexture(GL_TEXTURE_2D_ARRAY, 2);
 				glUniform1i(loc, 1);
 			}
 

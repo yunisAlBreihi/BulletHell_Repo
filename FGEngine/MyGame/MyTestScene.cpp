@@ -14,7 +14,6 @@
 MyTestScene::~MyTestScene()
 {
 	entityManager->Shutdown();
-	loader.UnloadFont(font);
 }
 
 void MyTestScene::OnEnter()
@@ -62,8 +61,8 @@ void MyTestScene::OnEnter()
 	DoubleWaveSweepTimer = BasicTimer(DoubleWaveSweepMaxTime);
 	collisionSystemInstance = CollisionSystem::GetInstance();
 
-	loader.Init();
-	font = loader.LoadFont("..//assets//fonts//cubic.ttf", 12);
+
+
 }
 
 bool MyTestScene::Update(float deltaTime)
