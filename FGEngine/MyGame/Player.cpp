@@ -9,13 +9,14 @@
 #include "Bullet.h"
 #include "EntityManager.h"
 #include "BaseEnemy.h"
+#include "WeaponPickup.h"
 
 Player::Player(FG::Sprite lightSprite, FG::Sprite darkSprite) :
 	lightSprite(lightSprite), darkSprite(darkSprite)
 {	
 	animationTimer = BasicTimer(0.15f);
 	currentSprite = lightSprite;
-	collidesWith = EntityLayers::GetEntityMask<DarkBullet, LightBullet>();
+	collidesWith = EntityLayers::GetEntityMask<DarkBullet, LightBullet, WeaponPickup>();
 }
 
 void Player::Init()

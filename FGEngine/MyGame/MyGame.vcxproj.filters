@@ -22,9 +22,6 @@
     <ClCompile Include="Spawner.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="StartMenu.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="StartMenuState.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -53,9 +50,6 @@
       <Filter>Include</Filter>
     </ClInclude>
     <ClInclude Include="Spawner.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="StartMenu.h">
       <Filter>Include</Filter>
     </ClInclude>
     <ClInclude Include="StartMenuState.h">

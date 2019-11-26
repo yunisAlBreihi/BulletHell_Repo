@@ -32,8 +32,10 @@ void BurstLightWeapon::Shoot(const FG::Vector2D& startPos, const FG::Vector2D& d
 
 void LazerLightWeapon::Shoot(const FG::Vector2D& startPos, const FG::Vector2D& dir, const uint64_t collidesWith)
 {
+
 }
 
 void LazerDarkWeapon::Shoot(const FG::Vector2D& startPos, const FG::Vector2D& dir, const uint64_t collidesWith)
 {
+
 }
