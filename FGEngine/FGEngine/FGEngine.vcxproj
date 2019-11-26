@@ -64,7 +64,7 @@
       <PreprocessorDefinitions>SDL_MAIN_HANDLED;WIN32_LEAN_AND_MEAN;SDL_STBIMAGE_IMPLEMENTATION;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)thirdParty\SDL2\include\;$(SolutionDir)thirdParty\stb\;$(SolutionDir)thirdParty\gl\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)thirdParty\SDL2\include\;$(SolutionDir)thirdParty\stb\;$(SolutionDir)thirdParty\gl\include\;$(SolutionDir)thirdParty\freetype\include\;$(SolutionDir)thirdParty\freetype\include\freetype;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>26451;6262;6011;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
@@ -72,8 +72,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>SDL2_d.lib;glew32d.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)thirdParty\SDL2\libs\;$(SolutionDir)thirdParty\gl\libs\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2_d.lib;glew32d.lib;opengl32.lib;%(AdditionalDependencies);freetype.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)thirdParty\SDL2\libs\;$(SolutionDir)thirdParty\gl\libs\;$(SolutionDir)thirdParty\freetype\libs\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -88,7 +88,7 @@
       <PreprocessorDefinitions>SDL_MAIN_HANDLED;WIN32_LEAN_AND_MEAN;SDL_STBIMAGE_IMPLEMENTATION;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)thirdParty\SDL2\include\;$(SolutionDir)thirdParty\stb\;$(SolutionDir)thirdParty\gl\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)thirdParty\SDL2\include\;$(SolutionDir)thirdParty\stb\;$(SolutionDir)thirdParty\gl\include\;$(SolutionDir)thirdParty\freetype\include\;$(SolutionDir)thirdParty\freetype\include\freetype;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -97,8 +97,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>SDL2.lib;glew32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)thirdParty\SDL2\libs\;$(SolutionDir)thirdParty\gl\libs\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;glew32.lib;opengl32.lib;%(AdditionalDependencies);freetype.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)thirdParty\SDL2\libs\;$(SolutionDir)thirdParty\gl\libs\;$(SolutionDir)thirdParty\freetype\libs\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -108,6 +108,7 @@
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="DrawCurve.cpp" />
     <ClCompile Include="EntityManager.cpp" />
+    <ClCompile Include="FontLoader.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="main.cpp" />
@@ -135,6 +136,8 @@
     <ClInclude Include="EntityType.h" />
     <ClInclude Include="float3.h" />
     <ClInclude Include="float4.h" />
+    <ClInclude Include="Font.h" />
+    <ClInclude Include="FontLoader.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Intevals.h" />
     <ClInclude Include="IResource.h" />
