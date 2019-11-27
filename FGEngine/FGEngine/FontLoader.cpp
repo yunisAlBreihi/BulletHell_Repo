@@ -46,8 +46,8 @@ GLuint FontLoader::LoadFont(const char* fileName, GLuint fontSize)
 		face,    /* handle to face object           */
 		0,       /* char_width in 1/64th of points  */
 		fontSize * 64,   /* char_height in 1/64th of points */
-		1344,     /* horizontal device resolution    */
-		756);   /* vertical device resolution      */
+		1920,     /* horizontal device resolution    */
+		1080);   /* vertical device resolution      */
 
 	error = FT_Set_Pixel_Sizes(
 		face,   /* handle to face object */

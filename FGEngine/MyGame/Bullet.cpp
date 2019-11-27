@@ -36,7 +36,7 @@ void BaseBullet::Update(float deltaTime)
 void BaseBullet::Render(Renderer* const renderer)
 {
 	renderer->Render(position, sprite);
-	renderer->RenderQuad(position + colliderScale, colliderScale, Color(1.0f, 1.0f, 1.0f, 1.0f), Color());
+	//renderer->RenderQuad(position + colliderScale, colliderScale, Color(1.0f, 1.0f, 1.0f, 1.0f), Color());
 }
 
 LightBullet::LightBullet(FG::Sprite sprite)

@@ -6,7 +6,7 @@
 #include "EnemyTypes.h"
 #include "EnemySpawnManager.h"
 #include "CollisionSystem.h"
-
+#include "WeaponPickup.h"
 GameState::~GameState()
 {
 	if (entityManager)
@@ -50,6 +50,8 @@ void GameState::OnEnter()
 	entityManager->InitializeEntityArray<EnemyForwardDWaveL>(20, FG::Vector2D(0, 0), enemy01SpriteL, BaseEnemy::ShootForward, BaseEnemy::MoveDoubleWave, BaseEnemy::Light);
 	entityManager->InitializeEntityArray<EnemyForwardDWaveD>(20, FG::Vector2D(0, 0), enemy01SpriteD, BaseEnemy::ShootForward, BaseEnemy::MoveDoubleWave, BaseEnemy::Dark);
 
+	entityManager->InitializeEntityArray<WeaponPickup>(100, enemy01SpriteD);
+
 	entityManager->InitializeEntityArray<EnemyTripleCircularL>(20, FG::Vector2D(0, 0), enemy02SpriteL, BaseEnemy::ShootTriple, BaseEnemy::MoveCircular, BaseEnemy::Light);
 	entityManager->InitializeEntityArray<EnemyTripleCircularD>(20, FG::Vector2D(0, 0), enemy02SpriteD, BaseEnemy::ShootTriple, BaseEnemy::MoveCircular, BaseEnemy::Dark);
 	entityManager->InitializeEntityArray<EnemyTripleCircularB>(20, FG::Vector2D(0, 0), enemy02SpriteL, BaseEnemy::ShootTriple, BaseEnemy::MoveCircular, BaseEnemy::Both);
@@ -69,6 +71,7 @@ void GameState::OnEnter()
 	entityManager->InitializeEntityArray<EnemyWaveStraightD>(20, FG::Vector2D(0, 0), enemy06SpriteD, BaseEnemy::ShootWave, BaseEnemy::MoveStraight, BaseEnemy::Dark);
 
 	player = entityManager->CreateEntity<Player>(FG::Vector2D(1, 1), 0);
+	entityManager->CreateEntity<WeaponPickup>(FG::Vector2D(1.0f, 3.0f));
 
 	enemySpawnManager = new EnemySpawnManager();
 

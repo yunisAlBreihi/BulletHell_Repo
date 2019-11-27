@@ -7,7 +7,9 @@
 #include <SDL_render.h>
 #include <cmath>
 #include "CollisionSystem.h"
-
+#include "BasicRandom.h"
+#include "float3.h"
+#include "WeaponPickup.h"
 BaseEnemy::BaseEnemy(FG::Vector2D position, FG::Sprite sprite, BulletSpreadType bulletSpreadType, MovementType movementType, BulletColor bulletColor)
 	: sprite(sprite), position(position), bs(bulletSpreadType), mt(movementType), bc(bulletColor)
 {
@@ -49,6 +51,10 @@ void BaseEnemy::Update(float deltaTime)
 	if (health <= 0)
 	{
 		FG::EntityManager::Instance()->RemoveEntity(this);
+		if (BasicRandom::Range(0, 100) > 50)
+		{
+			auto it = FG::EntityManager::Instance()->CreateEntity<WeaponPickup>(position);
+		}
 		return;
 	}
 	Move(deltaTime);
@@ -62,9 +68,6 @@ void BaseEnemy::Render(Renderer* const camera)
 	camera->Render(position, sprite);
 
 	//health bar
-
-
-
 	//TODO: Error handle xScale == 0
 	camera->RenderQuad(position, FG::Vector2D(healthBarWidth, healthBarHeight), Color(0.3f, 0.3f, 0.3f, 1.0f), Color(0.3f, 0.3f, 0.3f, 1.0f));
 	camera->RenderQuad(position, FG::Vector2D(healthBarStepWidth * health, healthBarHeight), Color(1.0f, 0.3f, 0.3f, 1.0f), Color(1.0f, 0.3f, 0.3f, 1.0f));
@@ -366,94 +369,143 @@ void BaseEnemy::Move(float deltaTime)
 	}
 	else
 	{
-		if (curvePosition <= curveSamples)
+		if (curvePosition < animPath.size())
 		{
-			curvePosition += animSpeed * deltaTime;
-			position.x = animPath[0][curvePosition].x;
-			position.y = animPath[0][curvePosition].y;
+			FG::Vector2D temp = animPath[curvePosition] - position;
+			float3 movement = float3(temp.x, temp.y, 0);
+
+			if (movement.x < 0.01f && movement.x > -0.01f && movement.y < 0.01f && movement.y > -0.01f)
+			{
+				curvePosition += 1;
+			}
+			if (movement.x != 0 || movement.y != 0)
+			{
+				movement = float3Util::normalize(movement);
+				movement *= deltaTime;
+				position.x += movement.x * 2.0f;
+				position.y += movement.y * 2.0f;
+			}
 		}
-		else if ((curvePosition >= curveSamples))
+		else
 		{
 			position.x += animSpeed * deltaTime * curveDirection;
 		}
 	}
-	if (position.x < 0.0f || position.x>30.0f)
+	if (position.x < 0.0f || position.x > 30.0f)
 	{
 		FG::EntityManager::Instance()->RemoveEntity(this);
 	}
 }
 
+const static int samples = 10;
 void BaseEnemy::CreateSweepAnimation()
 {
-	int currentPath = 0;
-	FG::BezierPath* path = new FG::BezierPath();
-	path->AddCurve({ FG::Vector2D(position.x,position.y - 2.0f),FG::Vector2D(position.x - 4.0f,position.y - 2.0f),FG::Vector2D(position.x - 8.0f, position.y - 2.0f), FG::Vector2D(position.x - 12.0f,position.y - 2.0f) }, 100);
-	path->AddCurve({ FG::Vector2D(position.x - 12.0f,position.y - 2.0f),FG::Vector2D(position.x - 18.0f,position.y - 2.0f),FG::Vector2D(position.x - 18.0f, position.y + 2.0f), FG::Vector2D(position.x - 12.0f,position.y + 2.0f) }, 130);
-	path->AddCurve({ FG::Vector2D(position.x - 12.0f,position.y + 2.0f),FG::Vector2D(position.x - 8.0f,position.y + 2.0f),FG::Vector2D(position.x - 4.0f, position.y + 2.0f), FG::Vector2D(position.x,position.y + 2.0f) }, 100);
 
-	animPath.push_back(std::vector<FG::Vector2D>());
-	path->Sample(&animPath[currentPath]);
-	delete path;
+	int currentPath = 0;
+	FG::BezierPath path = FG::BezierPath();
+	path.AddCurve({ 
+		FG::Vector2D(position.x,position.y - 2.0f),
+		FG::Vector2D(position.x - 4.0f,position.y - 2.0f),
+		FG::Vector2D(position.x - 8.0f, position.y - 2.0f), 
+		FG::Vector2D(position.x - 12.0f,position.y - 2.0f) }, samples);
+	path.AddCurve({ 
+		FG::Vector2D(position.x - 12.0f,position.y - 2.0f),
+		FG::Vector2D(position.x - 18.0f,position.y - 2.0f),
+		FG::Vector2D(position.x - 18.0f, position.y + 2.0f), 
+		FG::Vector2D(position.x - 12.0f,position.y + 2.0f) }, samples + 30);
+	path.AddCurve({ 
+		FG::Vector2D(position.x - 12.0f,position.y + 2.0f),
+		FG::Vector2D(position.x - 8.0f,position.y + 2.0f),
+		FG::Vector2D(position.x - 4.0f, position.y + 2.0f), 
+		FG::Vector2D(position.x,position.y + 2.0f) }, samples);
+
+	path.Sample(&animPath);
 
 	//Sets which direction the enemy is moving after its done following the curve
 	curveDirection = 1;
-	//This needs to be the same as the sum of samples on the AddCurve functions
-	curveSamples = 330;
 }
 
 void BaseEnemy::CreateCircularAnimation()
 {
 	int currentPath = 0;
-	FG::BezierPath* path = new FG::BezierPath();
+	FG::BezierPath path;
 
-	path->AddCurve({ FG::Vector2D(position.x,position.y),FG::Vector2D(position.x - 4.0f,position.y),FG::Vector2D(position.x - 8.0f, position.y), FG::Vector2D(position.x - 12.0f, position.y) }, 100);
-	path->AddCurve({ FG::Vector2D(position.x - 12.0f,position.y),FG::Vector2D(position.x - 13.5f,position.y),FG::Vector2D(position.x - 15.0f, position.y - 1.5f), FG::Vector2D(position.x - 15.0f, position.y - 3.0f) }, 43);
-	path->AddCurve({ FG::Vector2D(position.x - 15.0f,position.y - 3.0f),FG::Vector2D(position.x - 15.0f,position.y - 4.5f),FG::Vector2D(position.x - 13.5f, position.y - 6.0f), FG::Vector2D(position.x - 12.0f, position.y - 6.0f) }, 43);
-	path->AddCurve({ FG::Vector2D(position.x - 12.0f, position.y - 6.0f),FG::Vector2D(position.x - 10.5f,position.y - 6.0f),FG::Vector2D(position.x - 9.0f, position.y - 4.5f), FG::Vector2D(position.x - 9.0f, position.y - 3.0f) }, 43);
-	path->AddCurve({ FG::Vector2D(position.x - 9.0f, position.y - 3.0f),FG::Vector2D(position.x - 9.0f,position.y - 1.5f),FG::Vector2D(position.x - 10.5f, position.y), FG::Vector2D(position.x - 12.0f, position.y) }, 43);
-	path->AddCurve({ FG::Vector2D(position.x - 12.0f, position.y),FG::Vector2D(position.x - 16.0f,position.y),FG::Vector2D(position.x - 20.0f, position.y), FG::Vector2D(position.x - 24.0f, position.y) }, 100);
+	// we can probably reuse these?
+	// scale it to what our needs are
+	// 
 
-	animPath.push_back(std::vector<FG::Vector2D>());
-	path->Sample(&animPath[currentPath]);
-	delete path;
+	path.AddCurve({ 
+		FG::Vector2D(position.x,position.y),
+		FG::Vector2D(position.x - 4.0f,position.y)
+		,FG::Vector2D(position.x - 8.0f, position.y), 
+		FG::Vector2D(position.x - 12.0f, position.y) }, samples);
+	path.AddCurve({
+		FG::Vector2D(position.x - 12.0f,position.y),
+		FG::Vector2D(position.x - 13.5f,position.y),
+		FG::Vector2D(position.x - 15.0f, position.y - 1.5f), 
+		FG::Vector2D(position.x - 15.0f, position.y - 3.0f) }, samples);
+	path.AddCurve({ 
+		FG::Vector2D(position.x - 15.0f,position.y - 3.0f),
+		FG::Vector2D(position.x - 15.0f,position.y - 4.5f),
+		FG::Vector2D(position.x - 13.5f, position.y - 6.0f), 
+		FG::Vector2D(position.x - 12.0f, position.y - 6.0f) }, samples);
+	path.AddCurve({ 
+		FG::Vector2D(position.x - 12.0f, position.y - 6.0f),
+		FG::Vector2D(position.x - 10.5f,position.y - 6.0f),
+		FG::Vector2D(position.x - 9.0f, position.y - 4.5f), 
+		FG::Vector2D(position.x - 9.0f, position.y - 3.0f) }, samples);
+	path.AddCurve({ 
+		FG::Vector2D(position.x - 9.0f, position.y - 3.0f),
+		FG::Vector2D(position.x - 9.0f,position.y - 1.5f),
+		FG::Vector2D(position.x - 10.5f, position.y), 
+		FG::Vector2D(position.x - 12.0f, position.y) }, samples);
+	path.AddCurve({ 
+		FG::Vector2D(position.x - 12.0f, position.y),
+		FG::Vector2D(position.x - 16.0f,position.y),
+		FG::Vector2D(position.x - 20.0f, position.y), 
+		FG::Vector2D(position.x - 24.0f, position.y) }, samples);
+
+	path.Sample(&animPath);
 
 	//Sets which direction the enemy is moving after its done following the curve
 	curveDirection = -1;
-	//This needs to be the same as the sum of samples on the AddCurve functions
-	curveSamples = 372;
 }
 
 void BaseEnemy::CreateWaveAnimation()
 {
 	int currentPath = 0;
-	FG::BezierPath* path = new FG::BezierPath();
+	FG::BezierPath path = FG::BezierPath();
 
-	path->AddCurve({ FG::Vector2D(position.x,position.y),FG::Vector2D(position.x - 12.0f,position.y - 10.0f),FG::Vector2D(position.x - 12.0f, position.y + 10.0f), FG::Vector2D(position.x - 24.0f, position.y) }, 200);
-
-	animPath.push_back(std::vector<FG::Vector2D>());
-	path->Sample(&animPath[currentPath]);
-	delete path;
+	path.AddCurve({ 
+		FG::Vector2D(position.x,position.y),
+		FG::Vector2D(position.x - 12.0f,position.y - 10.0f),
+		FG::Vector2D(position.x - 12.0f, position.y + 10.0f), 
+		FG::Vector2D(position.x - 24.0f, position.y) }, samples);
+	path.Sample(&animPath);
 
 	//Sets which direction the enemy is moving after its done following the curve
 	curveDirection = -1;
-	//This needs to be the same as the sum of samples on the AddCurve functions
-	curveSamples = 200;
 }
 
 void BaseEnemy::CreateDoubleWaveAnimation()
 {
 	int currentPath = 0;
-	FG::BezierPath* path = new FG::BezierPath();
+	FG::BezierPath path = FG::BezierPath();
 
-	path->AddCurve({ FG::Vector2D(position.x,position.y),FG::Vector2D(position.x - 6.0f,position.y - 10.0f),FG::Vector2D(position.x - 6.0f, position.y + 10.0f), FG::Vector2D(position.x - 12.0f, position.y) }, 400);
-	path->AddCurve({ FG::Vector2D(position.x - 12.0f,position.y),FG::Vector2D(position.x - 18.0f,position.y - 10.0f),FG::Vector2D(position.x - 18.0f, position.y + 10.0f), FG::Vector2D(position.x - 24.0f, position.y) }, 400);
 
-	animPath.push_back(std::vector<FG::Vector2D>());
-	path->Sample(&animPath[currentPath]);
-	delete path;
+	path.AddCurve({ 
+		FG::Vector2D(position.x,position.y),
+		FG::Vector2D(position.x - 6.0f,position.y - 10.0f),
+		FG::Vector2D(position.x - 6.0f, position.y + 10.0f), 
+		FG::Vector2D(position.x - 12.0f, position.y) }, samples);
+	path.AddCurve({ 
+		FG::Vector2D(position.x - 12.0f,position.y),
+		FG::Vector2D(position.x - 18.0f,position.y - 10.0f),
+		FG::Vector2D(position.x - 18.0f, position.y + 10.0f), 
+		FG::Vector2D(position.x - 24.0f, position.y) }, samples);
+
+	path.Sample(&animPath);
 
 	//Sets which direction the enemy is moving after its done following the curve
 	curveDirection = -1;
-	//This needs to be the same as the sum of samples on the AddCurve functions
-	curveSamples = 800;
 }

@@ -14,12 +14,7 @@ namespace FG
 		std::vector<int> mSamples;
 
 	public:
-
-		BezierPath();
-		~BezierPath();
-
 		void AddCurve(BezierCurve curve, int samples);
-
 		void Sample(std::vector<Vector2D>* samplePath);
 	};
 }

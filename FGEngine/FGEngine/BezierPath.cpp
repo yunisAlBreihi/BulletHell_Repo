@@ -2,15 +2,6 @@
 
 namespace FG
 {
-	BezierPath::BezierPath()
-	{
-
-	}
-
-	BezierPath::~BezierPath()
-	{
-
-	}
 
 	void BezierPath::AddCurve(BezierCurve curve, int samples)
 	{
@@ -28,4 +19,5 @@ namespace FG
 			}
 		}
 	}
+
 }

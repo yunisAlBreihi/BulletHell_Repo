@@ -36,7 +36,7 @@ bool GameApplication::Initialize()
 	FG::InputManager::Initialize();
 	renderer = std::make_unique<Renderer>(window->GetInternalWindow());
 	loader.Init();
-	loader.LoadFont("..//assets//fonts//cubic.ttf", 12);
+	loader.LoadFont("..//assets//fonts//testFont.ttf", 12);
 	sceneStateMachine = new SceneStateMachine(new MyTestScene());
 	return true;
 }

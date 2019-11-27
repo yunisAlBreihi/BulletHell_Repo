@@ -43,7 +43,7 @@ public:
 	FG::Vector2D position;
 
 	//for curve animations
-	std::vector<std::vector<FG::Vector2D>> animPath;
+	std::vector<FG::Vector2D> animPath;
 	int curveSamples = 0;
 	int curveDirection = 0;
 	int animSpeed = 25;
