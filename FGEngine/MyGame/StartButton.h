@@ -4,27 +4,19 @@
 #include "Sprite.h"
 #include "Renderer.h"
 
-namespace FG
-{
-	class window;
-	class Sprite;
-	class Renderer;
-}
+
 class StartButton : public FG::Entity
 {
 public:
-	StartButton(FG::Sprite sprite, FG::Vector2D position);
+	StartButton(FG::Sprite sprite);
 	~StartButton(){}
 
-
-	void Start(FG::Vector2D startPos);
+	void Start(FG::Vector2D startPos, int index);
 	void Update(float deltaTime) override;
 	void Render(Renderer* renderer) override;
 	
 	FG::Sprite sprite;
 	FG::Vector2D position;
-private:
-	FG::Vector2D centerPos;
 
 };
 

@@ -1,27 +1,17 @@
 #include "StartButton.h"
-#include "Sprite.h"
-#include "Vector2D.h"
-#include "Camera.h"
-#include "EntityManager.h"
-#include <SDL_render.h>
 
-StartButton::StartButton(FG::Sprite sprite, FG::Vector2D position) : sprite(sprite), position(position)
+StartButton::StartButton(FG::Sprite sprite) : sprite(sprite)
 {
-
 }
 
-void StartButton::Start(FG::Vector2D startPos)
+void StartButton::Start(FG::Vector2D startPos, int index)
 {
-
-	Entity::Start();
 }
 
 void StartButton::Update(float deltaTime)
 {
-
 }
 
 void StartButton::Render(Renderer* renderer)
 {
-	renderer->Render(position, sprite);
 }

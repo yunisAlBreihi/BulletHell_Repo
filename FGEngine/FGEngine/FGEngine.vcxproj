@@ -109,6 +109,7 @@
     <ClCompile Include="DrawCurve.cpp" />
     <ClCompile Include="EntityManager.cpp" />
     <ClCompile Include="FontLoader.cpp" />
+    <ClCompile Include="HighScore.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="main.cpp" />
@@ -138,6 +139,7 @@
     <ClInclude Include="float4.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="FontLoader.h" />
+    <ClInclude Include="HighScore.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Intevals.h" />
     <ClInclude Include="IResource.h" />

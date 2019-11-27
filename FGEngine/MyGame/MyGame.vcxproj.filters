@@ -37,7 +37,6 @@
     <ClCompile Include="MyTestScene.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="WeaponPickup.cpp" />
     <ClCompile Include="EnemySpawnParameters.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -45,6 +44,9 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="StartButton.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="WeaponPickup.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>

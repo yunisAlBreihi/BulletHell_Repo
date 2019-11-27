@@ -47,7 +47,7 @@ void MyTestScene::OnEnter()
 	entityManager->InitializeEntityArray<Destroyer>(4, destroyerSpriteLight, destroyerSpriteDark);
 	player = entityManager->CreateEntity<Player>(FG::Vector2D(2, 1), 0);
 
-	entityManager->CreateEntity<Player>(FG::Vector2D(5, 1), 1);
+	//entityManager->CreateEntity<Player>(FG::Vector2D(5, 1), 1);
 
 	//EnemyTripleCircular* enemy03 = entityManager->CreateEntity<EnemyTripleCircular>(FG::Vector2D(20.0f, 5.0f));
 	//EnemyDoubleWaveSweep* enemy04 = entityManager->CreateEntity<EnemyDoubleWaveSweep>(FG::Vector2D(20.0f, 7.0f));
@@ -75,7 +75,7 @@ bool MyTestScene::Update(float deltaTime)
 	{
 		return false;
 	}
-	return false;
+	return true;
 }
 
 
