@@ -24,6 +24,7 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerWeapon.cpp" />
     <ClCompile Include="Spawner.cpp" />
+    <ClCompile Include="StartButton.cpp" />
     <ClCompile Include="StartMenuState.cpp" />
     <ClCompile Include="WeaponPickup.cpp" />
   </ItemGroup>
@@ -42,6 +43,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerWeapon.h" />
     <ClInclude Include="Spawner.h" />
+    <ClInclude Include="StartButton.h" />
     <ClInclude Include="StartMenuState.h" />
     <ClInclude Include="WeaponPickup.h" />
   </ItemGroup>

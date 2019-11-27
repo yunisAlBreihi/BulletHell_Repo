@@ -74,7 +74,7 @@ bool MyTestScene::Update(float deltaTime)
 	{
 		return false;
 	}
-	return true;
+	return false;
 }
 
 
