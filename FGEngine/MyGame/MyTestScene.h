@@ -27,6 +27,7 @@ private:
 	float DoubleWaveSweepMaxTime = 0.3f;
 	Player* player;
 	float spawnTimer = 0;
+
 	CollisionSystem* collisionSystemInstance;
 
 	template<typename T>

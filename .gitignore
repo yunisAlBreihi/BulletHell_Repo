@@ -328,3 +328,4 @@ ASALocalRun/
 .mfractor/
 FGEngine/builds/game/Assets/images/projectile.kra
 *.kra
+*.ipch

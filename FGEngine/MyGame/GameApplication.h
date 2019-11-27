@@ -3,7 +3,8 @@
 #include <Application.h>
 #include <Time.h>
 #include <memory>
-
+#include "FontLoader.h"
+#include "Font.h"
 namespace FG
 {
 	class Window;
@@ -20,7 +21,8 @@ public:
 	virtual void Shutdown() override;
 
 private:
-
+	FontLoader loader;
+	GLuint font;
 	FG::Window* window = nullptr;
 	std::unique_ptr<Renderer> renderer;
 	FG::Time time;

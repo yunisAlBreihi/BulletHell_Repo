@@ -17,6 +17,7 @@ public:
 		FRAGMENT,
 		TESS,
 		TESSCONTROL,
+		GEOMETRY,
 		PROGRAM
 	};
 	__declspec(dllexport)void DeleteProgram();

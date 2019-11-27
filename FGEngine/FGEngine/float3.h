@@ -72,6 +72,19 @@ struct float3
 		return (*this);
 	}
 
+	inline float3& operator *=(const float& rhs)
+	{
+		x *= rhs;
+		y *= rhs;
+		z *= rhs;
+		return (*this);
+	}
+
+	inline float3 operator*(const float& rhs) const
+	{
+		return float3(x * rhs, y * rhs, z * rhs);
+	}
+
 	inline bool operator==(const float3& rhs) const
 	{
 		return x == rhs.x && y == rhs.y && x == rhs.z;
