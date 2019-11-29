@@ -13,21 +13,17 @@ public:
 
 	~Background();
 
-	void Disable()override;
-	void Start(FG::Vector2D position);
 	void Update(float deltaTime) override;
-	void OnCollision(FG::Entity* other)override;
 
 private:
 	FG::Sprite sprite;
-	FG::Vector2D position;
-	float speed=0.25f;
 
-	//int width{ 0 };
-	//int height{ 0 };
+	FG::Vector2D position;
+
+	int width{ 0 };
+	int height{ 0 };
 
 	void Render(Renderer* const renderer) override;
-	void ImageLoop(float deltaTime);
 
 	
 };
