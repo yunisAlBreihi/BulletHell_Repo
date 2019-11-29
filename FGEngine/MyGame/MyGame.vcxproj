@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Background.cpp" />
+    <ClCompile Include="BezierCurveManager.cpp" />
     <ClCompile Include="CollisionSystem.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="BaseEnemy.cpp" />
@@ -30,6 +31,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Background.h" />
+    <ClInclude Include="BezierCurveManager.h" />
     <ClInclude Include="CollisionSystem.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="BaseEnemy.h" />

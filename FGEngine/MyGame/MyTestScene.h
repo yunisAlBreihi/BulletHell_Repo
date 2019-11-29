@@ -8,6 +8,7 @@
 #include "EnemyDoubleWaveSweep.h"
 #include "Player.h"
 #include "CollisionSystem.h"
+#include "BezierCurveManager.h"
 
 class MyTestScene : public ISceneState
 {
@@ -22,6 +23,7 @@ public:
 
 private:
 	FG::EntityManager* entityManager;
+	BezierCurveManager* bezierCurveManager;
 	BasicTimer DoubleWaveSweepTimer;
 	Spawner<EnemyDoubleWaveSweep> DoubleWaveSweepSpawner;
 	float DoubleWaveSweepMaxTime = 0.3f;

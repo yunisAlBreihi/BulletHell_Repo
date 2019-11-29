@@ -18,6 +18,8 @@ MyTestScene::~MyTestScene()
 
 void MyTestScene::OnEnter()
 {
+	bezierCurveManager = new BezierCurveManager();
+
 	FG::SpriteFactory factory; //TODO: This is probably a mem leak
 	FG::Sprite playerSpriteLight = factory.LoadSprite("..//assets//images//lightning-blue.png", 1, 4, 0);
 	FG::Sprite playerSpriteDark = factory.LoadSprite("..//assets//images//lightning-purple.png", 1, 4, 0);
@@ -40,9 +42,10 @@ void MyTestScene::OnEnter()
 	entityManager->InitializeEntityArray<DarkBullet>(7500, darkBulletSprite);
 	entityManager->InitializeEntityArray<LightBullet>(7500, lightBulletSprite);
 	//Enemy01::Enemy01(FG::Vector2D position, FG::Sprite sprite, FG::Sprite bulletsSprites, BulletSpreadType bulletSpreadType, MovementType movementType)
-	entityManager->InitializeEntityArray<EnemyWaveStraight>(20, FG::Vector2D(0, 0), enemy01Sprite, BaseEnemy::ShootCircle, BaseEnemy::MoveStraight, BaseEnemy::Dark);
-	entityManager->InitializeEntityArray<EnemyTripleCircular>(20, FG::Vector2D(0, 0), enemy01Sprite, BaseEnemy::ShootTriple, BaseEnemy::MoveCircular, BaseEnemy::Light);
-	entityManager->InitializeEntityArray<EnemyDoubleWaveSweep>(20, FG::Vector2D(0, 0), enemy01Sprite, BaseEnemy::ShootDoubleWave, BaseEnemy::MoveSweep, BaseEnemy::Both);
+	entityManager->InitializeEntityArray<EnemyWaveStraight>(20, FG::Vector2D(0, 0), enemy01Sprite, BaseEnemy::ShootCircle, BaseEnemy::MoveStraight, BaseEnemy::Dark, bezierCurveManager);
+	entityManager->InitializeEntityArray<EnemyTripleCircular>(20, FG::Vector2D(0, 0), enemy01Sprite, BaseEnemy::ShootTriple, BaseEnemy::MoveCircular, BaseEnemy::Light, bezierCurveManager);
+	entityManager->InitializeEntityArray<EnemyDoubleWaveSweep>(20, FG::Vector2D(0, 0), enemy01Sprite, BaseEnemy::ShootDoubleWave, BaseEnemy::MoveSweep, BaseEnemy::Both, bezierCurveManager);
+	entityManager->InitializeEntityArray<EnemyDVerticalWaveL>(20, FG::Vector2D(0, 0), enemy01Sprite, BaseEnemy::ShootDoubleVertical, BaseEnemy::MoveWave, BaseEnemy::Light, bezierCurveManager);
 	entityManager->InitializeEntityArray<WeaponPickup>(100, enemy01Sprite);
 	entityManager->InitializeEntityArray<Destroyer>(4, destroyerSpriteLight, destroyerSpriteDark);
 	player = entityManager->CreateEntity<Player>(FG::Vector2D(2, 1), 0);
@@ -55,6 +58,8 @@ void MyTestScene::OnEnter()
 	EnemyWaveStraight* enemy02 = entityManager->CreateEntity<EnemyWaveStraight>(FG::Vector2D(20.0f, 8.0f));
 
 	entityManager->CreateEntity<Destroyer>(FG::Vector2D(10, 5));
+	entityManager->CreateEntity<EnemyDVerticalWaveL>(FG::Vector2D(22.0f, 5.0f));
+
 
 	auto instance = CollisionSystem::GetInstance();
 	instance->Setup(20, 20, 2);

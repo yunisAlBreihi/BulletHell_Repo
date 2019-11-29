@@ -19,6 +19,8 @@ GameState::~GameState()
 
 void GameState::OnEnter()
 {
+	bezierCurveManager = new BezierCurveManager();
+
 	FG::SpriteFactory factory; //TODO: This is probably a mem leak
 	FG::Sprite playerSpriteLight = factory.LoadSprite("..//assets//images//lightning-blue.png", 1, 4, 0);
 	FG::Sprite playerSpriteDark = factory.LoadSprite("..//assets//images//lightning-purple.png", 1, 4, 0);
@@ -47,26 +49,26 @@ void GameState::OnEnter()
 	entityManager->InitializeEntityArray<DarkBullet>(1000, darkBulletSprite);
 	entityManager->InitializeEntityArray<LightBullet>(1000, lightBulletSprite);
 
-	entityManager->InitializeEntityArray<EnemyForwardDWaveL>(20, FG::Vector2D(0, 0), enemy01SpriteL, BaseEnemy::ShootForward, BaseEnemy::MoveDoubleWave, BaseEnemy::Light);
-	entityManager->InitializeEntityArray<EnemyForwardDWaveD>(20, FG::Vector2D(0, 0), enemy01SpriteD, BaseEnemy::ShootForward, BaseEnemy::MoveDoubleWave, BaseEnemy::Dark);
+	entityManager->InitializeEntityArray<EnemyForwardDWaveL>(20, FG::Vector2D(0, 0), enemy01SpriteL, BaseEnemy::ShootForward, BaseEnemy::MoveDoubleWave, BaseEnemy::Light, bezierCurveManager);
+	entityManager->InitializeEntityArray<EnemyForwardDWaveD>(20, FG::Vector2D(0, 0), enemy01SpriteD, BaseEnemy::ShootForward, BaseEnemy::MoveDoubleWave, BaseEnemy::Dark, bezierCurveManager);
 
-	entityManager->InitializeEntityArray<EnemyTripleCircularL>(20, FG::Vector2D(0, 0), enemy02SpriteL, BaseEnemy::ShootTriple, BaseEnemy::MoveCircular, BaseEnemy::Light);
-	entityManager->InitializeEntityArray<EnemyTripleCircularD>(20, FG::Vector2D(0, 0), enemy02SpriteD, BaseEnemy::ShootTriple, BaseEnemy::MoveCircular, BaseEnemy::Dark);
-	entityManager->InitializeEntityArray<EnemyTripleCircularB>(20, FG::Vector2D(0, 0), enemy02SpriteL, BaseEnemy::ShootTriple, BaseEnemy::MoveCircular, BaseEnemy::Both);
+	entityManager->InitializeEntityArray<EnemyTripleCircularL>(20, FG::Vector2D(0, 0), enemy02SpriteL, BaseEnemy::ShootTriple, BaseEnemy::MoveCircular, BaseEnemy::Light, bezierCurveManager);
+	entityManager->InitializeEntityArray<EnemyTripleCircularD>(20, FG::Vector2D(0, 0), enemy02SpriteD, BaseEnemy::ShootTriple, BaseEnemy::MoveCircular, BaseEnemy::Dark, bezierCurveManager);
+	entityManager->InitializeEntityArray<EnemyTripleCircularB>(20, FG::Vector2D(0, 0), enemy02SpriteL, BaseEnemy::ShootTriple, BaseEnemy::MoveCircular, BaseEnemy::Both, bezierCurveManager);
 
-	entityManager->InitializeEntityArray<EnemyDWaveSweepL>(20, FG::Vector2D(0, 0), enemy03SpriteL, BaseEnemy::ShootDoubleWave, BaseEnemy::MoveSweep, BaseEnemy::Light);
-	entityManager->InitializeEntityArray<EnemyDWaveSweepD>(20, FG::Vector2D(0, 0), enemy03SpriteD, BaseEnemy::ShootDoubleWave, BaseEnemy::MoveSweep, BaseEnemy::Dark);
-	entityManager->InitializeEntityArray<EnemyDWaveSweepB>(20, FG::Vector2D(0, 0), enemy03SpriteD, BaseEnemy::ShootDoubleWave, BaseEnemy::MoveSweep, BaseEnemy::Both);
+	entityManager->InitializeEntityArray<EnemyDWaveSweepL>(20, FG::Vector2D(0, 0), enemy03SpriteL, BaseEnemy::ShootDoubleWave, BaseEnemy::MoveSweep, BaseEnemy::Light, bezierCurveManager);
+	entityManager->InitializeEntityArray<EnemyDWaveSweepD>(20, FG::Vector2D(0, 0), enemy03SpriteD, BaseEnemy::ShootDoubleWave, BaseEnemy::MoveSweep, BaseEnemy::Dark, bezierCurveManager);
+	entityManager->InitializeEntityArray<EnemyDWaveSweepB>(20, FG::Vector2D(0, 0), enemy03SpriteD, BaseEnemy::ShootDoubleWave, BaseEnemy::MoveSweep, BaseEnemy::Both, bezierCurveManager);
 
-	entityManager->InitializeEntityArray<EnemyDVerticalWaveL>(20, FG::Vector2D(0, 0), enemy04SpriteL, BaseEnemy::ShootDoubleVertical, BaseEnemy::MoveWave, BaseEnemy::Light);
-	entityManager->InitializeEntityArray<EnemyDVerticalWaveD>(20, FG::Vector2D(0, 0), enemy04SpriteD, BaseEnemy::ShootDoubleVertical, BaseEnemy::MoveWave, BaseEnemy::Dark);
-	entityManager->InitializeEntityArray<EnemyDVerticalWaveB>(20, FG::Vector2D(0, 0), enemy04SpriteL, BaseEnemy::ShootDoubleVertical, BaseEnemy::MoveWave, BaseEnemy::Both);
+	entityManager->InitializeEntityArray<EnemyDVerticalWaveL>(20, FG::Vector2D(0, 0), enemy04SpriteL, BaseEnemy::ShootDoubleVertical, BaseEnemy::MoveWave, BaseEnemy::Light, bezierCurveManager);
+	entityManager->InitializeEntityArray<EnemyDVerticalWaveD>(20, FG::Vector2D(0, 0), enemy04SpriteD, BaseEnemy::ShootDoubleVertical, BaseEnemy::MoveWave, BaseEnemy::Dark, bezierCurveManager);
+	entityManager->InitializeEntityArray<EnemyDVerticalWaveB>(20, FG::Vector2D(0, 0), enemy04SpriteL, BaseEnemy::ShootDoubleVertical, BaseEnemy::MoveWave, BaseEnemy::Both, bezierCurveManager);
 
-	entityManager->InitializeEntityArray<EnemyCircleStraightL>(20, FG::Vector2D(0, 0), enemy05SpriteL, BaseEnemy::ShootCircle, BaseEnemy::MoveStraight, BaseEnemy::Light);
-	entityManager->InitializeEntityArray<EnemyCircleStraightD>(20, FG::Vector2D(0, 0), enemy05SpriteD, BaseEnemy::ShootCircle, BaseEnemy::MoveStraight, BaseEnemy::Dark);
+	entityManager->InitializeEntityArray<EnemyCircleStraightL>(20, FG::Vector2D(0, 0), enemy05SpriteL, BaseEnemy::ShootCircle, BaseEnemy::MoveStraight, BaseEnemy::Light, bezierCurveManager);
+	entityManager->InitializeEntityArray<EnemyCircleStraightD>(20, FG::Vector2D(0, 0), enemy05SpriteD, BaseEnemy::ShootCircle, BaseEnemy::MoveStraight, BaseEnemy::Dark, bezierCurveManager);
 
-	entityManager->InitializeEntityArray<EnemyWaveStraightL>(20, FG::Vector2D(0, 0), enemy06SpriteL, BaseEnemy::ShootWave, BaseEnemy::MoveStraight, BaseEnemy::Light);
-	entityManager->InitializeEntityArray<EnemyWaveStraightD>(20, FG::Vector2D(0, 0), enemy06SpriteD, BaseEnemy::ShootWave, BaseEnemy::MoveStraight, BaseEnemy::Dark);
+	entityManager->InitializeEntityArray<EnemyWaveStraightL>(20, FG::Vector2D(0, 0), enemy06SpriteL, BaseEnemy::ShootWave, BaseEnemy::MoveStraight, BaseEnemy::Light, bezierCurveManager);
+	entityManager->InitializeEntityArray<EnemyWaveStraightD>(20, FG::Vector2D(0, 0), enemy06SpriteD, BaseEnemy::ShootWave, BaseEnemy::MoveStraight, BaseEnemy::Dark, bezierCurveManager);
 
 	player = entityManager->CreateEntity<Player>(FG::Vector2D(1, 1), 0);
 
