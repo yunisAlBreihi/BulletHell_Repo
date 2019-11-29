@@ -2,6 +2,7 @@
 #include "Entity.h"
 #include "Vector2D.h"
 #include "BezierPath.h"
+#include "BezierCurveManager.h"
 
 const float healthBarHeight = 0.15f;
 
@@ -43,19 +44,13 @@ public:
 	FG::Vector2D position;
 
 	//for curve animations
-	std::vector<std::vector<FG::Vector2D>> animPath;
+	std::vector<FG::Vector2D> animPath;
 	int curveSamples = 0;
 	int curveDirection = 0;
 	int animSpeed = 25;
 	float curvePosition = 0;
 
-	//Functions to create animations
-	void CreateSweepAnimation();
-	void CreateCircularAnimation();
-	void CreateWaveAnimation();
-	void CreateDoubleWaveAnimation();
-
-	BaseEnemy(FG::Vector2D position, FG::Sprite sprite, BulletSpreadType bulletSpreadType, MovementType movementType, BulletColor bulletColor);
+	BaseEnemy(FG::Vector2D position, FG::Sprite sprite, BulletSpreadType bulletSpreadType, MovementType movementType, BulletColor bulletColor, BezierCurveManager* curveManager);
 
 	void Start(FG::Vector2D startPos);
 	void Update(float deltaTime) override;
@@ -68,12 +63,16 @@ public:
 	SDL_Color CollidingColor = { 255, 0, 0, 255 };
 
 private:
+	BezierCurveManager* curveManager;
+
 	float orbitSpeed = 1.0f;
 	float orbitRadius = 2.0f;
 	float angle = 1.0f;
 	float timer = 0.2f;
 	float accu = 0.0f;
 	float healthBarStepWidth;
+
+	FG::Vector2D positionOffset;
 
 	float healthBarWidth;
 	const static int MAX_HEALTH = 50;
@@ -93,4 +92,5 @@ private:
 
 	void Shoot(float deltaTime);
 	void Move(float deltaTime);
+	void MovePath(float deltaTime, std::vector<FG::Vector2D> path, int direction);
 };

@@ -8,6 +8,8 @@
 #include "EnemyTypes.h"
 #include "Player.h"
 #include "CollisionSystem.h"
+#include "BezierCurveManager.h"
+
 class GameState : public ISceneState
 {
 public:
@@ -23,6 +25,7 @@ public:
 private:
 	FG::EntityManager* entityManager;
 	EnemySpawnManager* enemySpawnManager;
+	BezierCurveManager* bezierCurveManager;
 	Player* player;
 	CollisionSystem* collisionSystemInstance;
 };

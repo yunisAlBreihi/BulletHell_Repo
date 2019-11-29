@@ -49,6 +49,9 @@
     <ClCompile Include="WeaponPickup.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="BezierCurveManager.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Background.h">
@@ -101,6 +104,9 @@
     </ClInclude>
     <ClInclude Include="StartButton.h">
       <Filter>Include\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="BezierCurveManager.h">
+      <Filter>Include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
