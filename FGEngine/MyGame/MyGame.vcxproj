@@ -24,7 +24,6 @@
     <ClCompile Include="MyTestScene.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerWeapon.cpp" />
-    <ClCompile Include="Spawner.cpp" />
     <ClCompile Include="StartButton.cpp" />
     <ClCompile Include="StartMenuState.cpp" />
     <ClCompile Include="WeaponPickup.cpp" />

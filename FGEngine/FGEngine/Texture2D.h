@@ -23,7 +23,7 @@ public:
 	static uint16_t LoadTextureIntoArray(unsigned char* buffer, float width, float height, const float4& textureData);
 	static void UnloadTextureArray();
 
-	const static uint16_t nTextures = 32;
+	const static uint16_t nTextures = 16;
 	static const int textureSize = 2048;
 
 	static std::unordered_map<std::string, unsigned int> textures;

@@ -60,7 +60,7 @@ namespace FG
 				gameControllerPointers[i] = SDL_GameControllerOpen(i);
 			}
 		}
-		//TODO: move this to window, InputManager should have 0 (ZERO!) coupling or dependency to/with SDL. This is the reponsibility of the window, not the inputmanager...
+		//TODO: move this to window, InputManager should have 0 coupling or dependency to/with SDL. This is the reponsibility of the window, not the inputmanager...
 		while (SDL_PollEvent(&event))
 		{
 			switch (event.type)

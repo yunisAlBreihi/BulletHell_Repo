@@ -19,9 +19,6 @@
     <ClCompile Include="PlayerWeapon.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Spawner.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="StartMenuState.cpp">
       <Filter>Source</Filter>
     </ClCompile>

@@ -36,8 +36,8 @@ bool GameApplication::Initialize()
 	FG::InputManager::Initialize();
 	renderer = std::make_unique<Renderer>(window->GetInternalWindow());
 	loader.Init();
-	loader.LoadFont("..//assets//fonts//cubic.ttf", 12);
-	sceneStateMachine = new SceneStateMachine(new MyTestScene());
+	loader.LoadFont("..//assets//fonts//Bebas-Regular.ttf", 12);
+	sceneStateMachine = new SceneStateMachine(new GameState());
 	return true;
 }
 

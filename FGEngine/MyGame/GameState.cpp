@@ -6,6 +6,7 @@
 #include "EnemyTypes.h"
 #include "EnemySpawnManager.h"
 #include "CollisionSystem.h"
+#include "Background.h"
 
 GameState::~GameState()
 {
@@ -44,7 +45,12 @@ void GameState::OnEnter()
 	FG::Sprite enemy06SpriteL = factory.LoadSprite("..//assets//images//LightSprites02.png", 3, 3, 6);
 	FG::Sprite enemy06SpriteD = factory.LoadSprite("..//assets//images//DarkSprites02.png", 3, 3, 6);
 
+	FG::Sprite backgroundSprite = factory.LoadSprite("..//assets//images//bg.png", 1, 1);
+
+	backgroundSprite.SetScale(40, 10);
+
 	entityManager = FG::EntityManager::Instance();
+	entityManager->InitializeEntityArray<Background>(2, backgroundSprite);
 	entityManager->InitializeEntityArray<Player>(1, playerSpriteLight, playerSpriteDark);
 	entityManager->InitializeEntityArray<DarkBullet>(1000, darkBulletSprite);
 	entityManager->InitializeEntityArray<LightBullet>(1000, lightBulletSprite);
@@ -74,9 +80,14 @@ void GameState::OnEnter()
 
 	enemySpawnManager = new EnemySpawnManager();
 
+
+
 	auto instance = CollisionSystem::GetInstance();
 	instance->Setup(20, 20, 2);
 	collisionSystemInstance = CollisionSystem::GetInstance();
+
+	entityManager->CreateEntity<Background>(FG::Vector2D(0, 0));
+
 }
 
 bool GameState::Update(float deltaTime)

@@ -39,14 +39,13 @@ void MyTestScene::OnEnter()
 
 	entityManager = FG::EntityManager::Instance();
 	entityManager->InitializeEntityArray<Player>(2, playerSpriteLight, playerSpriteDark);
-	entityManager->InitializeEntityArray<DarkBullet>(7500, darkBulletSprite);
-	entityManager->InitializeEntityArray<LightBullet>(7500, lightBulletSprite);
+	entityManager->InitializeEntityArray<DarkBullet>(500, darkBulletSprite);
+	entityManager->InitializeEntityArray<LightBullet>(500, lightBulletSprite);
 	//Enemy01::Enemy01(FG::Vector2D position, FG::Sprite sprite, FG::Sprite bulletsSprites, BulletSpreadType bulletSpreadType, MovementType movementType)
 	entityManager->InitializeEntityArray<EnemyWaveStraight>(20, FG::Vector2D(0, 0), enemy01Sprite, BaseEnemy::ShootCircle, BaseEnemy::MoveStraight, BaseEnemy::Dark, bezierCurveManager);
 	entityManager->InitializeEntityArray<EnemyTripleCircular>(20, FG::Vector2D(0, 0), enemy01Sprite, BaseEnemy::ShootTriple, BaseEnemy::MoveCircular, BaseEnemy::Light, bezierCurveManager);
 	entityManager->InitializeEntityArray<EnemyDoubleWaveSweep>(20, FG::Vector2D(0, 0), enemy01Sprite, BaseEnemy::ShootDoubleWave, BaseEnemy::MoveSweep, BaseEnemy::Both, bezierCurveManager);
 	entityManager->InitializeEntityArray<EnemyDVerticalWaveL>(20, FG::Vector2D(0, 0), enemy01Sprite, BaseEnemy::ShootDoubleVertical, BaseEnemy::MoveWave, BaseEnemy::Light, bezierCurveManager);
-	entityManager->InitializeEntityArray<WeaponPickup>(100, enemy01Sprite);
 	entityManager->InitializeEntityArray<Destroyer>(4, destroyerSpriteLight, destroyerSpriteDark);
 	player = entityManager->CreateEntity<Player>(FG::Vector2D(2, 1), 0);
 
