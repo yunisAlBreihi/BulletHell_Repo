@@ -91,6 +91,7 @@ namespace FG
 				//TODO: deal with out of bounds memory access if we're using too many entities
 			used[index]++;
 			ret->Start(args...); //call start function on created entity
+			ret->isActive = true;
 			return ret;
 		}
 		return nullptr;

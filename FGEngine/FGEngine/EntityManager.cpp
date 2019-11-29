@@ -66,6 +66,7 @@ namespace FG
 		{
 			entities[entity->layer][entity->index]->Disable();
 			freeIndices[entity->layer].push_back(entity->index);
+			entity->isActive = false;
 			used[entity->layer]--;
 		}
 	}
