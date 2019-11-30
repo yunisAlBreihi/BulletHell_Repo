@@ -61,13 +61,14 @@
 #undef far
 
 
-const float zoomSpeed = 0.5f;
+float Camera::zoom = 1.0f;
 
+const float zoomSpeed = 0.5f;
 const float movementSpeed = 3.0f;
 
-Camera::Camera(float3 position, float fov, float near, float far)
+Camera::Camera(float3 position, float fov, float near, float far, float zoom)
 {
-	this->zoom = 20.0f;
+	Camera::zoom = zoom;
 	this->near = near;
 	this->fov = fov;
 	this->far = far;
@@ -114,6 +115,11 @@ mat4 Camera::GetVP() const
 float3 Camera::GetPos() const
 {
 	return position;
+}
+
+float Camera::GetZoom()
+{
+	return 0.0f;
 }
 
 bool Camera::Contains(FG::Vector2D p, FG::Vector2D size)

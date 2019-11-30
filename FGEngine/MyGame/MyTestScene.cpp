@@ -20,7 +20,7 @@ void MyTestScene::OnEnter()
 {
 	bezierCurveManager = new BezierCurveManager();
 
-	FG::SpriteFactory factory; //TODO: This is probably a mem leak
+	FG::SpriteFactory factory;
 	FG::Sprite playerSpriteLight = factory.LoadSprite("..//assets//images//lightning-blue.png", 1, 4, 0);
 	FG::Sprite playerSpriteDark = factory.LoadSprite("..//assets//images//lightning-purple.png", 1, 4, 0);
 	FG::Sprite lightBulletSprite = factory.LoadSprite("..//assets//images//projectile-blue.png", 1, 1, 0);

@@ -22,7 +22,6 @@ public:
 	static uint16_t LoadTextureIntoArray(const char* filename, const int& rows, const int& columns, float& width, float& height, float& aspectRatio);
 	static uint16_t LoadTextureIntoArray(unsigned char* buffer, float width, float height, const float4& textureData);
 	static void UnloadTextureArray();
-
 	const static uint16_t nTextures = 16;
 	static const int textureSize = 2048;
 

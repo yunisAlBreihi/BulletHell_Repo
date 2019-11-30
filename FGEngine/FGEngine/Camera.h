@@ -12,11 +12,12 @@ class Camera
 
 #undef near
 #undef far
-	float fov, near, far, zoom;
+	float fov, near, far;	
+	static float zoom;
 	float3 lookAt;
 
 public:
-	Camera(float3 position, float fov, float near, float far);
+	Camera(float3 position, float fov, float near, float far, float zoom);
 	void Update(float dt, FG::Vector2D lookAt);
 	void SetPosition(float3 position);
 	void Move(float3 direction);
@@ -26,8 +27,7 @@ public:
 	mat4 GetVP() const;
 	float3 GetPos() const;
 
-	FG::Vector2D WorldToScreen(const FG::Vector2D& point) const;
-	FG::Vector2D ScreenToWorld(const FG::Vector2D& point) const;
+	static float GetZoom();
 
 	bool Contains(FG::Vector2D  pos, FG::Vector2D size);
 };

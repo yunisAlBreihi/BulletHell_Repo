@@ -42,9 +42,12 @@ bool GameApplication::Initialize()
 	return true;
 }
 
+const float WORLD_SIZE = 20.0f;
+const FG::Vector2D worldMiddle = FG::Vector2D(1.0f, 1.0f);
+
 void GameApplication::Run()
 {
-	Camera camera = Camera({ 0, 0, -1 }, 45, -1, 100);
+	Camera camera = Camera({ 0, 0, -1 }, NULL, -1, 100, WORLD_SIZE);
 	bool quit = false;
 	Profiler frameTime = Profiler();
 	float fpsAccu = 0;
@@ -68,7 +71,7 @@ void GameApplication::Run()
 
 		if (!sceneStateMachine->Update(time.DeltaTime())) break; //if there is no scene to update, the application should quit
 		sceneStateMachine->Render(renderer.get());
-		camera.Update(time.DeltaTime(), FG::Vector2D(1.0f, 1.0f));
+		camera.Update(time.DeltaTime(), worldMiddle);
 		renderer->Clear(float4(0.0f, 0.0f, 0.0f, 1.0f));
 		renderer->Present(&camera);
 		fpsAccu += frameTime.End();
@@ -97,6 +100,10 @@ void GameApplication::Shutdown()
 		delete window;
 		window = nullptr;
 	}
+
+	Texture2DHandler::UnloadTextureArray();
+	
+
 	SDL_Quit();
 }
 

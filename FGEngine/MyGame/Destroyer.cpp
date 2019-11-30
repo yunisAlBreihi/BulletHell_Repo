@@ -97,7 +97,6 @@ void Destroyer::Render(Renderer* const renderer)
 {
 	renderer->Render(position, currentSprite);
 	const float healthBarHeight = 0.15f;
-	//TODO: Error handle xScale == 0
 	renderer->RenderQuad(position, FG::Vector2D(healthBarWidth, healthBarHeight), Color(0.3f, 0.3f, 0.3f, 1.0f), Color(0.3f, 0.3f, 0.3f, 1.0f));
 	renderer->RenderQuad(position, FG::Vector2D(healthBarStepWidth * health, healthBarHeight), Color(1.0f, 0.3f, 0.3f, 1.0f), Color(1.0f, 0.3f, 0.3f, 1.0f));
 }

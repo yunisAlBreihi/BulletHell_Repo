@@ -74,8 +74,6 @@ void BaseEnemy::Render(Renderer* const camera)
 {
 	camera->Render(position, sprite);
 
-	//health bar
-	//TODO: Error handle xScale == 0
 	camera->RenderQuad(position, FG::Vector2D(healthBarWidth, healthBarHeight), Color(0.3f, 0.3f, 0.3f, 1.0f), Color(0.3f, 0.3f, 0.3f, 1.0f));
 	camera->RenderQuad(position, FG::Vector2D(healthBarStepWidth * health, healthBarHeight), Color(1.0f, 0.3f, 0.3f, 1.0f), Color(1.0f, 0.3f, 0.3f, 1.0f));
 }

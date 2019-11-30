@@ -10,12 +10,6 @@ namespace FG
 		textureSize = { 1.0f, 1.0f };
 	}
 
-	uint16_t CalculateIndexFromRect(const float4& rect)
-	{
-		//TODO: Implement;
-		return 0;
-	}
-
 	void SpriteFactory::_LoadSprite(const char* filePath, int rows, int columns, Sprite& sprite)
 	{
 		if (sprites.find(filePath) != sprites.end())

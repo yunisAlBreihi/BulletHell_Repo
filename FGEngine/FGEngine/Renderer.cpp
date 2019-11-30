@@ -1,5 +1,5 @@
 #include "Renderer.h"
-
+#include "Camera.h"
 Renderer::Renderer(SDL_Window* window)
 {
 
@@ -39,10 +39,8 @@ void Renderer::RenderText(const FG::Vector2D& position, const float size, const 
 {
 	for (int i = 0; i < text.size(); i++)
 	{
-		//TODO: Get pixelsize from camera
-		auto pixelSize = size / 20.0f;
+		auto pixelSize = size / Camera::GetZoom();
 		TextVertex vertex(position.x + i * pixelSize, position.y, pixelSize, text[i]);
-
 		textVertices.push_back(vertex);
 	}
 }

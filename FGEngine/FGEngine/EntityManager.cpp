@@ -38,7 +38,7 @@ namespace FG
 		{
 			for (int j = 0; j < allocated[i]; j++)
 			{
-				if (entities[i][j]->isActive) //TODO: Remove this, we want to keep contigous arrays so we don't need to branch here..
+				if (entities[i][j]->isActive)
 				{
 					entities[i][j]->Update(deltaTime);
 				}
@@ -52,7 +52,7 @@ namespace FG
 		{
 			for (int j = 0; j < allocated[i]; j++)
 			{
-				if (entities[i][j]->isActive)//TODO: Remove this, we want to keep contigous arrays so we don't need to branch here..
+				if (entities[i][j]->isActive)
 				{
 					entities[i][j]->Render(renderer);
 				}

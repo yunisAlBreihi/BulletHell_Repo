@@ -97,7 +97,7 @@ void CollisionSystem::RegisterCollider(const FG::Vector2D& pos, const FG::Vector
 	{
 		if (!(indices[i] < buckets.size()) || indices[i] < 0)
 		{
-			//TODO: deal with indices outside of the bounds
+			//skip indices which are out of bounds
 			continue;
 		}
 		for (int j = 0; j < i; j++)
@@ -110,7 +110,7 @@ void CollisionSystem::RegisterCollider(const FG::Vector2D& pos, const FG::Vector
 		}
 		if (!duplicate)
 		{
-			buckets[indices[i]].emplace_back(object);	//TODO: Don't use emplace back, use some structure to count how many items the buckets should contain
+			buckets[indices[i]].emplace_back(object);
 		}
 		duplicate = false;
 	}
@@ -138,8 +138,6 @@ void CollisionSystem::TestCollisions()
 	{
 		auto a = collisionPairs[i].first;
 		auto b = collisionPairs[i].second;
-
-		//TODO: Add narrowphase
 
 		a->OnCollision(b);
 		b->OnCollision(a);

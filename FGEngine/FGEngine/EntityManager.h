@@ -56,7 +56,6 @@ namespace FG
 	};
 
 
-	//TODO: Create arrays instead of individual objects
 	template<typename T, typename... Args>
 	inline void EntityManager::InitializeEntityArray(size_t count, Args&&...args)
 	{
@@ -87,8 +86,7 @@ namespace FG
 		{
 			uint32_t i = freeIndices[index].front();
 			freeIndices[index].pop_front();
-			T* ret = dynamic_cast<T*>(entities[index][i]); 	///IF YOU CRASH HERE: There are not enough entities allocated
-				//TODO: deal with out of bounds memory access if we're using too many entities
+			T* ret = dynamic_cast<T*>(entities[index][i]); 
 			used[index]++;
 			ret->Start(args...); //call start function on created entity
 			ret->isActive = true;

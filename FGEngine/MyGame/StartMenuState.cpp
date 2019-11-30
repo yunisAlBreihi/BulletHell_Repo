@@ -26,7 +26,7 @@ void StartMenuState::OnEnter()
 bool StartMenuState::Update(float deltaTime)
 {
 	entityManager->Update(deltaTime);
-	return false;
+	return true;
 }
 
 void StartMenuState::Render(Renderer* renderer)

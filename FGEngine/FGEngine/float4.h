@@ -1,6 +1,4 @@
 #pragma once
-//TODO: swizzle, util functions, etc.
-
 struct float4
 {
 	inline float4(float a = 0.0f)
