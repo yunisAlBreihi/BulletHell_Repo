@@ -20,8 +20,6 @@ namespace FG
 			float uuu = uu * u;
 
 			Vector2D point = (p0 * uuu) + (p1 * 3 * uu * t) + (p2 * 3 * u * tt) + (p3 * ttt);
-			//point.x = round(point.x);
-			//point.y = round(point.y);
 			return point;
 		}
 	};

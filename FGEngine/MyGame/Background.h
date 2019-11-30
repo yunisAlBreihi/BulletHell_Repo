@@ -6,11 +6,9 @@
 
 class Background : public FG::Entity
 {
-
 public:
 	Background(FG::Sprite sprite);
 	Background();
-
 	~Background();
 
 	void Disable()override;
@@ -19,12 +17,11 @@ public:
 	void OnCollision(FG::Entity* other)override;
 
 private:
-	FG::Sprite sprite;
-	FG::Vector2D position;
-	float speed;
-
 	void Render(Renderer* const renderer) override;
 	void ImageLoop(float deltaTime);
 
-	
+private:
+	FG::Sprite sprite;
+	FG::Vector2D position;
+	float speed;
 };

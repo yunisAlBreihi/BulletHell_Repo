@@ -31,7 +31,6 @@ void Background::Start(FG::Vector2D position)
 
 void Background::Update(float deltaTime)
 {
-
 	ImageLoop(deltaTime);
 }
 

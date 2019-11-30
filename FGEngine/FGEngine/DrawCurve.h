@@ -8,8 +8,6 @@ namespace FG
 	{
 	public:
 		DrawCurve(Renderer* renderer);
-
-
 		void DrawLine(FG::Vector2D vecA, FG::Vector2D vecB);
 
 	private:

@@ -9,12 +9,10 @@ namespace FG
 	class BezierPath 
 	{
 	private:
-
 		std::vector<BezierCurve> mCurves;
 		std::vector<int> mSamples;
 
 	public:
-
 		BezierPath();
 		~BezierPath();
 
