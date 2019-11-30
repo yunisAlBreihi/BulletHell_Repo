@@ -21,13 +21,9 @@ EnemySpawnManager::EnemySpawnManager()
 
 	FG::SpriteFactory factory; //TODO: This is probably a mem leak
 
-	FG::Sprite sprite4 = factory.LoadSprite("..//assets//images//DarkSprites01.png", 8, 8, 5);
-	FG::Sprite enemy01SpriteL = factory.LoadSprite("..//assets//images//LightSprites02.png", 3, 3, 1);
-	FG::Sprite enemy02SpriteL = factory.LoadSprite("..//assets//images//LightSprites02.png", 3, 3, 2);
-	FG::Sprite enemy03SpriteD = factory.LoadSprite("..//assets//images//DarkSprites02.png", 3, 3, 3);
-	FG::Sprite enemy04SpriteL = factory.LoadSprite("..//assets//images//LightSprites02.png", 3, 3, 4);
-	FG::Sprite enemy05SpriteD = factory.LoadSprite("..//assets//images//DarkSprites02.png", 3, 3, 5);
-	FG::Sprite enemy06SpriteD = factory.LoadSprite("..//assets//images//DarkSprites02.png", 3, 3, 6);
+	FG::Sprite enemySpriteBlue = factory.LoadSprite("..//assets//images//enemyShip1-blue.png", 1, 4, 0);
+	FG::Sprite enemySpritePurple = factory.LoadSprite("..//assets//images//enemyShip1-purple.png", 1, 4, 0);
+	FG::Sprite enemySpriteGray = factory.LoadSprite("..//assets//images//enemyShip1-gray.png", 1, 4, 0);
 
 	FG::Sprite destroyerSpriteLight = factory.LoadSprite("..//assets//images//destroyer-blue.png", 1, 4, 0);
 	FG::Sprite destroyerSpriteDark = factory.LoadSprite("..//assets//images//destroyer-purple.png", 1, 4, 0);
@@ -35,12 +31,12 @@ EnemySpawnManager::EnemySpawnManager()
 	destroyerSpriteLight.SetScale(2.0f, 2.0f);
 
 	entityManager = FG::EntityManager::Instance();
-	entityManager->InitializeEntityArray<EnemyForwardDWaveL>(20, FG::Vector2D(0, 0), enemy01SpriteL, BaseEnemy::ShootForward, BaseEnemy::MoveDoubleWave, BaseEnemy::Light, bezierCurveManager);
-	entityManager->InitializeEntityArray<EnemyTripleCircularL>(20, FG::Vector2D(0, 0), enemy02SpriteL, BaseEnemy::ShootTriple, BaseEnemy::MoveCircular, BaseEnemy::Light, bezierCurveManager);
-	entityManager->InitializeEntityArray<EnemyDWaveSweepB>(20, FG::Vector2D(0, 0), enemy03SpriteD, BaseEnemy::ShootDoubleWave, BaseEnemy::MoveSweep, BaseEnemy::Both, bezierCurveManager);
-	entityManager->InitializeEntityArray<EnemyDVerticalWaveB>(20, FG::Vector2D(0, 0), enemy04SpriteL, BaseEnemy::ShootDoubleVertical, BaseEnemy::MoveWave, BaseEnemy::Both, bezierCurveManager);
-	entityManager->InitializeEntityArray<EnemyCircleStraightD>(20, FG::Vector2D(0, 0), enemy05SpriteD, BaseEnemy::ShootCircle, BaseEnemy::MoveStraight, BaseEnemy::Dark, bezierCurveManager);
-	entityManager->InitializeEntityArray<EnemyWaveStraightD>(20, FG::Vector2D(0, 0), enemy06SpriteD, BaseEnemy::ShootWave, BaseEnemy::MoveStraight, BaseEnemy::Dark, bezierCurveManager);
+	entityManager->InitializeEntityArray<EnemyForwardDWaveL>(20, FG::Vector2D(0, 0), enemySpriteBlue, BaseEnemy::ShootForward, BaseEnemy::MoveDoubleWave, BaseEnemy::Light, bezierCurveManager);
+	entityManager->InitializeEntityArray<EnemyTripleCircularL>(20, FG::Vector2D(0, 0), enemySpriteBlue, BaseEnemy::ShootTriple, BaseEnemy::MoveCircular, BaseEnemy::Light, bezierCurveManager);
+	entityManager->InitializeEntityArray<EnemyDWaveSweepB>(20, FG::Vector2D(0, 0), enemySpriteGray, BaseEnemy::ShootDoubleWave, BaseEnemy::MoveSweep, BaseEnemy::Both, bezierCurveManager);
+	entityManager->InitializeEntityArray<EnemyDVerticalWaveB>(20, FG::Vector2D(0, 0), enemySpriteGray, BaseEnemy::ShootDoubleVertical, BaseEnemy::MoveWave, BaseEnemy::Both, bezierCurveManager);
+	entityManager->InitializeEntityArray<EnemyCircleStraightD>(20, FG::Vector2D(0, 0), enemySpritePurple, BaseEnemy::ShootCircle, BaseEnemy::MoveStraight, BaseEnemy::Dark, bezierCurveManager);
+	entityManager->InitializeEntityArray<EnemyWaveStraightD>(20, FG::Vector2D(0, 0), enemySpritePurple, BaseEnemy::ShootWave, BaseEnemy::MoveStraight, BaseEnemy::Dark, bezierCurveManager);
 	entityManager->InitializeEntityArray<Destroyer>(4, destroyerSpriteLight, destroyerSpriteDark);
 
 	enemy01SpawnParameters = new EnemySpawnParameters(BasicRandom::Range(2.0f, 10.0f), FG::Vector2D(BasicRandom::Range(20.0f, 22.5f), BasicRandom::Range(2.0f, 8.0f)));
@@ -54,11 +50,13 @@ EnemySpawnManager::EnemySpawnManager()
 void EnemySpawnManager::Update(float deltaTime)
 {
 	DestroyerSpawn(deltaTime,destroyerMaxTimer);
-
-	if ( destroyerIsAlive && destroyer->health <= 0 )
+	if ( destroyerIsAlive )
 	{
-		destroyerIsAlive = false;
-		destroyerTimer = 0;
+		if (destroyer->health <= 0)
+		{
+			destroyerIsAlive = false;
+			destroyerTimer = 0;
+		}
 	}
 
 	if (!destroyerIsAlive)
