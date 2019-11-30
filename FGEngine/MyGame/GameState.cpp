@@ -7,6 +7,7 @@
 #include "EnemySpawnManager.h"
 #include "CollisionSystem.h"
 #include "Background.h"
+#include <string>
 
 GameState::~GameState()
 {
@@ -49,6 +50,8 @@ void GameState::OnEnter()
 
 	entityManager->CreateEntity<Background>(FG::Vector2D(0, 0));
 
+	HighScore::ResetScore();
+	
 }
 
 bool GameState::Update(float deltaTime)
@@ -56,6 +59,8 @@ bool GameState::Update(float deltaTime)
 	entityManager->Update(deltaTime);
 	enemySpawnManager->Update(deltaTime);
 	collisionSystemInstance->TestCollisions();
+
+
 //#ifndef _DEBUG
 	if (player->IsDead())
 	{
@@ -69,6 +74,8 @@ bool GameState::Update(float deltaTime)
 void GameState::Render(Renderer* renderer)
 {
 	entityManager->Render(renderer);
+	FG::Vector2D scoreTextPosition = { 13, 0.5f };
+	renderer->RenderText(scoreTextPosition, 12, std::string("Score: ") + std::to_string(HighScore::GetScore()));
 }
 
 void GameState::OnExit()

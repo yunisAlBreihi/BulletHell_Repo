@@ -9,6 +9,7 @@
 #include "Player.h"
 #include "CollisionSystem.h"
 #include "BezierCurveManager.h"
+#include "HighScore.h"
 
 class GameState : public ISceneState
 {

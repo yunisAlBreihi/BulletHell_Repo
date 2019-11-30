@@ -4,15 +4,13 @@
 class HighScore : FG::Entity
 {
 public:
-	HighScore();
-	~HighScore();
+	static void AddScore(int addScore);
+	static int GetScore();
+	static void ResetScore();
 
-	void Update(float deltatime) override;
-	void AddScore(int addScore);
-	virtual int MulitplyScore(int inputModifier);
-	int score;
 private:
-	void ClearScore();
+	HighScore();
+	static int score;
 
 };
 

@@ -119,7 +119,7 @@ float3 Camera::GetPos() const
 
 float Camera::GetZoom()
 {
-	return 0.0f;
+	return zoom;
 }
 
 bool Camera::Contains(FG::Vector2D p, FG::Vector2D size)

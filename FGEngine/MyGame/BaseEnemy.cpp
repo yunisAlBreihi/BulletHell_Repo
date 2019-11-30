@@ -10,6 +10,7 @@
 #include "BasicRandom.h"
 #include "float3.h"
 #include "WeaponPickup.h"
+#include "HighScore.h"
 BaseEnemy::BaseEnemy(FG::Vector2D position, FG::Sprite sprite, BulletSpreadType bulletSpreadType, MovementType movementType, BulletColor bulletColor, BezierCurveManager* curveManager)
 	: sprite(sprite), position(position), bs(bulletSpreadType), mt(movementType), bc(bulletColor)
 {
@@ -31,15 +32,14 @@ void BaseEnemy::Start(FG::Vector2D startPos)
 	Entity::Start();
 }
 
+const int ENEMY_SCORE_VALUE = 10;
+
 void BaseEnemy::Update(float deltaTime)
 {
 	if (health <= 0)
 	{
 		FG::EntityManager::Instance()->RemoveEntity(this);
-		if (BasicRandom::Range(0, 100) > 50)
-		{
-			auto it = FG::EntityManager::Instance()->CreateEntity<WeaponPickup>(position);
-		}
+		HighScore::AddScore(ENEMY_SCORE_VALUE);
 		return;
 	}
 

@@ -6,6 +6,7 @@
 #include "CollisionSystem.h"
 #include "Player.h"
 #include "BaseEnemy.h"
+#include "HighScore.h"
 Destroyer::Destroyer(FG::Sprite lightSprite, FG::Sprite darkSprite)
 {
 
@@ -34,6 +35,8 @@ void Destroyer::Disable()
 	isActive = false; 
 }
 
+const static int SCORE_VALUE = 1000;
+
 void Destroyer::Update(float deltaTime)
 {
 	animationTimer.Update(deltaTime);
@@ -49,6 +52,7 @@ void Destroyer::Update(float deltaTime)
 	if (health <= 0)
 	{
 		FG::EntityManager::Instance()->RemoveEntity(this);
+		HighScore::AddScore(SCORE_VALUE);
 		return;
 	}
 

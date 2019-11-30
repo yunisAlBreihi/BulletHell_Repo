@@ -2,35 +2,19 @@
 #include "EntityManager.h"
 #include <iostream>
 
-
-HighScore::HighScore()
-{
-	std::cout << "Score is: " + score;
-}
-
-HighScore::~HighScore()
-{
-	ClearScore();
-}
-
-void HighScore::Update(float deltatime)
-{
-	std::cout << "Score is: ";
-}
+int HighScore::score = 0;
 
 void HighScore::AddScore(int addScore)
 {
 	score += addScore;
-	
 }
 
-int HighScore::MulitplyScore(int inputModifier)
+int HighScore::GetScore()
 {
-	score = pow(score, inputModifier);
 	return score;
 }
 
-void HighScore::ClearScore()
+void HighScore::ResetScore()
 {
 	score = 0;
 }
