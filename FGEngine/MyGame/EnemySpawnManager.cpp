@@ -19,7 +19,7 @@ EnemySpawnManager::EnemySpawnManager()
 
 	bezierCurveManager = new BezierCurveManager();
 
-	FG::SpriteFactory factory; //TODO: This is probably a mem leak
+	FG::SpriteFactory factory;
 
 	FG::Sprite enemySpriteBlue = factory.LoadSprite("..//assets//images//enemyShip1-blue.png", 1, 4, 0);
 	FG::Sprite enemySpritePurple = factory.LoadSprite("..//assets//images//enemyShip1-purple.png", 1, 4, 0);
