@@ -21,6 +21,8 @@ public:
 
 	void Shoot(FG::EntityManager* entityManager, FG::Vector2D startPos, float baseAngle, float angleOffset);
 
+	int health;
+
 private:
 	FG::Vector2D position;
 	FG::Sprite currentSprite;
@@ -41,7 +43,6 @@ private:
 	float spawnAccu = 0;
 	float projectileCount = 25;
 	const static int MAX_HEALTH = 2000;
-	int health;
 
 	BasicTimer animationTimer;
 

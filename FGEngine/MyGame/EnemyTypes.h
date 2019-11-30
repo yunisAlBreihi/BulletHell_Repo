@@ -117,11 +117,6 @@ public:
 	{
 		animSpeed = 7;
 	}
-	//EnemyDVerticalWaveB(FG::Vector2D position, FG::Sprite sprite, BulletSpreadType bulletSpreadType, BulletColor bulletColor, bool moveStraight = false)
-	//	: BaseEnemy(position, sprite, bulletSpreadType, bulletColor, moveStraight)
-	//{
-	//	animSpeed = 7;
-	//}
 };
 
 #pragma endregion

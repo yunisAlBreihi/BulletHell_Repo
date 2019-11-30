@@ -21,10 +21,7 @@ public:
 private:
 	FG::Sprite sprite;
 	FG::Vector2D position;
-	float speed=0.25f;
-
-	//int width{ 0 };
-	//int height{ 0 };
+	float speed;
 
 	void Render(Renderer* const renderer) override;
 	void ImageLoop(float deltaTime);

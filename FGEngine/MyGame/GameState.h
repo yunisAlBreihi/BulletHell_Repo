@@ -15,7 +15,6 @@ class GameState : public ISceneState
 public:
 	~GameState();
 
-
 	void OnEnter() override;
 	bool Update(float deltaTime)  override; 
 	void Render(Renderer* renderer) override;
@@ -25,7 +24,6 @@ public:
 private:
 	FG::EntityManager* entityManager;
 	EnemySpawnManager* enemySpawnManager;
-	BezierCurveManager* bezierCurveManager;
 	Player* player;
 	CollisionSystem* collisionSystemInstance;
 };

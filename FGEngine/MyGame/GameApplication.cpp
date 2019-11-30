@@ -17,6 +17,7 @@
 #include "SDL_syswm.h"
 #include "Profiler.h"
 #include "MyTestScene.h"
+#include "StartMenuState.h"
 
 
 bool GameApplication::Initialize()

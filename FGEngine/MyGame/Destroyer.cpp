@@ -34,8 +34,6 @@ void Destroyer::Disable()
 	isActive = false; 
 }
 
-
-
 void Destroyer::Update(float deltaTime)
 {
 	animationTimer.Update(deltaTime);
