@@ -7,7 +7,7 @@ EnemySpawnManager::EnemySpawnManager()
 
 	//For the destroyer Spawn
 	destroyerTimer = 0.0f;
-	destroyerMaxTimer = BasicRandom::Range(20.0f, 30.0f);
+	destroyerMaxTimer = BasicRandom::Range(30.0f, 45.0f);
 	destroyerIsAlive = false;
 
 	enemy01Timer = BasicTimer(enemySpawnTime);
@@ -19,32 +19,7 @@ EnemySpawnManager::EnemySpawnManager()
 
 	bezierCurveManager = new BezierCurveManager();
 
-	FG::SpriteFactory factory;
-
-	FG::Sprite enemySpriteBlue = factory.LoadSprite("..//assets//images//enemyShip1-blue.png", 1, 4, 0);
-	FG::Sprite enemySpritePurple = factory.LoadSprite("..//assets//images//enemyShip1-purple.png", 1, 4, 0);
-	FG::Sprite enemySpriteGray = factory.LoadSprite("..//assets//images//enemyShip1-gray.png", 1, 4, 0);
-
-	FG::Sprite destroyerSpriteLight = factory.LoadSprite("..//assets//images//destroyer-blue.png", 1, 4, 0);
-	FG::Sprite destroyerSpriteDark = factory.LoadSprite("..//assets//images//destroyer-purple.png", 1, 4, 0);
-	destroyerSpriteDark.SetScale(2.0f, 2.0f);
-	destroyerSpriteLight.SetScale(2.0f, 2.0f);
-
-	entityManager = FG::EntityManager::Instance();
-	entityManager->InitializeEntityArray<EnemyForwardDWaveL>(20, FG::Vector2D(0, 0), enemySpriteBlue, BaseEnemy::ShootForward, BaseEnemy::MoveDoubleWave, BaseEnemy::Light, bezierCurveManager);
-	entityManager->InitializeEntityArray<EnemyTripleCircularL>(20, FG::Vector2D(0, 0), enemySpriteBlue, BaseEnemy::ShootTriple, BaseEnemy::MoveCircular, BaseEnemy::Light, bezierCurveManager);
-	entityManager->InitializeEntityArray<EnemyDWaveSweepB>(20, FG::Vector2D(0, 0), enemySpriteGray, BaseEnemy::ShootDoubleWave, BaseEnemy::MoveSweep, BaseEnemy::Both, bezierCurveManager);
-	entityManager->InitializeEntityArray<EnemyDVerticalWaveB>(20, FG::Vector2D(0, 0), enemySpriteGray, BaseEnemy::ShootDoubleVertical, BaseEnemy::MoveWave, BaseEnemy::Both, bezierCurveManager);
-	entityManager->InitializeEntityArray<EnemyCircleStraightD>(20, FG::Vector2D(0, 0), enemySpritePurple, BaseEnemy::ShootCircle, BaseEnemy::MoveStraight, BaseEnemy::Dark, bezierCurveManager);
-	entityManager->InitializeEntityArray<EnemyWaveStraightD>(20, FG::Vector2D(0, 0), enemySpritePurple, BaseEnemy::ShootWave, BaseEnemy::MoveStraight, BaseEnemy::Dark, bezierCurveManager);
-	entityManager->InitializeEntityArray<Destroyer>(4, destroyerSpriteLight, destroyerSpriteDark);
-
-	enemy01SpawnParameters = new EnemySpawnParameters(BasicRandom::Range(2.0f, 10.0f), FG::Vector2D(BasicRandom::Range(20.0f, 22.5f), BasicRandom::Range(2.0f, 8.0f)));
-	enemy02SpawnParameters = new EnemySpawnParameters(BasicRandom::Range(2.0f, 10.0f), FG::Vector2D(BasicRandom::Range(20.0f, 22.5f), BasicRandom::Range(2.0f, 8.0f)));
-	enemy03SpawnParameters = new EnemySpawnParameters(BasicRandom::Range(2.0f, 10.0f), FG::Vector2D(BasicRandom::Range(20.0f, 22.5f), BasicRandom::Range(2.0f, 8.0f)));
-	enemy04SpawnParameters = new EnemySpawnParameters(BasicRandom::Range(2.0f, 10.0f), FG::Vector2D(BasicRandom::Range(20.0f, 22.5f), BasicRandom::Range(2.0f, 8.0f)));
-	enemy05SpawnParameters = new EnemySpawnParameters(BasicRandom::Range(2.0f, 10.0f), FG::Vector2D(BasicRandom::Range(20.0f, 22.5f), BasicRandom::Range(2.0f, 8.0f)));
-	enemy06SpawnParameters = new EnemySpawnParameters(BasicRandom::Range(2.0f, 10.0f), FG::Vector2D(BasicRandom::Range(20.0f, 22.5f), BasicRandom::Range(2.0f, 8.0f)));
+	EnemyCreation();
 }
 
 void EnemySpawnManager::Update(float deltaTime)
@@ -125,8 +100,38 @@ void EnemySpawnManager::DestroyerSpawn(float deltaTime, float& maxSpawnTime)
 		{
 			destroyer = entityManager->CreateEntity<Destroyer>(FG::Vector2D(10, 5));
 			destroyerIsAlive = true;
-			maxSpawnTime = BasicRandom::Range(20.0f, 30.0f);
+			maxSpawnTime = BasicRandom::Range(30.0f, 45.0f);
 		}
 	}
+}
+
+void EnemySpawnManager::EnemyCreation()
+{
+	FG::SpriteFactory factory;
+
+	FG::Sprite enemySpriteBlue = factory.LoadSprite("..//assets//images//enemyShip1-blue.png", 1, 4, 0);
+	FG::Sprite enemySpritePurple = factory.LoadSprite("..//assets//images//enemyShip1-purple.png", 1, 4, 0);
+	FG::Sprite enemySpriteGray = factory.LoadSprite("..//assets//images//enemyShip1-gray.png", 1, 4, 0);
+
+	FG::Sprite destroyerSpriteLight = factory.LoadSprite("..//assets//images//destroyer-blue.png", 1, 4, 0);
+	FG::Sprite destroyerSpriteDark = factory.LoadSprite("..//assets//images//destroyer-purple.png", 1, 4, 0);
+	destroyerSpriteDark.SetScale(2.0f, 2.0f);
+	destroyerSpriteLight.SetScale(2.0f, 2.0f);
+
+	entityManager = FG::EntityManager::Instance();
+	entityManager->InitializeEntityArray<EnemyForwardDWaveL>(20, FG::Vector2D(0, 0), enemySpriteBlue, BaseEnemy::ShootForward, BaseEnemy::MoveDoubleWave, BaseEnemy::Light, bezierCurveManager);
+	entityManager->InitializeEntityArray<EnemyTripleCircularL>(20, FG::Vector2D(0, 0), enemySpriteBlue, BaseEnemy::ShootTriple, BaseEnemy::MoveCircular, BaseEnemy::Light, bezierCurveManager);
+	entityManager->InitializeEntityArray<EnemyDWaveSweepB>(20, FG::Vector2D(0, 0), enemySpriteGray, BaseEnemy::ShootDoubleWave, BaseEnemy::MoveSweep, BaseEnemy::Both, bezierCurveManager);
+	entityManager->InitializeEntityArray<EnemyDVerticalWaveB>(20, FG::Vector2D(0, 0), enemySpriteGray, BaseEnemy::ShootDoubleVertical, BaseEnemy::MoveWave, BaseEnemy::Both, bezierCurveManager);
+	entityManager->InitializeEntityArray<EnemyCircleStraightD>(20, FG::Vector2D(0, 0), enemySpritePurple, BaseEnemy::ShootCircle, BaseEnemy::MoveStraight, BaseEnemy::Dark, bezierCurveManager);
+	entityManager->InitializeEntityArray<EnemyWaveStraightD>(20, FG::Vector2D(0, 0), enemySpritePurple, BaseEnemy::ShootWave, BaseEnemy::MoveStraight, BaseEnemy::Dark, bezierCurveManager);
+	entityManager->InitializeEntityArray<Destroyer>(4, destroyerSpriteLight, destroyerSpriteDark);
+
+	enemy01SpawnParameters = new EnemySpawnParameters(BasicRandom::Range(2.0f, 10.0f), FG::Vector2D(BasicRandom::Range(20.0f, 22.5f), BasicRandom::Range(2.0f, 8.0f)));
+	enemy02SpawnParameters = new EnemySpawnParameters(BasicRandom::Range(2.0f, 10.0f), FG::Vector2D(BasicRandom::Range(20.0f, 22.5f), BasicRandom::Range(2.0f, 8.0f)));
+	enemy03SpawnParameters = new EnemySpawnParameters(BasicRandom::Range(2.0f, 10.0f), FG::Vector2D(BasicRandom::Range(20.0f, 22.5f), BasicRandom::Range(2.0f, 8.0f)));
+	enemy04SpawnParameters = new EnemySpawnParameters(BasicRandom::Range(2.0f, 10.0f), FG::Vector2D(BasicRandom::Range(20.0f, 22.5f), BasicRandom::Range(2.0f, 8.0f)));
+	enemy05SpawnParameters = new EnemySpawnParameters(BasicRandom::Range(2.0f, 10.0f), FG::Vector2D(BasicRandom::Range(20.0f, 22.5f), BasicRandom::Range(2.0f, 8.0f)));
+	enemy06SpawnParameters = new EnemySpawnParameters(BasicRandom::Range(2.0f, 10.0f), FG::Vector2D(BasicRandom::Range(20.0f, 22.5f), BasicRandom::Range(2.0f, 8.0f)));
 }
 

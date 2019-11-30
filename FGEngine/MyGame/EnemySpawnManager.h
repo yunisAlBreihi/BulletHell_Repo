@@ -11,6 +11,7 @@ public:
 	EnemySpawnManager();
 	void Update(float deltaTime);
 
+private:
 	template<typename T>
 	void SpawnWaves(float dt, Spawner<T>* spawner, BasicTimer* timer, FG::Vector2D spawnPosition);
 
@@ -21,6 +22,8 @@ public:
 	void Spawn(EnemySpawnParameters* enemySpawn, Spawner<T>* spawner, BasicTimer* enemyTimer, int spawnCount, float deltaTime);
 
 	void DestroyerSpawn(float deltaTime, float& maxSpawnTime);
+
+	void EnemyCreation();
 
 private:
 	FG::EntityManager* entityManager;
