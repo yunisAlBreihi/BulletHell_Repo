@@ -141,11 +141,9 @@
     <ClInclude Include="EntityType.h" />
     <ClInclude Include="float3.h" />
     <ClInclude Include="float4.h" />
-    <ClInclude Include="Font.h" />
     <ClInclude Include="FontLoader.h" />
     <ClInclude Include="HighScore.h" />
     <ClInclude Include="InputManager.h" />
-    <ClInclude Include="Intevals.h" />
     <ClInclude Include="IState.h" />
     <ClInclude Include="LineVertex.h" />
     <ClInclude Include="Logger.h" />

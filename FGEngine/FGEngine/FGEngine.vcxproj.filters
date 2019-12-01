@@ -161,9 +161,6 @@
     <ClInclude Include="IState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Intevals.h">
-      <Filter>Header Files\Math</Filter>
-    </ClInclude>
     <ClInclude Include="BasicRandom.h">
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
@@ -177,9 +174,6 @@
       <Filter>Header Files\Rendering</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
-      <Filter>Header Files\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="Font.h">
       <Filter>Header Files\Rendering</Filter>
     </ClInclude>
     <ClInclude Include="FontLoader.h">

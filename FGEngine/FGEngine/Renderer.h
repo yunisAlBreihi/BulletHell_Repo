@@ -5,7 +5,6 @@
 #include <memory>
 #include "Sprite.h"
 #include "Color.h"
-#include "Font.h"
 #include "float3.h"
 
 #include "glew.h"
